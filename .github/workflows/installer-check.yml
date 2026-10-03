@@ -1,0 +1,88 @@
+# Installs a published release with the one-line installers exactly as the website shows them, on a clean runner
+# per OS, checks the editor and the extension, then uninstalls the same way. The install steps pin the release; the
+# uninstall steps look up the latest one, which right after publishing is the same release. release.yml calls this
+# after publishing; run it by hand (Actions → installer check → Run workflow) after changing site/install.*.
+name: installer check
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release to install, e.g. 0.2.0 (empty for the latest)
+        type: string
+        required: false
+
+permissions:
+  contents: read
+
+env:
+  SITE: https://klammr.github.io/klammr
+
+jobs:
+  check:
+    name: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install (curl | sh)
+        if: runner.os != 'Windows'
+        env:
+          KLAMMR_VERSION: ${{ inputs.version }}
+        run: curl -fsSL "$SITE/install.sh" | sh
+      - name: Install (irm | iex, Windows PowerShell 5.1)
+        if: runner.os == 'Windows'
+        shell: powershell
+        env:
+          KLAMMR_VERSION: ${{ inputs.version }}
+        run: irm "$env:SITE/install.ps1" | iex
+
+      - name: Check the editor and the extension
+        if: runner.os != 'Windows'
+        run: |
+          if [ "$RUNNER_OS" = macOS ]; then cli="$HOME/Applications/Klammr.app/Contents/Resources/app/bin/klammr"; else cli="$HOME/.local/opt/klammr/bin/klammr"; fi
+          "$cli" --version
+          "$cli" --list-extensions --show-versions | tee extensions.txt
+          grep -qi '^klammr\.klammr@' extensions.txt
+      - name: Check the editor and the extension
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $cli = Join-Path $env:LOCALAPPDATA 'Programs\Klammr\bin\klammr.cmd'
+          & $cli --version
+          $extensions = & $cli --list-extensions --show-versions
+          $extensions
+          if (-not ($extensions -match '^klammr\.klammr@')) { throw 'the Klammr extension is not installed' }
+
+      - name: Uninstall (curl | sh -s -- --uninstall, latest release)
+        if: runner.os != 'Windows'
+        run: curl -fsSL "$SITE/install.sh" | sh -s -- --uninstall --yes
+      - name: Uninstall (script block, Windows PowerShell 5.1, latest release)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: '& ([scriptblock]::Create((irm "$env:SITE/install.ps1"))) --uninstall --yes'
+
+      - name: Check it is gone
+        if: runner.os != 'Windows'
+        run: |
+          if [ "$RUNNER_OS" = macOS ]; then app="$HOME/Applications/Klammr.app"; else app="$HOME/.local/opt/klammr"; fi
+          test ! -e "$app" && test ! -e "$HOME/.local/bin/klammr"
+      - name: Check it is gone
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: if (Test-Path (Join-Path $env:LOCALAPPDATA 'Programs\Klammr')) { throw 'Klammr is still installed' }
+      - name: Uninstall again (PowerShell 7, latest release, nothing left to remove)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: '& ([scriptblock]::Create((irm "$env:SITE/install.ps1"))) --uninstall --yes'

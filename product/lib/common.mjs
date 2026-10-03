@@ -23,6 +23,8 @@ export const PINNED_SHA256 = {
 };
 // Optional https URL of this repository: when set, Help › Report Issue / Documentation point at it.
 export const REPO_URL = process.env.KLAMMR_REPO_URL || 'https://github.com/klammr/klammr';
+// Serves the one-line installers (site/install.sh, site/install.ps1).
+export const SITE_URL = 'https://klammr.github.io/klammr';
 
 export const PLATFORMS = ['linux', 'darwin', 'win32'];
 export const ARCHES = ['x64', 'arm64'];

@@ -109,6 +109,13 @@ build any target — the Linux box builds the macOS and Windows bundles), then p
 for Windows) plus a `.sha256`. `install.mjs` detects `app/` and `klammr.vsix` next to itself and installs from them
 without downloading (`--from <dir>` does the same explicitly). `.github/workflows/release.yml` builds all six on a `v*` tag.
 
+The one-line installers `site/install.sh` and `site/install.ps1` (served by the website) download the bundle for the
+user's machine from the latest release, check its `.sha256`, unpack it into the download cache (Windows: the temp
+directory) and run its `install.mjs`; with `--uninstall` they fetch the release's source archive and run
+`product/uninstall.mjs` from it. `product/__tests__/web-install.test.mjs` runs `install.sh` against a local stand-in for
+GitHub, and `.github/workflows/installer-check.yml` installs and uninstalls every release this way on Linux, macOS and
+Windows.
+
 ## Testing without touching your real home
 
 ```bash

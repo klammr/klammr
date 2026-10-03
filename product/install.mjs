@@ -35,7 +35,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-  ARCHES, PLATFORMS, PLATFORM_LABEL, PRODUCT_DIR, REPO_DIR, VSCODIUM_VERSION, assetFor, cleanStaleSiblings,
+  ARCHES, PLATFORMS, PLATFORM_LABEL, PRODUCT_DIR, REPO_DIR, SITE_URL, VSCODIUM_VERSION, assetFor, cleanStaleSiblings,
   copyTree, die, ensureAsset, ensureDir, exists, extractArchive, have, isFile, jsoncSetIfAbsent, klammrPaths, log,
   main, makeStageDir, markerOf, nowIso, parseArgs, readJson, rmrf, run, swapIn, writeIfMissing, writeJson,
 } from './lib/common.mjs';
@@ -311,8 +311,15 @@ await main(async () => {
   L.push(`    Settings    ${settings}   (yours — the installer never overwrites it)`);
   L.push('                Ctrl+Shift+J inside Klammr opens the Klammr Settings panel; Ctrl+, the VS Code settings.');
   if (platform === 'linux') L.push(`    Flags       ${paths.flagsFile}`);
-  const rerun = platform === 'win32' ? 'product\\install.cmd' : 'bash product/install.sh';
-  const unrun = platform === 'win32' ? 'product\\uninstall.cmd' : 'bash product/uninstall.sh';
-  L.push(`    Upgrade     re-run:  ${rerun}          Uninstall:  ${unrun}`);
+  if (bundleApp) {
+    // A release bundle, usually unpacked (and removed again) by the one-line installer.
+    const web = platform === 'win32' ? `irm ${SITE_URL}/install.ps1 | iex` : `curl -fsSL ${SITE_URL}/install.sh | sh`;
+    L.push(`    Upgrade     ${web}`);
+    L.push(`    Uninstall   ${platform === 'win32' ? `& ([scriptblock]::Create((irm ${SITE_URL}/install.ps1))) --uninstall` : `${web} -s -- --uninstall`}`);
+  } else {
+    const rerun = platform === 'win32' ? 'product\\install.cmd' : 'bash product/install.sh';
+    const unrun = platform === 'win32' ? 'product\\uninstall.cmd' : 'bash product/uninstall.sh';
+    L.push(`    Upgrade     re-run:  ${rerun}          Uninstall:  ${unrun}`);
+  }
   console.log(L.join('\n'));
 });

@@ -1,5 +1,6 @@
 # Klammr release: on a v* tag, build the extension once, then one redistributable bundle per
-# platform/arch (product/build-bundle.mjs) on the native runner, and attach everything to a GitHub Release.
+# platform/arch (product/build-bundle.mjs) on the native runner, attach everything to a GitHub Release, and
+# install it with the one-line installers on each OS (installer-check.yml).
 name: release
 
 on:
@@ -81,3 +82,10 @@ jobs:
           files: |
             artifacts/klammr-vsix/klammr.vsix
             artifacts/bundles-*/*
+
+  installer-check:
+    name: one-line installers
+    needs: release
+    uses: ./.github/workflows/installer-check.yml
+    with:
+      version: ${{ github.ref_name }}

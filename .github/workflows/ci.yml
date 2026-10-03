@@ -19,7 +19,7 @@ jobs:
       - run: npm run typecheck
       - run: node scripts/build-theme.mjs --check
       - run: npm run build
-      - run: node --test src/extension/*/__tests__/*.test.mjs src/webview/__tests__/*.test.mjs
+      - run: node --test src/extension/*/__tests__/*.test.mjs src/webview/__tests__/*.test.mjs product/__tests__/*.test.mjs
       - run: node scripts/smoke-load.mjs
       - run: npm run package
       - uses: actions/upload-artifact@v4

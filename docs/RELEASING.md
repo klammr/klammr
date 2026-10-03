@@ -7,7 +7,7 @@ Klammr follows a small, strict routine so every update is traceable and users ca
 - One logical change per commit, written in the imperative with a type prefix:
   `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`, `release:`.
 - The tree must pass `npm run typecheck`, `npm run build`, the unit tests
-  (`node --test src/extension/*/__tests__/*.test.mjs src/webview/__tests__/*.test.mjs`) and
+  (`node --test src/extension/*/__tests__/*.test.mjs src/webview/__tests__/*.test.mjs product/__tests__/*.test.mjs`) and
   `node scripts/smoke-load.mjs` before it is committed. CI runs the same checks on every push.
 - Never commit `dist/`, `node_modules/`, screenshots with personal data, or scratch files.
 - User-visible changes get a line under `## [Unreleased]` in `CHANGELOG.md` in the same commit.
@@ -36,11 +36,15 @@ git push origin main --follow-tags
 
 The release workflow builds `klammr.vsix` once, then one bundle per platform/arch on native runners
 (Linux x64/arm64, macOS arm64/x64, Windows x64/arm64) and attaches everything, with `.sha256` sidecars,
-to the GitHub Release for the tag. Fill in the release notes from the changelog section.
+to the GitHub Release for the tag. Fill in the release notes from the changelog section. Last, it installs the release
+with the one-line installers on Linux, macOS and Windows and uninstalls it again (`installer-check.yml`); run that check
+from the Actions tab after changing `site/install.sh` or `site/install.ps1`.
 
 ## Updating an installed Klammr
 
-Users upgrade by downloading the new bundle and running its installer, or by `git pull` and re-running
+Users upgrade by running the install command again (`curl -fsSL https://klammr.github.io/klammr/install.sh | sh`, or
+`irm https://klammr.github.io/klammr/install.ps1 | iex` on Windows), by downloading the new bundle and running its
+installer, or by `git pull` and re-running
 `product/install.sh` / `product\install.cmd`. The installer replaces the application directory atomically,
 reinstalls the extension, and never touches `settings.json`, `keybindings.json`, chats or extensions.
 

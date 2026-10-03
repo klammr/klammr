@@ -7,15 +7,21 @@ builds the extension and one bundle per platform from that tag.
 
 ## [Unreleased]
 
+### Added
+- One-command install: `curl -fsSL https://klammr.github.io/klammr/install.sh | sh` (Linux, macOS) or `irm https://klammr.github.io/klammr/install.ps1 | iex` (Windows PowerShell) downloads the latest release bundle for your machine, checks its sha256 and runs its installer. Run it again to upgrade, or with `--uninstall` to remove Klammr; `KLAMMR_VERSION` picks a specific release. Every release is installed and uninstalled this way on Linux, macOS and Windows by CI.
+
 ### Changed
 - Renamed to **Klammr** (formerly Kursor), with a new mark: a text cursor held in a pair of brackets. Breaking: the app, the `klammr` command, the install and data folders (`~/.local/opt/klammr`, `~/.config/Klammr`, `~/.klammr`), the `klammr://` URL scheme, the extension ID (`klammr.klammr`) and every command, setting and context key (`kursor.*` → `klammr.*`) change. Klammr installs next to an existing Kursor with a fresh profile; remove Kursor with its own uninstaller.
 - The source and releases move to github.com/klammr/klammr and the website to klammr.github.io/klammr; the Help menu links, the Settings About tab and the package metadata point there. Kursor 0.1.x stays at github.com/brucegrootgames/kursor.
 - Klammr Dark is rebuilt from the brand palette by `scripts/build-theme.mjs`: ink window, surface panels, violet accent, orchid cursor, Keep / Undo / Warn for diffs and git status, and Klammr's own syntax colours instead of VS Code's Dark+.
 - Klammr's own workbench look by default: VS Code's Modern UI with floating rounded panels, the Inter-first UI font, layout toggles in the title bar, smooth cursor blinking and caret animation, no minimap. New installs also fold the menu bar into one button.
 - Chat and Settings follow the brand: brand UI font, an inset composer with a single focus ring and the accent-gradient send button, a cursor-bar streaming caret, approval cards in amber, Klammr syntax colours in code blocks, no drop shadow on the logo. In the side bar the native title shows the chat title and the duplicate header is gone; the tab strip appears only with several chats.
+- Release bundles are named after the Klammr version (`Klammr-linux-x64-0.2.0.tar.gz`) instead of the VSCodium version inside them.
 
 ### Fixed
 - On a new profile the secondary side bar opened VS Code's disabled Chat container ("Drag a view here to display") instead of the Klammr chat.
+- After installing from a bundle, the installer's closing hints pointed at `product/install.sh` and `product/uninstall.sh`, which a bundle does not have; they now show the one-line commands.
+- The website said the uninstaller's `--purge` deletes settings; `--yes` does, `--purge` deletes the download cache.
 
 ## [0.1.1] - 2026-10-03
 

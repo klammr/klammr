@@ -5,7 +5,7 @@
 //
 // The archive unpacks to one directory:
 //
-//   Klammr-<platform>-<arch>-<version>/
+//   Klammr-<platform>-<arch>-<version>/      (<version> is Klammr's, from package.json)
 //     app/                 the rebranded editor (darwin: app/Klammr.app) — same code path as install.mjs --stage-only
 //     klammr.vsix          the extension
 //     install.sh|.cmd|.ps1, uninstall.*, install.mjs, uninstall.mjs, lib/, defaults/, icons/, brand/, omarchy/
@@ -13,21 +13,24 @@
 //
 // install.mjs finds app/ and klammr.vsix next to itself and installs from them (no download). Archives are
 // .tar.gz for linux/darwin (symlinks and exec bits preserved) and .zip for win32; a .sha256 is written too.
-// Any host can build any target; signing (macOS) happens on the user's machine at install time.
+// Any host can build any target; signing (macOS) happens on the user's machine at install time. The one-line
+// installers (site/install.sh, site/install.ps1) download these archives from the GitHub release by this name.
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import {
   ARCHES, PLATFORMS, PRODUCT_DIR, REPO_DIR, VSCODIUM_VERSION, die, ensureDir, have, isFile, log, main, parseArgs, rmrf,
-  sha256File, powershell,
+  readJson, sha256File, powershell,
 } from './lib/common.mjs';
+
+const VERSION = readJson(path.join(REPO_DIR, 'package.json')).version;
 
 const BUNDLE_FILES = ['install.mjs', 'uninstall.mjs', 'install.sh', 'uninstall.sh', 'install.ps1', 'install.cmd', 'uninstall.ps1',
   'uninstall.cmd', 'README.md', 'lib', 'defaults', 'icons', 'brand', 'omarchy'];
 
 function installText(platform, name) {
-  const common = `Klammr ${VSCODIUM_VERSION} — ${name}
+  const common = `Klammr ${VERSION} (VSCodium ${VSCODIUM_VERSION}) — ${name}
 
 Requirements: Node.js 18+ (only to run the installer) and the Claude Code CLI installed and signed in
 on this machine (https://code.claude.com/docs/en/setup; sign in with:  claude auth login).
@@ -91,7 +94,7 @@ await main(async () => {
   const vsix = path.resolve(opts.vsix || path.join(REPO_DIR, 'dist', 'klammr.vsix'));
   if (!isFile(vsix)) die(`extension package not found: ${vsix} (npm run package, or --vsix <path>)`);
   const outDir = path.resolve(opts.out || path.join(REPO_DIR, 'dist', 'bundles'));
-  const name = `Klammr-${platform}-${arch}-${VSCODIUM_VERSION}`;
+  const name = `Klammr-${platform}-${arch}-${VERSION}`;
   const workDir = path.join(outDir, 'work');
   const bundleDir = path.join(workDir, name);
   rmrf(bundleDir);

@@ -78,6 +78,21 @@ Modern UI layout with rounded floating panels, the Inter-first UI font and a fol
 
 ## Install
 
+**One command:** downloads the latest release bundle for your machine from GitHub, checks it against the `.sha256`
+published next to it, unpacks it into the download cache, runs the installer inside (described below) and deletes the
+unpacked copy again:
+
+```
+Linux / macOS:   curl -fsSL https://klammr.github.io/klammr/install.sh | sh
+Windows:         irm https://klammr.github.io/klammr/install.ps1 | iex           (in PowerShell)
+```
+
+Installer options go after `sh -s --` (`curl -fsSL https://klammr.github.io/klammr/install.sh | sh -s -- --hypr-bind`)
+and on Windows after a script block (`& ([scriptblock]::Create((irm https://klammr.github.io/klammr/install.ps1))) --desktop-shortcut`).
+The scripts are [`site/install.sh`](site/install.sh) and [`site/install.ps1`](site/install.ps1). They need Node.js 18+
+(see [Requirements](#requirements)), pick the bundle that matches that Node's platform and CPU, and install a specific
+release instead of the latest with `KLAMMR_VERSION=0.2.0`.
+
 **From a release bundle** (no build step): download `Klammr-<platform>-<arch>-<version>.tar.gz` / `.zip` from the
 [Releases](../../releases) page, unpack it, and run the installer inside:
 
@@ -139,7 +154,7 @@ Options (`--help` lists them all):
 Environment: `KLAMMR_CACHE_DIR` (download cache), `KLAMMR_VSCODIUM_VERSION`, `KLAMMR_REPO_URL` (an https URL of this
 repo; when set, Help › Report Issue / Documentation point at it, otherwise those menu entries are hidden).
 
-**Upgrading** is re-running the installer. It replaces the application directory and refreshes launchers, shortcuts and
+**Upgrading** is running the install command again, or re-running the installer from a newer bundle or checkout. It replaces the application directory and refreshes launchers, shortcuts and
 icons, but never overwrites `settings.json`, `keybindings.json`, `argv.json` or the flags file once they exist. Extensions
 live outside the application directory and survive upgrades.
 
@@ -376,15 +391,16 @@ bridge is used by a given `claude` terminal (the one it was started from, via `C
 ## Uninstall
 
 ```
-Linux / macOS:   bash product/uninstall.sh            # or bash uninstall.sh inside a bundle
-Windows:         product\uninstall.cmd
+Linux / macOS:   curl -fsSL https://klammr.github.io/klammr/install.sh | sh -s -- --uninstall
+Windows:         & ([scriptblock]::Create((irm https://klammr.github.io/klammr/install.ps1))) --uninstall
+From a checkout: bash product/uninstall.sh  or  product\uninstall.cmd     (bash uninstall.sh inside a bundle)
 
     --yes            delete settings, extensions and flags too, without asking
     --keep-config    keep them without being asked
     --purge          also delete the cached VSCodium download
 ```
 
-Removes the application, the `klammr` command, desktop entries / shortcuts / `Path` entry / `klammr://` registration, the
+The one-line form downloads the release's source (about 2 MB) and runs the uninstaller from it. It removes the application, the `klammr` command, desktop entries / shortcuts / `Path` entry / `klammr://` registration, the
 Omarchy hook, keybinding and default-editor setting, then asks (TTY only; kept otherwise) about the user data directory,
 `~/.klammr` and the flags file. Your `claude` installation and login are never touched.
 

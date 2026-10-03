@@ -14,7 +14,7 @@ Omarchy integration and troubleshooting are in the [README](../README.md).
 | extensions, `argv.json` | `~/.klammr/` | `~/.klammr/` | `%USERPROFILE%\.klammr\` |
 | install a `.vsix` by hand | `klammr --install-extension file.vsix` | same | same |
 | extra Electron flags | `~/.config/klammr-flags.conf` | `~/.klammr/argv.json` | `%USERPROFILE%\.klammr\argv.json` |
-| upgrade / uninstall | `bash product/install.sh` / `bash product/uninstall.sh` | same | `product\install.cmd` / `product\uninstall.cmd` |
+| upgrade / uninstall | the [install command](../README.md#install) again / with `--uninstall`; in a checkout `bash product/install.sh` / `bash product/uninstall.sh` | same | the install command again / with `--uninstall`; in a checkout `product\install.cmd` / `product\uninstall.cmd` |
 
 Klammr's own settings panel (Ctrl+Shift+J) and VS Code's settings UI (Ctrl+, / Cmd+,) edit the same `settings.json`.
 
