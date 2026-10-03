@@ -14,7 +14,7 @@ installed and signed in on your machine**. Runs on Linux, macOS and Windows (x64
 Klammr is an independent project. It is not affiliated with, endorsed by, or sponsored by Anthropic (Claude, Claude Code)
 or Anysphere (Cursor). See [Compliance and licensing](#compliance-and-licensing).
 
-**Status:** early (0.1.0). The whole tree typechecks and builds, the installer and Omarchy integration are exercised
+**Status:** early (0.2.0). The whole tree typechecks and builds, the installer and Omarchy integration are exercised
 headlessly in CI-style runs, and the Claude bridge was probed against Claude Code 2.1.263. Expect rough edges in the
 GUI flows and please report them.
 

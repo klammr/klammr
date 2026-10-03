@@ -7,6 +7,8 @@ builds the extension and one bundle per platform from that tag.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-03
+
 ### Added
 - One-command install: `curl -fsSL https://klammr.github.io/klammr/install.sh | sh` (Linux, macOS) or `irm https://klammr.github.io/klammr/install.ps1 | iex` (Windows PowerShell) downloads the latest release bundle for your machine, checks its sha256 and runs its installer. Run it again to upgrade, or with `--uninstall` to remove Klammr; `KLAMMR_VERSION` picks a specific release. Every release is installed and uninstalled this way on Linux, macOS and Windows by CI.
 
@@ -49,6 +51,7 @@ First public release.
 ### Fixed
 - Installer and bundle builder use Windows' built-in `tar.exe` (bsdtar) instead of a GNU tar found on PATH, which misread `C:\` paths and cannot handle zip archives.
 
-[Unreleased]: https://github.com/klammr/klammr/commits/main
+[Unreleased]: https://github.com/klammr/klammr/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/klammr/klammr/releases/tag/v0.2.0
 [0.1.1]: https://github.com/brucegrootgames/kursor/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/brucegrootgames/kursor/releases/tag/v0.1.0
