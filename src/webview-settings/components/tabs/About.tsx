@@ -4,8 +4,8 @@ import { copyText, tildify } from '../../util';
 import { post } from '../../vscode';
 import { Button, LinkButton, Section, SettingRow } from '../controls';
 
-const WEBSITE = 'https://brucegrootgames.github.io/kursor/';
-const REPO = 'https://github.com/brucegrootgames/kursor';
+const WEBSITE = 'https://klammr.github.io/klammr/';
+const REPO = 'https://github.com/klammr/klammr';
 const PROJECT_LINKS: { label: string; url: string; icon: string }[] = [
   { label: 'Website', url: WEBSITE, icon: 'globe' },
   { label: 'Repository', url: REPO, icon: 'github' },

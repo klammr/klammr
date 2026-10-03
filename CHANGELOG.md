@@ -9,6 +9,7 @@ builds the extension and one bundle per platform from that tag.
 
 ### Changed
 - Renamed to **Klammr** (formerly Kursor), with a new mark: a text cursor held in a pair of brackets. Breaking: the app, the `klammr` command, the install and data folders (`~/.local/opt/klammr`, `~/.config/Klammr`, `~/.klammr`), the `klammr://` URL scheme, the extension ID (`klammr.klammr`) and every command, setting and context key (`kursor.*` → `klammr.*`) change. Klammr installs next to an existing Kursor with a fresh profile; remove Kursor with its own uninstaller.
+- The source and releases move to github.com/klammr/klammr and the website to klammr.github.io/klammr; the Help menu links, the Settings About tab and the package metadata point there. Kursor 0.1.x stays at github.com/brucegrootgames/kursor.
 - Klammr Dark is rebuilt from the brand palette by `scripts/build-theme.mjs`: ink window, surface panels, violet accent, orchid cursor, Keep / Undo / Warn for diffs and git status, and Klammr's own syntax colours instead of VS Code's Dark+.
 - Klammr's own workbench look by default: VS Code's Modern UI with floating rounded panels, the Inter-first UI font, layout toggles in the title bar, smooth cursor blinking and caret animation, no minimap. New installs also fold the menu bar into one button.
 - Chat and Settings follow the brand: brand UI font, an inset composer with a single focus ring and the accent-gradient send button, a cursor-bar streaming caret, approval cards in amber, Klammr syntax colours in code blocks, no drop shadow on the logo. In the side bar the native title shows the chat title and the duplicate header is gone; the tab strip appears only with several chats.
@@ -42,6 +43,6 @@ First public release.
 ### Fixed
 - Installer and bundle builder use Windows' built-in `tar.exe` (bsdtar) instead of a GNU tar found on PATH, which misread `C:\` paths and cannot handle zip archives.
 
-[Unreleased]: https://github.com/brucegrootgames/kursor/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/klammr/klammr/commits/main
 [0.1.1]: https://github.com/brucegrootgames/kursor/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/brucegrootgames/kursor/releases/tag/v0.1.0

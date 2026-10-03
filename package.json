@@ -958,10 +958,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/brucegrootgames/kursor.git"
+    "url": "https://github.com/klammr/klammr.git"
   },
-  "homepage": "https://brucegrootgames.github.io/kursor/",
+  "homepage": "https://klammr.github.io/klammr/",
   "bugs": {
-    "url": "https://github.com/brucegrootgames/kursor/issues"
+    "url": "https://github.com/klammr/klammr/issues"
   }
 }
