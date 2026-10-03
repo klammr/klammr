@@ -36,7 +36,7 @@ function describeTool(name: string, input: unknown): string {
 export function chatToMarkdown(chat: ChatState): string {
   const out: string[] = [];
   out.push(`# ${chat.title}`, '');
-  out.push(`_Kursor chat · ${new Date(chat.createdAt).toLocaleString()} · mode: ${chat.mode}${chat.model ? ` · model: ${chat.model}` : ''}${chat.cwd ? ` · ${chat.cwd}` : ''}_`, '');
+  out.push(`_Klammr chat · ${new Date(chat.createdAt).toLocaleString()} · mode: ${chat.mode}${chat.model ? ` · model: ${chat.model}` : ''}${chat.cwd ? ` · ${chat.cwd}` : ''}_`, '');
   for (const m of chat.messages) {
     if (m.kind === 'user') {
       out.push('## User', '');

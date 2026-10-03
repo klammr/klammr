@@ -344,7 +344,7 @@ export function SettingFooter({ meta, value }: { meta: SettingMeta | undefined; 
         <span className="override">
           <Icon name="warning" />
           Overridden in this {meta.scope === 'workspace' ? 'workspace' : 'folder'} —{' '}
-          <LinkButton onClick={() => post({ type: 'openEditorSettings', query: `kursor.${meta.key}`, scope: 'workspace' })}>open workspace setting</LinkButton>
+          <LinkButton onClick={() => post({ type: 'openEditorSettings', query: `klammr.${meta.key}`, scope: 'workspace' })}>open workspace setting</LinkButton>
         </span>
       )}
       {differs && !overridden && (

@@ -47,7 +47,7 @@ export function setUiState(patch: Partial<WebviewUiState>): void {
   }
 }
 
-/** Forward a diagnostic line to the host logger (shows up in the Kursor output channel). */
+/** Forward a diagnostic line to the host logger (shows up in the Klammr output channel). */
 export function hostLog(level: 'info' | 'warn' | 'error', text: string): void {
   post({ type: 'log', level, text });
 }

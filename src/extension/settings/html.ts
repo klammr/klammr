@@ -26,7 +26,7 @@ export function settingsHtml(webview: vscode.Webview, extensionUri: vscode.Uri):
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="${codiconUri}">
 ${cssLink}
-<title>Kursor Settings</title>
+<title>Klammr Settings</title>
 <style nonce="${nonce}">html,body,#root{height:100%;margin:0;padding:0}${uiFontRule()}</style>
 </head>
 <body>

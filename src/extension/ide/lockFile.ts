@@ -1,5 +1,5 @@
 /**
- * Lock-file contract between Kursor and the `claude` CLI.
+ * Lock-file contract between Klammr and the `claude` CLI.
  *
  * The CLI lists `<claude config dir>/ide/*.lock`, parses each JSON payload and, when the
  * port matches `CLAUDE_CODE_SSE_PORT` (or the cwd is inside one of `workspaceFolders`),
@@ -17,7 +17,7 @@ export interface LockFilePayload {
   pid: number;
   /** Absolute workspace folder paths. */
   workspaceFolders: string[];
-  /** `vscode.env.appName` ("Kursor" in the rebranded build). */
+  /** `vscode.env.appName` ("Klammr" in the rebranded build). */
   ideName: string;
   transport: 'ws';
   runningInWindows: boolean;

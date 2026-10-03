@@ -3,7 +3,7 @@
  *
  * The SDK's `env` option REPLACES the child environment, so we start from
  * `process.env`. `CLAUDECODE` / `CLAUDE_CODE_CHILD_SESSION` are removed so a
- * `claude` that happens to be running the extension host (e.g. Kursor launched
+ * `claude` that happens to be running the extension host (e.g. Klammr launched
  * from a Claude Code terminal) does not make the child think it is nested.
  * `NODE_OPTIONS` is never set (the SDK deletes it anyway).
  *

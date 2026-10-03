@@ -1,8 +1,8 @@
 /**
  * Inline diff presentation for agent edits (Cursor "Inline Diffs"):
- * - whole-line background on added lines (`kursor.addedLineBackground`),
+ * - whole-line background on added lines (`klammr.addedLineBackground`),
  * - a dashed marker with "− N lines removed" (hover shows the removed text),
- * - CodeLens "Keep · Undo" per hunk (`kursor.edits.keepHunk/undoHunk [fsPath, i]`).
+ * - CodeLens "Keep · Undo" per hunk (`klammr.edits.keepHunk/undoHunk [fsPath, i]`).
  * Hunks are recomputed from the tracked base against the live document text.
  */
 import * as vscode from 'vscode';
@@ -11,7 +11,7 @@ import { computeHunks, hunkOldLines, type Hunk, type TrackedFile } from './model
 export class EditDecorations implements vscode.CodeLensProvider, vscode.Disposable {
   private readonly added = vscode.window.createTextEditorDecorationType({
     isWholeLine: true,
-    backgroundColor: new vscode.ThemeColor('kursor.addedLineBackground'),
+    backgroundColor: new vscode.ThemeColor('klammr.addedLineBackground'),
     overviewRulerColor: new vscode.ThemeColor('editorGutter.addedBackground'),
     overviewRulerLane: vscode.OverviewRulerLane.Left,
     rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
@@ -100,7 +100,7 @@ export class EditDecorations implements vscode.CodeLensProvider, vscode.Disposab
         removedOpts.push({
           range: new vscode.Range(line, 0, line, 0),
           hoverMessage: md,
-          renderOptions: { after: { contentText: `− ${oldLines.length} line${oldLines.length === 1 ? '' : 's'} removed by Kursor` } },
+          renderOptions: { after: { contentText: `− ${oldLines.length} line${oldLines.length === 1 ? '' : 's'} removed by Klammr` } },
         });
       }
     }
@@ -119,14 +119,14 @@ export class EditDecorations implements vscode.CodeLensProvider, vscode.Disposab
       const line = Math.min(lastLine, Math.max(0, h.newStart - 1));
       const range = new vscode.Range(line, 0, line, 0);
       lenses.push(
-        new vscode.CodeLens(range, { title: '$(check) Keep', tooltip: 'Keep this change', command: 'kursor.edits.keepHunk', arguments: [doc.uri.fsPath, i] }),
-        new vscode.CodeLens(range, { title: '$(discard) Undo', tooltip: 'Undo this change', command: 'kursor.edits.undoHunk', arguments: [doc.uri.fsPath, i] }),
+        new vscode.CodeLens(range, { title: '$(check) Keep', tooltip: 'Keep this change', command: 'klammr.edits.keepHunk', arguments: [doc.uri.fsPath, i] }),
+        new vscode.CodeLens(range, { title: '$(discard) Undo', tooltip: 'Undo this change', command: 'klammr.edits.undoHunk', arguments: [doc.uri.fsPath, i] }),
       );
       if (i === 0 && hunks.length > 1) {
         lenses.push(
-          new vscode.CodeLens(range, { title: `Kursor: ${hunks.length} changes`, command: 'kursor.edits.reviewFile', arguments: [doc.uri] }),
-          new vscode.CodeLens(range, { title: 'Keep file', command: 'kursor.edits.keepFile', arguments: [doc.uri] }),
-          new vscode.CodeLens(range, { title: 'Undo file', command: 'kursor.edits.undoFile', arguments: [doc.uri] }),
+          new vscode.CodeLens(range, { title: `Klammr: ${hunks.length} changes`, command: 'klammr.edits.reviewFile', arguments: [doc.uri] }),
+          new vscode.CodeLens(range, { title: 'Keep file', command: 'klammr.edits.keepFile', arguments: [doc.uri] }),
+          new vscode.CodeLens(range, { title: 'Undo file', command: 'klammr.edits.undoFile', arguments: [doc.uri] }),
         );
       }
     });

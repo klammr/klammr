@@ -10,7 +10,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const src = path.resolve(here, '..');
-const tmp = fs.mkdtempSync(path.join(process.env.KURSOR_TEST_TMP || os.tmpdir(), 'kursor-shell-test-'));
+const tmp = fs.mkdtempSync(path.join(process.env.KLAMMR_TEST_TMP || os.tmpdir(), 'klammr-shell-test-'));
 let shell, prompt;
 
 before(async () => {

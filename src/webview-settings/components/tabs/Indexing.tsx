@@ -11,7 +11,7 @@ export function IndexingTab() {
 
   return (
     <>
-      <Section title="Codebase access" description="Kursor does not build a separate embeddings index. The agent searches your workspace live with Claude Code's own tools, so what it sees is always current.">
+      <Section title="Codebase access" description="Klammr does not build a separate embeddings index. The agent searches your workspace live with Claude Code's own tools, so what it sees is always current.">
         <ul className="bullets">
           <li>
             <strong>Agent searches</strong> (Grep, Glob, Read) run against the files on disk and skip paths ignored by <code>.gitignore</code>. A file you reference explicitly can always be read.
@@ -61,7 +61,7 @@ export function IndexingTab() {
         <ul className="bullets">
           <li>Code leaves this machine only when the Claude Code CLI sends it to Anthropic's API as part of a request you started (chat, Ctrl+K, Tab, commit message).</li>
           <li>Tab completions send a window of the current file around the cursor (see the Tab page for the size).</li>
-          <li>Kursor stores chat transcripts in this editor's workspace storage; Claude Code keeps its own session logs under <code>~/.claude/projects</code>.</li>
+          <li>Klammr stores chat transcripts in this editor's workspace storage; Claude Code keeps its own session logs under <code>~/.claude/projects</code>.</li>
         </ul>
       </Section>
     </>

@@ -20,13 +20,13 @@ export class InlineDiffCodeLensProvider implements vscode.CodeLensProvider, vsco
       const line = Math.min(block.start, Math.max(0, document.lineCount - 1));
       const range = new vscode.Range(line, 0, line, 0);
       lenses.push(
-        new vscode.CodeLens(range, { title: '✓ Accept', tooltip: 'Accept this change (Ctrl+Alt+Y)', command: 'kursor.inlineEdit.acceptBlock', arguments: [fsPath, index] }),
-        new vscode.CodeLens(range, { title: '✗ Reject', tooltip: 'Reject this change (Ctrl+Alt+N)', command: 'kursor.inlineEdit.rejectBlock', arguments: [fsPath, index] }),
+        new vscode.CodeLens(range, { title: '✓ Accept', tooltip: 'Accept this change (Ctrl+Alt+Y)', command: 'klammr.inlineEdit.acceptBlock', arguments: [fsPath, index] }),
+        new vscode.CodeLens(range, { title: '✗ Reject', tooltip: 'Reject this change (Ctrl+Alt+N)', command: 'klammr.inlineEdit.rejectBlock', arguments: [fsPath, index] }),
       );
       if (index === 0 && handler.blocks.length > 1) {
         lenses.push(
-          new vscode.CodeLens(range, { title: 'Accept all (Ctrl+Enter)', command: 'kursor.inlineEdit.acceptAll', arguments: [document.uri] }),
-          new vscode.CodeLens(range, { title: 'Reject all (Ctrl+Backspace)', command: 'kursor.inlineEdit.rejectAll', arguments: [document.uri] }),
+          new vscode.CodeLens(range, { title: 'Accept all (Ctrl+Enter)', command: 'klammr.inlineEdit.acceptAll', arguments: [document.uri] }),
+          new vscode.CodeLens(range, { title: 'Reject all (Ctrl+Backspace)', command: 'klammr.inlineEdit.rejectAll', arguments: [document.uri] }),
         );
       }
     });

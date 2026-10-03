@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Kursor are recorded here. The format follows
+All notable changes to Klammr are recorded here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow
 [Semantic Versioning](https://semver.org/). Each release is a `vX.Y.Z` tag; CI
 builds the extension and one bundle per platform from that tag.
@@ -8,12 +8,13 @@ builds the extension and one bundle per platform from that tag.
 ## [Unreleased]
 
 ### Changed
-- Kursor Dark is rebuilt from the brand palette by `scripts/build-theme.mjs`: ink window, surface panels, violet accent, orchid cursor, Keep / Undo / Warn for diffs and git status, and Kursor's own syntax colours instead of VS Code's Dark+.
-- Kursor's own workbench look by default: VS Code's Modern UI with floating rounded panels, the Inter-first UI font, layout toggles in the title bar, smooth cursor blinking and caret animation, no minimap. New installs also fold the menu bar into one button.
-- Chat and Settings follow the brand: brand UI font, an inset composer with a single focus ring and the accent-gradient send button, a cursor-bar streaming caret, approval cards in amber, Kursor syntax colours in code blocks, no drop shadow on the logo. In the side bar the native title shows the chat title and the duplicate header is gone; the tab strip appears only with several chats.
+- Renamed to **Klammr** (formerly Kursor), with a new mark: a text cursor held in a pair of brackets. Breaking: the app, the `klammr` command, the install and data folders (`~/.local/opt/klammr`, `~/.config/Klammr`, `~/.klammr`), the `klammr://` URL scheme, the extension ID (`klammr.klammr`) and every command, setting and context key (`kursor.*` → `klammr.*`) change. Klammr installs next to an existing Kursor with a fresh profile; remove Kursor with its own uninstaller.
+- Klammr Dark is rebuilt from the brand palette by `scripts/build-theme.mjs`: ink window, surface panels, violet accent, orchid cursor, Keep / Undo / Warn for diffs and git status, and Klammr's own syntax colours instead of VS Code's Dark+.
+- Klammr's own workbench look by default: VS Code's Modern UI with floating rounded panels, the Inter-first UI font, layout toggles in the title bar, smooth cursor blinking and caret animation, no minimap. New installs also fold the menu bar into one button.
+- Chat and Settings follow the brand: brand UI font, an inset composer with a single focus ring and the accent-gradient send button, a cursor-bar streaming caret, approval cards in amber, Klammr syntax colours in code blocks, no drop shadow on the logo. In the side bar the native title shows the chat title and the duplicate header is gone; the tab strip appears only with several chats.
 
 ### Fixed
-- On a new profile the secondary side bar opened VS Code's disabled Chat container ("Drag a view here to display") instead of the Kursor chat.
+- On a new profile the secondary side bar opened VS Code's disabled Chat container ("Drag a view here to display") instead of the Klammr chat.
 
 ## [0.1.1] - 2026-10-03
 

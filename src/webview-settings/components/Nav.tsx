@@ -1,6 +1,6 @@
 /** Left navigation: an accessible vertical tab list with roving focus (arrow keys, Home/End). */
 import { useCallback, useEffect, useRef, type KeyboardEvent } from 'react';
-import { KursorGlyph } from '../../shared/Logo';
+import { KlammrGlyph } from '../../shared/Logo';
 import { SETTINGS_TABS, type SettingsTab } from '../../shared/settingsProtocol';
 import { cx } from '../util';
 import { Icon } from './Icon';
@@ -11,7 +11,7 @@ export const TAB_INFO: Record<SettingsTab, { label: string; icon: string; hint: 
   tab: { label: 'Tab', icon: 'sparkle', hint: 'Ghost-text completions' },
   models: { label: 'Models', icon: 'circuit-board', hint: 'Default and per-feature models' },
   rules: { label: 'Rules', icon: 'law', hint: 'User rules and project rules' },
-  indexing: { label: 'Indexing', icon: 'search', hint: 'What Kursor can see' },
+  indexing: { label: 'Indexing', icon: 'search', hint: 'What Klammr can see' },
   about: { label: 'About', icon: 'info', hint: 'Version and links' },
 };
 
@@ -77,9 +77,9 @@ export function Nav({ active, onSelect }: { active: SettingsTab; onSelect: (tab:
     <nav className="nav" aria-label="Settings sections">
       <div className="nav-brand">
         <span className="nav-logo" aria-hidden="true">
-          <KursorGlyph size={18} />
+          <KlammrGlyph size={18} />
         </span>
-        <span className="nav-title">Kursor Settings</span>
+        <span className="nav-title">Klammr Settings</span>
       </div>
       <div className="nav-list" role="tablist" aria-orientation="vertical">
         {SETTINGS_TABS.map((tab) => {

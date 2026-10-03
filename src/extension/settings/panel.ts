@@ -1,7 +1,7 @@
 /**
- * SettingsPanelController — the singleton "Kursor Settings" WebviewPanel (viewType `kursor.settings`).
+ * SettingsPanelController — the singleton "Klammr Settings" WebviewPanel (viewType `klammr.settings`).
  *
- * The host owns the state: it reads `kursor.*` (config.ts), the Claude status (bridge), the project
+ * The host owns the state: it reads `klammr.*` (config.ts), the Claude status (bridge), the project
  * rules (RulesService) and the workspace info, pushes snapshots to the panel and applies the panel's
  * intents. Everything the panel can trigger goes through `handleMessage`, which never throws:
  * failures are logged and surfaced as a toast inside the panel.
@@ -29,7 +29,7 @@ import { settingsHtml } from './html';
 import { createNewRuleInteractive } from './rulesActions';
 import { defaultCwd, isWorkspaceFolderPath, openGitignore, openOrCreateCursorignore, openPathFromPanel, readWorkspaceInfo } from './workspace';
 
-export const SETTINGS_VIEW_TYPE = 'kursor.settings';
+export const SETTINGS_VIEW_TYPE = 'klammr.settings';
 const SETTINGS_POST_THROTTLE_MS = 50;
 
 const ABOUT_LINKS: AboutInfo['links'] = [
@@ -41,15 +41,15 @@ const ABOUT_LINKS: AboutInfo['links'] = [
 ];
 
 const ALLOWED_COMMANDS = new Set<string>([
-  'kursor.claude.login',
-  'kursor.claude.status',
-  'kursor.showLogs',
-  'kursor.rules.new',
-  'kursor.tab.toggle',
-  'kursor.tab.snooze',
-  'kursor.tab.statusMenu',
-  'kursor.chat.open',
-  'kursor.chat.newChat',
+  'klammr.claude.login',
+  'klammr.claude.status',
+  'klammr.showLogs',
+  'klammr.rules.new',
+  'klammr.tab.toggle',
+  'klammr.tab.snooze',
+  'klammr.tab.statusMenu',
+  'klammr.chat.open',
+  'klammr.chat.newChat',
   'workbench.action.openSettings',
   'workbench.action.openSettingsJson',
   'workbench.action.openWorkspaceSettings',
@@ -89,7 +89,7 @@ export class SettingsPanelController implements vscode.Disposable {
         },
       }),
       vscode.workspace.onDidChangeConfiguration((e) => {
-        if (!e.affectsConfiguration('kursor')) return;
+        if (!e.affectsConfiguration('klammr')) return;
         this.scheduleSettingsPost();
       }),
       deps.bridge.onDidChangeStatus((status) => {
@@ -122,7 +122,7 @@ export class SettingsPanelController implements vscode.Disposable {
     const roots = [vscode.Uri.joinPath(this.context.extensionUri, 'dist'), vscode.Uri.joinPath(this.context.extensionUri, 'media')];
     const panel = vscode.window.createWebviewPanel(
       SETTINGS_VIEW_TYPE,
-      'Kursor Settings',
+      'Klammr Settings',
       { viewColumn: vscode.ViewColumn.Active, preserveFocus: false },
       { enableScripts: true, retainContextWhenHidden: true, enableFindWidget: true, localResourceRoots: roots },
     );
@@ -135,8 +135,8 @@ export class SettingsPanelController implements vscode.Disposable {
     this.panel = panel;
     this.ready = false;
     const roots = [vscode.Uri.joinPath(this.context.extensionUri, 'dist'), vscode.Uri.joinPath(this.context.extensionUri, 'media')];
-    panel.title = 'Kursor Settings';
-    panel.iconPath = vscode.Uri.joinPath(this.context.extensionUri, 'media', 'kursor-activity.svg');
+    panel.title = 'Klammr Settings';
+    panel.iconPath = vscode.Uri.joinPath(this.context.extensionUri, 'media', 'klammr-activity.svg');
     panel.webview.options = { enableScripts: true, localResourceRoots: roots };
     panel.webview.html = settingsHtml(panel.webview, this.context.extensionUri);
     this.panelSubs.push(
@@ -332,15 +332,15 @@ export class SettingsPanelController implements vscode.Disposable {
         if (!isSettingKey(msg.key)) throw new Error(`Unknown setting ${String(msg.key)}`);
         const value = coerceValue(msg.key, msg.value);
         const { shadowed } = await writeValue(msg.key, value);
-        this.log.debug(`set kursor.${msg.key} = ${JSON.stringify(value)}`);
-        if (shadowed) this.toast('warning', `Saved to your user settings, but kursor.${msg.key} is overridden in this workspace.`);
+        this.log.debug(`set klammr.${msg.key} = ${JSON.stringify(value)}`);
+        if (shadowed) this.toast('warning', `Saved to your user settings, but klammr.${msg.key} is overridden in this workspace.`);
         this.scheduleSettingsPost();
         return;
       }
       case 'resetSetting': {
         if (!isSettingKey(msg.key)) throw new Error(`Unknown setting ${String(msg.key)}`);
         await writeValue(msg.key, undefined);
-        this.log.debug(`reset kursor.${msg.key}`);
+        this.log.debug(`reset klammr.${msg.key}`);
         this.scheduleSettingsPost();
         return;
       }
@@ -401,7 +401,7 @@ export class SettingsPanelController implements vscode.Disposable {
         return;
       }
       case 'openEditorSettings': {
-        const query = typeof msg.query === 'string' && msg.query.trim() ? msg.query.trim() : '@ext:kursor.kursor';
+        const query = typeof msg.query === 'string' && msg.query.trim() ? msg.query.trim() : '@ext:klammr.klammr';
         const command = msg.scope === 'workspace' ? 'workbench.action.openWorkspaceSettings' : 'workbench.action.openSettings';
         await vscode.commands.executeCommand(command, query);
         return;

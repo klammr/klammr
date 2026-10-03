@@ -1,5 +1,5 @@
 /**
- * WebSocket + MCP server the `claude` CLI connects to from Kursor's integrated terminal.
+ * WebSocket + MCP server the `claude` CLI connects to from Klammr's integrated terminal.
  *
  *   http.Server (127.0.0.1:<random 10000-65535>) ─ upgrade ─▶ ws (subprotocol "mcp")
  *     ├─ auth: header `x-claude-code-ide-authorization` must equal the lock file's authToken
@@ -23,7 +23,7 @@ import { WebSocketServerTransport } from './wsTransport';
 
 export const AUTH_HEADER = 'x-claude-code-ide-authorization';
 export const SSE_PORT_ENV = 'CLAUDE_CODE_SSE_PORT';
-/** Stops the CLI from trying to install the reference extension into Kursor when it sees TERM_PROGRAM=vscode. */
+/** Stops the CLI from trying to install the reference extension into Klammr when it sees TERM_PROGRAM=vscode. */
 export const SKIP_AUTO_INSTALL_ENV = 'CLAUDE_CODE_IDE_SKIP_AUTO_INSTALL';
 const LISTEN_ATTEMPTS = 5;
 
@@ -161,7 +161,7 @@ export class IdeServer implements vscode.Disposable {
     try {
       const lockPath = this.refreshLockFile();
       this.options.env.persistent = false;
-      this.options.env.description = new vscode.MarkdownString('Kursor IDE bridge: lets a `claude` CLI started in this terminal connect to the editor.');
+      this.options.env.description = new vscode.MarkdownString('Klammr IDE bridge: lets a `claude` CLI started in this terminal connect to the editor.');
       this.options.env.replace(SSE_PORT_ENV, String(port));
       this.options.env.replace(SKIP_AUTO_INSTALL_ENV, 'true');
       this.log.info(`IDE bridge listening on ws://${LOOPBACK_HOST}:${port} (lock file ${lockPath ?? 'not written'})`);
@@ -256,7 +256,7 @@ export class IdeServer implements vscode.Disposable {
       const server = http.createServer((_req, res) => {
         res.statusCode = 404;
         res.setHeader('Content-Type', 'text/plain');
-        res.end('Kursor IDE bridge: WebSocket only');
+        res.end('Klammr IDE bridge: WebSocket only');
       });
       const wss = new WebSocketServer({ noServer: true, perMessageDeflate: false });
       server.on('upgrade', (req, socket, head) => this.handleUpgrade(wss, req, socket, head));
@@ -309,7 +309,7 @@ export class IdeServer implements vscode.Disposable {
       previous.close(1000, 'Replaced by a newer client');
       this.clientEmitter.fire(undefined);
     }
-    const conn = new ClientConnection(ws, remote, this.log, this.host, { name: 'Kursor IDE', version: this.options.version });
+    const conn = new ClientConnection(ws, remote, this.log, this.host, { name: 'Klammr IDE', version: this.options.version });
     this.client = conn;
     conn.onDidClose(() => {
       if (this.client !== conn) return;

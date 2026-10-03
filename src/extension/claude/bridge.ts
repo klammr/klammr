@@ -18,7 +18,7 @@ import { errorMessage } from './sdk';
 
 const STATUS_TTL_MS = 60_000;
 const NOT_FOUND_MESSAGE =
-  'The `claude` command-line tool was not found. Install Claude Code (https://code.claude.com/docs/en/setup) or set `kursor.claude.path` to its location.';
+  'The `claude` command-line tool was not found. Install Claude Code (https://code.claude.com/docs/en/setup) or set `klammr.claude.path` to its location.';
 
 interface Executable {
   claudePath: string;
@@ -35,9 +35,9 @@ export function createClaudeBridge(context: vscode.ExtensionContext, log: Logger
   let statusCache: { status: ClaudeStatus; at: number } | undefined;
   let statusInflight: Promise<ClaudeStatus> | undefined;
 
-  const configuredPath = (): string => vscode.workspace.getConfiguration('kursor').get<string>('claude.path', '') ?? '';
+  const configuredPath = (): string => vscode.workspace.getConfiguration('klammr').get<string>('claude.path', '') ?? '';
 
-  /** Resolve (and cache) the executable + child env for the current `kursor.claude.path`. */
+  /** Resolve (and cache) the executable + child env for the current `klammr.claude.path`. */
   function resolveExecutable(force = false): Promise<Executable | undefined> {
     const key = configuredPath();
     if (!force && executable && executable.key === key) return executable.promise;
@@ -159,7 +159,7 @@ export function createClaudeBridge(context: vscode.ExtensionContext, log: Logger
   context.subscriptions.push(
     bridge,
     vscode.workspace.onDidChangeConfiguration((e) => {
-      if (e.affectsConfiguration('kursor.claude.path')) {
+      if (e.affectsConfiguration('klammr.claude.path')) {
         executable = undefined;
         void refreshStatus(true).catch((err: unknown) => log.error('status refresh failed', err));
       }

@@ -1,6 +1,6 @@
 # `claude/` — ClaudeBridge
 
-The one place that talks to the Claude Code CLI. Everything else in Kursor programs
+The one place that talks to the Claude Code CLI. Everything else in Klammr programs
 against `types.ts` (`ClaudeBridge`, `ClaudeSession`, `SessionEvent`).
 
 We spawn the **user's own, unmodified `claude` binary** through
@@ -83,5 +83,5 @@ with `tool_result` blocks (`content` string or block array — flattened; `is_er
 - On the plan card's **Build**, call `respondPermission(id, {behavior:'allow'})` and then
   `setMode?.('agent')`; on **Reject** with feedback, `{behavior:'deny', message: feedback}`.
 - `status()` is cached 60 s; `refreshStatus()` also re-resolves the executable (and the
-  login shell). Changing `kursor.claude.path` refreshes automatically.
+  login shell). Changing `klammr.claude.path` refreshes automatically.
 - Everything logs through the `Logger`; the CLI's stderr is logged at debug level.

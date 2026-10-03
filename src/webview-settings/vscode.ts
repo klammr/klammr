@@ -47,7 +47,7 @@ export function setUiState(patch: Partial<SettingsUiState>): void {
   }
 }
 
-/** Forward a diagnostic line to the host logger (Kursor output channel). */
+/** Forward a diagnostic line to the host logger (Klammr output channel). */
 export function hostLog(level: 'info' | 'warn' | 'error', text: string): void {
   post({ type: 'log', level, text });
 }

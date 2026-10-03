@@ -1,6 +1,6 @@
 /**
  * Minimal typings for the built-in `vscode.git` extension API — the subset
- * Kursor uses, copied from extensions/git/src/api/git.d.ts (VS Code 1.136).
+ * Klammr uses, copied from extensions/git/src/api/git.d.ts (VS Code 1.136).
  * Acquire with `vscode.extensions.getExtension<GitExtension>('vscode.git')`.
  *
  * Note: the real file declares `Status` as a `const enum`; we deliberately type

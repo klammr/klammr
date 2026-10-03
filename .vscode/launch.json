@@ -1,6 +1,6 @@
 {
   // F5 targets. "Run Extension (code)" uses the `code` binary on PATH (VS Code / VSCodium);
-  // "Run Extension (kursor)" uses the rebranded binary installed by product/install.sh.
+  // "Run Extension (klammr)" uses the rebranded binary installed by product/install.sh.
   // Both load this folder as the extension (--extensionDevelopmentPath) and open ../ as the workspace.
   "version": "0.2.0",
   "configurations": [
@@ -16,22 +16,22 @@
       ],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "sourceMaps": true,
-      "preLaunchTask": "kursor: build",
-      "env": { "KURSOR_DEV": "1" }
+      "preLaunchTask": "klammr: build",
+      "env": { "KLAMMR_DEV": "1" }
     },
     {
-      "name": "Run Extension (kursor)",
+      "name": "Run Extension (klammr)",
       "type": "extensionHost",
       "request": "launch",
-      "runtimeExecutable": "${env:HOME}/.local/opt/kursor/bin/kursor",
+      "runtimeExecutable": "${env:HOME}/.local/opt/klammr/bin/klammr",
       "args": [
         "--extensionDevelopmentPath=${workspaceFolder}",
         "${workspaceFolder}"
       ],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "sourceMaps": true,
-      "preLaunchTask": "kursor: build",
-      "env": { "KURSOR_DEV": "1" }
+      "preLaunchTask": "klammr: build",
+      "env": { "KLAMMR_DEV": "1" }
     },
     {
       "name": "Watch + Run Extension (code)",
@@ -45,7 +45,7 @@
       ],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "sourceMaps": true,
-      "preLaunchTask": "kursor: watch"
+      "preLaunchTask": "klammr: watch"
     }
   ]
 }

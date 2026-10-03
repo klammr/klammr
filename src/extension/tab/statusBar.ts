@@ -1,7 +1,7 @@
 /**
- * Bottom-right status bar item: `$(sparkle) Kursor Tab` / `Tab: off` /
+ * Bottom-right status bar item: `$(sparkle) Klammr Tab` / `Tab: off` /
  * `Tab: snoozed 28m` / `Tab: off (markdown)` / spinner while a request runs.
- * Clicking opens `kursor.tab.statusMenu`.
+ * Clicking opens `klammr.tab.statusMenu`.
  */
 import * as vscode from 'vscode';
 import type { TabState } from './state';
@@ -17,9 +17,9 @@ export class TabStatusBar implements vscode.Disposable {
     private readonly state: TabState,
     private readonly stats: () => TabStats,
   ) {
-    this.item = vscode.window.createStatusBarItem('kursor.tab', vscode.StatusBarAlignment.Right, 90);
-    this.item.name = 'Kursor Tab';
-    this.item.command = 'kursor.tab.statusMenu';
+    this.item = vscode.window.createStatusBarItem('klammr.tab', vscode.StatusBarAlignment.Right, 90);
+    this.item.name = 'Klammr Tab';
+    this.item.command = 'klammr.tab.statusMenu';
     this.disposables.push(
       this.item,
       state.onDidChange(() => this.refresh()),
@@ -42,7 +42,7 @@ export class TabStatusBar implements vscode.Disposable {
     this.item.backgroundColor = undefined;
 
     if (availability.active) {
-      this.item.text = this.busy ? '$(loading~spin) Kursor Tab' : '$(sparkle) Kursor Tab';
+      this.item.text = this.busy ? '$(loading~spin) Klammr Tab' : '$(sparkle) Klammr Tab';
     } else {
       switch (availability.reason) {
         case 'disabled':
@@ -64,7 +64,7 @@ export class TabStatusBar implements vscode.Disposable {
     const s = this.stats();
     const md = new vscode.MarkdownString('', true);
     md.isTrusted = true;
-    md.appendMarkdown(`**Kursor Tab** — ${describe(availability, language)}\n\n`);
+    md.appendMarkdown(`**Klammr Tab** — ${describe(availability, language)}\n\n`);
     md.appendMarkdown(`Model \`${cfg.model}\` · debounce ${cfg.debounceMs} ms · ${cfg.contextLines} context lines\n\n`);
     md.appendMarkdown(`This session: ${s.requests} requests · ${s.shown} shown · ${s.accepted} accepted${s.errors ? ` · ${s.errors} errors` : ''}\n\n`);
     if (s.lastError) md.appendMarkdown(`Last error: ${s.lastError.replace(/\n/g, ' ').slice(0, 200)}\n\n`);
@@ -101,11 +101,11 @@ function describe(a: ReturnType<TabState['availabilityFor']>, language: string |
   if (a.active) return language ? `active for ${language}` : 'active';
   switch (a.reason) {
     case 'disabled':
-      return 'disabled (`kursor.tab.enabled`)';
+      return 'disabled (`klammr.tab.enabled`)';
     case 'snoozed':
       return 'snoozed';
     case 'language':
-      return `disabled for ${a.detail ?? language ?? 'this language'} (\`kursor.tab.disabledLanguages\`)`;
+      return `disabled for ${a.detail ?? language ?? 'this language'} (\`klammr.tab.disabledLanguages\`)`;
     case 'unavailable':
       return `unavailable: ${a.detail ?? 'Claude Code CLI not ready'}`;
   }

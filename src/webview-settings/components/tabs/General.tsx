@@ -7,14 +7,14 @@ export function GeneralTab() {
   const about = useStore((s) => s.state!.about);
   return (
     <>
-      <Section title="Account" description="Every AI feature in Kursor is powered by the Claude Code CLI installed on your machine.">
+      <Section title="Account" description="Every AI feature in Klammr is powered by the Claude Code CLI installed on your machine.">
         <ClaudeStatusCard />
       </Section>
 
       <Section title="Editor">
         <SettingRow
           label="Editor settings"
-          description={`Everything else — fonts, themes, keybindings — lives in the regular ${about.appName} settings. Kursor's settings are listed under the "Kursor" section too.`}
+          description={`Everything else — fonts, themes, keybindings — lives in the regular ${about.appName} settings. Klammr's settings are listed under the "Klammr" section too.`}
           control={
             <div className="row-buttons">
               <Button icon="settings-gear" onClick={() => post({ type: 'openEditorSettings' })}>
@@ -34,14 +34,14 @@ export function GeneralTab() {
             </>
           }
           control={
-            <Button icon="keyboard" onClick={() => post({ type: 'runCommand', command: 'workbench.action.openGlobalKeybindings', args: ['kursor'] })}>
+            <Button icon="keyboard" onClick={() => post({ type: 'runCommand', command: 'workbench.action.openGlobalKeybindings', args: ['klammr'] })}>
               Open shortcuts
             </Button>
           }
         />
         <SettingRow
           label="Color theme"
-          description="Kursor ships a “Kursor Dark” theme; pick any other theme if you prefer."
+          description="Klammr ships a “Klammr Dark” theme; pick any other theme if you prefer."
           control={
             <Button icon="color-mode" onClick={() => post({ type: 'runCommand', command: 'workbench.action.selectTheme' })}>
               Choose theme
@@ -51,15 +51,15 @@ export function GeneralTab() {
       </Section>
 
       <Section title="Integrated terminal" description="A `claude` session started in the integrated terminal can talk to this window.">
-        <ToggleSetting setting="ide.enableServer" label="IDE bridge for the terminal" description="Lets a claude started in Kursor's terminal see your selection and diagnostics, and open its proposed diffs in the editor (lock file in ~/.claude/ide)." />
+        <ToggleSetting setting="ide.enableServer" label="IDE bridge for the terminal" description="Lets a claude started in Klammr's terminal see your selection and diagnostics, and open its proposed diffs in the editor (lock file in ~/.claude/ide)." />
       </Section>
 
       <Section title="Diagnostics">
         <SettingRow
           label="Logs"
-          description="Everything Kursor does — CLI calls, tool events, errors — is written to the Kursor output channel."
+          description="Everything Klammr does — CLI calls, tool events, errors — is written to the Klammr output channel."
           control={
-            <Button icon="output" onClick={() => post({ type: 'runCommand', command: 'kursor.showLogs' })}>
+            <Button icon="output" onClick={() => post({ type: 'runCommand', command: 'klammr.showLogs' })}>
               Show logs
             </Button>
           }

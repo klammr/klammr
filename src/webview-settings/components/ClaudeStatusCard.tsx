@@ -61,7 +61,7 @@ export function ClaudeStatusCard() {
           ) : (
             <span className="muted">not found</span>
           )}
-          {configuredPath ? <span className="muted"> · from kursor.claude.path</span> : <span className="muted"> · auto-detected from your login shell</span>}
+          {configuredPath ? <span className="muted"> · from klammr.claude.path</span> : <span className="muted"> · auto-detected from your login shell</span>}
         </dd>
         <dt>Version</dt>
         <dd>{status.version ? <code>{status.version}</code> : <span className="muted">—</span>}</dd>
@@ -84,23 +84,23 @@ export function ClaudeStatusCard() {
 
       <div className="status-actions">
         {showSignIn && (
-          <Button primary icon="sign-in" onClick={() => post({ type: 'runCommand', command: 'kursor.claude.login' })} title={status.ok ? 'Runs `claude auth login` in a terminal' : 'Runs `claude auth login` in a terminal (needs a working claude executable)'}>
+          <Button primary icon="sign-in" onClick={() => post({ type: 'runCommand', command: 'klammr.claude.login' })} title={status.ok ? 'Runs `claude auth login` in a terminal' : 'Runs `claude auth login` in a terminal (needs a working claude executable)'}>
             Sign in
           </Button>
         )}
         <Button icon={status.checking || !probed ? 'loading' : 'refresh'} disabled={status.checking} onClick={() => post({ type: 'refreshStatus' })} title="Re-run `claude --version` and `claude auth status`">
           Re-check
         </Button>
-        <Button icon="folder-opened" onClick={() => post({ type: 'openEditorSettings', query: 'kursor.claude.path' })} title="Edit kursor.claude.path in the settings editor">
+        <Button icon="folder-opened" onClick={() => post({ type: 'openEditorSettings', query: 'klammr.claude.path' })} title="Edit klammr.claude.path in the settings editor">
           Change path
         </Button>
-        <Button ghost icon="output" onClick={() => post({ type: 'runCommand', command: 'kursor.showLogs' })}>
+        <Button ghost icon="output" onClick={() => post({ type: 'runCommand', command: 'klammr.showLogs' })}>
           Logs
         </Button>
       </div>
 
       <p className="status-note muted">
-        Kursor runs the unmodified <code>claude</code> binary installed on this machine with its own login. No credentials are read, stored or forwarded by the extension.
+        Klammr runs the unmodified <code>claude</code> binary installed on this machine with its own login. No credentials are read, stored or forwarded by the extension.
       </p>
     </div>
   );

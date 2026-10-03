@@ -73,7 +73,7 @@ export class ChatManager implements vscode.Disposable {
         this.postAppState();
       }),
       vscode.workspace.onDidChangeConfiguration((e) => {
-        if (e.affectsConfiguration('kursor')) this.postAppState();
+        if (e.affectsConfiguration('klammr')) this.postAppState();
       }),
       vscode.workspace.onDidChangeWorkspaceFolders(() => this.postAppState()),
     );
@@ -95,7 +95,7 @@ export class ChatManager implements vscode.Disposable {
   // ---- settings / environment ------------------------------------------------------
 
   settings(): AppState['settings'] {
-    const cfg = vscode.workspace.getConfiguration('kursor');
+    const cfg = vscode.workspace.getConfiguration('klammr');
     return {
       showThinking: cfg.get<boolean>('chat.showThinking', true),
       toolCallDensity: cfg.get<'compact' | 'balanced' | 'detailed'>('chat.toolCallDensity', 'balanced'),
@@ -186,7 +186,7 @@ export class ChatManager implements vscode.Disposable {
   private updateRunningContext(): void {
     const active = this.store.active();
     const running = !!active && (active.status === 'running' || active.status === 'starting' || active.status === 'waiting');
-    void vscode.commands.executeCommand('setContext', 'kursor.chatRunning', running);
+    void vscode.commands.executeCommand('setContext', 'klammr.chatRunning', running);
   }
 
   // ---- runners --------------------------------------------------------------------
@@ -270,7 +270,7 @@ export class ChatManager implements vscode.Disposable {
       }
     }
     const s = this.settings();
-    const cfg = vscode.workspace.getConfiguration('kursor');
+    const cfg = vscode.workspace.getConfiguration('klammr');
     const chat = createChatState({
       mode: opts?.mode ?? s.defaultMode,
       permissionMode: s.permissionMode,
@@ -333,7 +333,7 @@ export class ChatManager implements vscode.Disposable {
     if (!vscode.workspace.isTrusted) {
       // Restricted Mode: the agent reads, edits and runs code in the workspace, so it waits for trust.
       chat.messages.push(
-        systemNote('This workspace is in Restricted Mode. Trust it to let Kursor read, edit and run code here.', 'warning', {
+        systemNote('This workspace is in Restricted Mode. Trust it to let Klammr read, edit and run code here.', 'warning', {
           label: 'Manage Workspace Trust',
           command: 'workbench.trust.manage',
         }),
@@ -343,7 +343,7 @@ export class ChatManager implements vscode.Disposable {
       return chat;
     }
     if (options?.mode && options.mode !== chat.mode) await this.setMode(chat.id, options.mode);
-    const cfg = vscode.workspace.getConfiguration('kursor');
+    const cfg = vscode.workspace.getConfiguration('klammr');
     if (cfg.get<boolean>('agent.autoSave', true)) {
       try {
         await vscode.workspace.saveAll(false);
@@ -384,7 +384,7 @@ export class ChatManager implements vscode.Disposable {
       this.deps.log.error('send failed', err);
       chat.status = 'error';
       chat.error = msg;
-      chat.messages.push(systemNote(`Could not start Claude Code: ${msg}`, 'error', { label: 'Check status', command: 'kursor.claude.status' }));
+      chat.messages.push(systemNote(`Could not start Claude Code: ${msg}`, 'error', { label: 'Check status', command: 'klammr.claude.status' }));
     }
     this.postChatState(chat.id);
     this.postAppState();
@@ -509,7 +509,7 @@ export class ChatManager implements vscode.Disposable {
     if (!res.canRewind) {
       const msg = res.error ?? 'Claude Code could not restore this checkpoint.';
       chat.messages.push(systemNote(msg, 'warning'));
-      void vscode.window.showWarningMessage(`Kursor: ${msg}`);
+      void vscode.window.showWarningMessage(`Klammr: ${msg}`);
     } else {
       this.deps.edits.clear(chat.id);
       const files = res.filesChanged ?? [];
@@ -613,7 +613,7 @@ export class ChatManager implements vscode.Disposable {
       .slice(0, 40) || 'chat';
     const base = vscode.workspace.workspaceFolders?.[0]?.uri ?? vscode.Uri.file(os.homedir());
     const target = await vscode.window.showSaveDialog({
-      defaultUri: vscode.Uri.joinPath(base, `kursor-chat-${slug}.md`),
+      defaultUri: vscode.Uri.joinPath(base, `klammr-chat-${slug}.md`),
       filters: { Markdown: ['md'] },
       title: 'Export chat as Markdown',
     });

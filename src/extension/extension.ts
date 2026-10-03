@@ -16,7 +16,7 @@ import { terminalLaunchSpec } from './claude/launch';
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
   const log = createLogger(context);
   const version = (context.extension.packageJSON as { version?: string }).version ?? '?';
-  log.info(`Kursor ${version} activating (${vscode.env.appName} ${vscode.version})`);
+  log.info(`Klammr ${version} activating (${vscode.env.appName} ${vscode.version})`);
 
   const bridge = createClaudeBridge(context, log.child('claude'));
   const rules = createRulesService(context, log.child('rules'));
@@ -31,8 +31,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   registerIdeServer(context, { log: log.child('ide'), edits });
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('kursor.showLogs', () => log.show()),
-    vscode.commands.registerCommand('kursor.claude.status', async () => {
+    vscode.commands.registerCommand('klammr.showLogs', () => log.show()),
+    vscode.commands.registerCommand('klammr.claude.status', async () => {
       const s = await bridge.refreshStatus();
       if (s.ok) {
         void vscode.window.showInformationMessage(
@@ -40,11 +40,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         );
       } else {
         const pick = await vscode.window.showErrorMessage(`Claude Code is not available: ${s.error ?? 'unknown error'}`, 'Open Settings', 'Show Logs');
-        if (pick === 'Open Settings') void vscode.commands.executeCommand('workbench.action.openSettings', 'kursor.claude.path');
+        if (pick === 'Open Settings') void vscode.commands.executeCommand('workbench.action.openSettings', 'klammr.claude.path');
         if (pick === 'Show Logs') log.show();
       }
     }),
-    vscode.commands.registerCommand('kursor.claude.login', async () => {
+    vscode.commands.registerCommand('klammr.claude.login', async () => {
       const claudePath = await bridge.resolveClaudePath();
       let term: vscode.Terminal;
       if (claudePath) {

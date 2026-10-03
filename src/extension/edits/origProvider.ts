@@ -1,12 +1,12 @@
 /**
- * `kursor-orig:` read-only documents serving the pre-edit snapshot of a tracked
- * file, used as the left side of review diffs. URI: kursor-orig:<fsPath>?v=<n>
+ * `klammr-orig:` read-only documents serving the pre-edit snapshot of a tracked
+ * file, used as the left side of review diffs. URI: klammr-orig:<fsPath>?v=<n>
  * (`?empty=1` → always empty, used as the right side for deleted files).
  */
 import * as vscode from 'vscode';
 import type { TrackedFile } from './model';
 
-export const ORIG_SCHEME = 'kursor-orig';
+export const ORIG_SCHEME = 'klammr-orig';
 
 export class OrigContentProvider implements vscode.TextDocumentContentProvider {
   private readonly emitter = new vscode.EventEmitter<vscode.Uri>();

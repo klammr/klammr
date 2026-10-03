@@ -1,6 +1,6 @@
 /**
  * Minimal in-memory FileSystemProvider used for the two sides of an `openDiff` editor
- * (schemes `kursor-ide-left` / `kursor-ide-right`). Each diff gets versioned URIs
+ * (schemes `klammr-ide-left` / `klammr-ide-right`). Each diff gets versioned URIs
  * (`?v=N`) so consecutive diffs of the same file never share a stale document.
  */
 import * as vscode from 'vscode';

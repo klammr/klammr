@@ -26,12 +26,12 @@ const builtin = {
 };
 
 const groups = [
-  ['Chat', /^kursor\.chat\./],
-  ['Agent edits', /^kursor\.edits\./],
-  ['Inline edit (Ctrl+K)', /^kursor\.inlineEdit\./],
-  ['Terminal', /^kursor\.terminal\./],
-  ['Tab completions', /^kursor\.tab\./],
-  ['Settings', /^kursor\.settings\./],
+  ['Chat', /^klammr\.chat\./],
+  ['Agent edits', /^klammr\.edits\./],
+  ['Inline edit (Ctrl+K)', /^klammr\.inlineEdit\./],
+  ['Terminal', /^klammr\.terminal\./],
+  ['Tab completions', /^klammr\.tab\./],
+  ['Settings', /^klammr\.settings\./],
   ['Cursor-style chords (VS Code built-ins)', /^(workbench|editor)\./],
 ];
 
@@ -48,20 +48,20 @@ const prettyKey = (k) =>
 
 const prettyWhen = (w = '') =>
   w
-    .replace(/focusedView == kursor\.chat/g, 'chat focused')
+    .replace(/focusedView == klammr\.chat/g, 'chat focused')
     .replace(/editorTextFocus/g, 'editor')
     .replace(/terminalFocus/g, 'terminal')
-    .replace(/kursor\.inlineDiffVisible/g, 'inline diff shown')
-    .replace(/kursor\.hasPendingEdits/g, 'pending agent edits')
-    .replace(/kursor\.chatRunning/g, 'generating')
-    .replace(/kursor\.inlineEditInputFocus && inQuickOpen/g, 'Ctrl+K prompt open')
-    .replace(/kursor\.inlineEditRunning/g, 'inline edit running')
+    .replace(/klammr\.inlineDiffVisible/g, 'inline diff shown')
+    .replace(/klammr\.hasPendingEdits/g, 'pending agent edits')
+    .replace(/klammr\.chatRunning/g, 'generating')
+    .replace(/klammr\.inlineEditInputFocus && inQuickOpen/g, 'Ctrl+K prompt open')
+    .replace(/klammr\.inlineEditRunning/g, 'inline edit running')
     .replace(/!editorReadonly/g, 'writable')
     .replace(/openFolderWorkspaceSupport/g, '')
     .replace(/!isAuxiliaryWindowFocusedContext/g, '')
     .replace(/editorHasDocumentFormattingProvider && /g, '')
     .replace(/foldingEnabled/g, '')
-    .replace(/kursor\.inlineEditInputFocus/g, 'Ctrl+K prompt open')
+    .replace(/klammr\.inlineEditInputFocus/g, 'Ctrl+K prompt open')
     .replace(/!terminal/g, 'not in terminal')
     .replace(/!editor/g, 'not in editor')
     .replace(/!generating/g, 'idle')

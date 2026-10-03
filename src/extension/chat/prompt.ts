@@ -135,8 +135,8 @@ export function composeTurn(text: string, attachments: Attachment[], opts: Compo
   return { turn: { text: prompt, images: images.length ? images : undefined }, contextPaths: [...new Set(contextPaths)] };
 }
 
-export const KURSOR_SYSTEM_NOTE = [
-  'You are running inside the Kursor editor (a VS Code based IDE) as its chat/agent assistant.',
+export const KLAMMR_SYSTEM_NOTE = [
+  'You are running inside the Klammr editor (a VS Code based IDE) as its chat/agent assistant.',
   'Your replies are rendered as markdown in a chat panel; file edits you make are applied on disk and shown to the user as reviewable diffs (Keep/Undo).',
   'Attached files are referenced with @path lines — read them with your tools when relevant. "Active file" tells you what the user is looking at.',
   'When you show code meant to replace part of a file, use a fenced block with the language and the path after it (e.g. ```ts src/app.ts) so the user can apply it.',

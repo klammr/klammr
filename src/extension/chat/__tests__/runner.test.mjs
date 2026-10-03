@@ -12,7 +12,7 @@ import { pathToFileURL } from 'node:url';
 import assert from 'node:assert/strict';
 
 const root = new URL('../../../..', import.meta.url).pathname;
-const dir = mkdtempSync(join(process.env.SCRATCHPAD ?? tmpdir(), 'kursor-runner-test-'));
+const dir = mkdtempSync(join(process.env.SCRATCHPAD ?? tmpdir(), 'klammr-runner-test-'));
 const entry = join(dir, 'entry.ts');
 writeFileSync(
   entry,
@@ -140,7 +140,7 @@ await test('plain text turn: streaming, uuid, result, idle', async () => {
   const s = h.session();
   assert.equal(s.opts.cwd, '/w');
   assert.deepEqual(s.opts.additionalDirectories, ['/other']);
-  assert.ok(s.opts.appendSystemPrompt.startsWith(prompt.KURSOR_SYSTEM_NOTE));
+  assert.ok(s.opts.appendSystemPrompt.startsWith(prompt.KLAMMR_SYSTEM_NOTE));
   assert.ok(s.opts.appendSystemPrompt.includes('# User rules'));
   assert.equal(h.chat.status, 'starting');
   s.emit({ type: 'init', sessionId: 'sess-1', model: 'claude-x', tools: [], permissionMode: 'acceptEdits' });

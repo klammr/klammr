@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Kursor smoke test: load dist/extension.js OUTSIDE VS Code with a stubbed `vscode` module,
- * call activate(), list the registered `kursor.*` commands and compare them with package.json
+ * Klammr smoke test: load dist/extension.js OUTSIDE VS Code with a stubbed `vscode` module,
+ * call activate(), list the registered `klammr.*` commands and compare them with package.json
  * (commands, keybindings, menus), resolve the chat webview + settings panel once, then
  * deactivate/dispose everything and exit.
  *
@@ -10,9 +10,9 @@
  * Exit code 0 = no real problems found. Stub limitations are reported separately
  * ("stub fallbacks") and are NOT failures.
  *
- * The stub sets `kursor.ide.enableServer=false` so no WebSocket server / lock file is created.
+ * The stub sets `klammr.ide.enableServer=false` so no WebSocket server / lock file is created.
  * The Claude bridge still probes the user's `claude` binary (`--version`, `auth status`) — that
- * costs no quota. Override any setting with KURSOR_SMOKE_CONFIG='{"kursor.claude.path":"/x"}'.
+ * costs no quota. Override any setting with KLAMMR_SMOKE_CONFIG='{"klammr.claude.path":"/x"}'.
  */
 import Module from 'node:module';
 import { createRequire } from 'node:module';
@@ -666,13 +666,13 @@ for (const k of Object.keys(enums)) if (enums[k] === undefined) delete enums[k];
 // ---------------------------------------------------------------------------------------------
 // Workspace fixture
 // ---------------------------------------------------------------------------------------------
-const scratchBase = process.env.KURSOR_SMOKE_TMP || process.env.SCRATCHPAD || os.tmpdir();
-const wsRoot = fs.mkdtempSync(path.join(scratchBase, 'kursor-smoke-ws-'));
+const scratchBase = process.env.KLAMMR_SMOKE_TMP || process.env.SCRATCHPAD || os.tmpdir();
+const wsRoot = fs.mkdtempSync(path.join(scratchBase, 'klammr-smoke-ws-'));
 fs.mkdirSync(path.join(wsRoot, '.cursor', 'rules'), { recursive: true });
 fs.writeFileSync(path.join(wsRoot, '.cursor', 'rules', 'style.mdc'), '---\ndescription: Style guide\nglobs: "**/*.ts"\nalwaysApply: false\n---\n- Prefer const.\n');
 fs.writeFileSync(path.join(wsRoot, 'AGENTS.md'), '# Agents\nBe concise.\n');
 fs.writeFileSync(path.join(wsRoot, 'hello.ts'), 'export const hello = "world";\n');
-const storageRoot = fs.mkdtempSync(path.join(scratchBase, 'kursor-smoke-storage-'));
+const storageRoot = fs.mkdtempSync(path.join(scratchBase, 'klammr-smoke-storage-'));
 const workspaceFolder = { uri: Uri.file(wsRoot), name: path.basename(wsRoot), index: 0 };
 
 // ---------------------------------------------------------------------------------------------
@@ -680,12 +680,12 @@ const workspaceFolder = { uri: Uri.file(wsRoot), name: path.basename(wsRoot), in
 // ---------------------------------------------------------------------------------------------
 const manifestProps = pkg.contributes?.configuration?.properties ?? {};
 const configDefaults = Object.fromEntries(Object.entries(manifestProps).map(([k, v]) => [k, v.default]));
-const configOverrides = { 'kursor.ide.enableServer': false, 'files.autoSave': 'off' };
-if (process.env.KURSOR_SMOKE_CONFIG) {
+const configOverrides = { 'klammr.ide.enableServer': false, 'files.autoSave': 'off' };
+if (process.env.KLAMMR_SMOKE_CONFIG) {
   try {
-    Object.assign(configOverrides, JSON.parse(process.env.KURSOR_SMOKE_CONFIG));
+    Object.assign(configOverrides, JSON.parse(process.env.KLAMMR_SMOKE_CONFIG));
   } catch (err) {
-    console.error('smoke-load: KURSOR_SMOKE_CONFIG is not valid JSON:', err.message);
+    console.error('smoke-load: KLAMMR_SMOKE_CONFIG is not valid JSON:', err.message);
     process.exit(2);
   }
 }
@@ -724,7 +724,7 @@ function getConfiguration(section, _scope) {
       configChanged.fire({ affectsConfiguration: (s) => key === s || key.startsWith(`${s}.`) });
     },
   };
-  // Allow `cfg['kursor.x']` style reads too.
+  // Allow `cfg['klammr.x']` style reads too.
   return new Proxy(cfg, {
     get(t, prop) {
       if (prop in t) return t[prop];
@@ -1246,10 +1246,10 @@ const languagesImpl = {
 };
 
 const envImpl = {
-  appName: 'Kursor (smoke)',
+  appName: 'Klammr (smoke)',
   appRoot: path.join(storageRoot, 'appRoot'),
   appHost: 'desktop',
-  uriScheme: 'kursor',
+  uriScheme: 'klammr',
   language: 'en',
   machineId: 'smoke-machine',
   sessionId: 'smoke-session',
@@ -1419,10 +1419,10 @@ const context = {
 // ---------------------------------------------------------------------------------------------
 const declaredCommands = new Set((pkg.contributes?.commands ?? []).map((c) => c.command));
 const paletteHidden = new Set((pkg.contributes?.menus?.commandPalette ?? []).filter((m) => m.when === 'false').map((m) => m.command));
-const keybindingCommands = new Set((pkg.contributes?.keybindings ?? []).map((k) => k.command).filter((c) => c.startsWith('kursor.')));
+const keybindingCommands = new Set((pkg.contributes?.keybindings ?? []).map((k) => k.command).filter((c) => c.startsWith('klammr.')));
 const menuCommands = new Set();
 for (const [menuId, entries] of Object.entries(pkg.contributes?.menus ?? {})) {
-  for (const e of entries) if (e.command?.startsWith('kursor.')) menuCommands.add(`${menuId}:${e.command}`);
+  for (const e of entries) if (e.command?.startsWith('klammr.')) menuCommands.add(`${menuId}:${e.command}`);
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -1458,7 +1458,7 @@ async function main() {
   const activateMs = Date.now() - t0;
 
   // --- commands vs manifest -----------------------------------------------------------------
-  const registered = [...registeredCommands.keys()].filter((id) => id.startsWith('kursor.')).sort();
+  const registered = [...registeredCommands.keys()].filter((id) => id.startsWith('klammr.')).sort();
   const missing = [...declaredCommands].filter((id) => !registeredCommands.has(id)).sort();
   const extra = registered.filter((id) => !declaredCommands.has(id));
   const danglingKeybindings = [...keybindingCommands].filter((id) => !declaredCommands.has(id));
@@ -1469,17 +1469,17 @@ async function main() {
   for (const ref of danglingMenus) problem(`menu entry references undeclared command: ${ref}`);
 
   // --- exercise the chat view provider ------------------------------------------------------
-  const chatEntry = webviewViewProviders.get('kursor.chat');
+  const chatEntry = webviewViewProviders.get('klammr.chat');
   let chatHtmlOk = false;
   let chatAppState = false;
   if (!chatEntry) {
-    problem('no WebviewViewProvider registered for kursor.chat');
+    problem('no WebviewViewProvider registered for klammr.chat');
   } else {
     const webview = makeWebview({});
     const visibility = new EventEmitter();
     const disposed = new EventEmitter();
     const view = {
-      viewType: 'kursor.chat',
+      viewType: 'klammr.chat',
       webview,
       title: 'Chat',
       description: undefined,
@@ -1505,17 +1505,17 @@ async function main() {
       webview._received.fire({ type: 'focusChanged', focused: false });
       disposed.fire(undefined);
     } catch (err) {
-      problem(`resolveWebviewView(kursor.chat) threw: ${err instanceof Error ? err.stack ?? err.message : String(err)}`);
+      problem(`resolveWebviewView(klammr.chat) threw: ${err instanceof Error ? err.stack ?? err.message : String(err)}`);
     }
   }
 
   // --- exercise the settings panel ----------------------------------------------------------
   let settingsOk = false;
-  if (registeredCommands.has('kursor.settings.open')) {
+  if (registeredCommands.has('klammr.settings.open')) {
     try {
-      await registeredCommands.get('kursor.settings.open')();
-      const panel = createdPanels.find((p) => p.viewType === 'kursor.settings');
-      if (!panel) problem('kursor.settings.open did not create a kursor.settings WebviewPanel');
+      await registeredCommands.get('klammr.settings.open')();
+      const panel = createdPanels.find((p) => p.viewType === 'klammr.settings');
+      if (!panel) problem('klammr.settings.open did not create a klammr.settings WebviewPanel');
       else {
         const html = panel.webview.html ?? '';
         if (!/settings\.js/.test(html) || !/nonce-/.test(html)) problem(`settings panel HTML is missing settings.js / nonce (length ${html.length})`);
@@ -1525,12 +1525,12 @@ async function main() {
         panel.dispose();
       }
     } catch (err) {
-      problem(`kursor.settings.open threw: ${err instanceof Error ? err.stack ?? err.message : String(err)}`);
+      problem(`klammr.settings.open threw: ${err instanceof Error ? err.stack ?? err.message : String(err)}`);
     }
   }
 
   // --- a few commands that must be safe without an editor -----------------------------------
-  for (const id of ['kursor.showLogs', 'kursor.inlineEdit.acceptAll', 'kursor.inlineEdit.rejectAll', 'kursor.edits.keepAll', 'kursor.edits.reviewAll', 'kursor.chat.stop', 'kursor.ide.insertAtMention']) {
+  for (const id of ['klammr.showLogs', 'klammr.inlineEdit.acceptAll', 'klammr.inlineEdit.rejectAll', 'klammr.edits.keepAll', 'klammr.edits.reviewAll', 'klammr.chat.stop', 'klammr.ide.insertAtMention']) {
     const fn = registeredCommands.get(id);
     if (!fn) continue;
     try {
@@ -1584,7 +1584,7 @@ async function main() {
   if (JSON_OUT) {
     console.log(JSON.stringify(summary, null, 2));
   } else {
-    console.log(`activate(): ${activateMs} ms, ${context.subscriptions.length} subscriptions, ${registered.length} kursor.* commands registered, ${declaredCommands.size} declared`);
+    console.log(`activate(): ${activateMs} ms, ${context.subscriptions.length} subscriptions, ${registered.length} klammr.* commands registered, ${declaredCommands.size} declared`);
     console.log(`registered: ${registered.join(' ')}`);
     console.log(`context keys: ${JSON.stringify(summary.contextKeys)}`);
     console.log(`chat view: html=${chatHtmlOk ? 'ok' : 'BAD'} appState=${chatAppState ? 'ok' : 'MISSING'}; settings panel: ${settingsOk ? 'ok' : 'BAD'}`);

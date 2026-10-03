@@ -13,7 +13,7 @@ export interface TrackedFile {
   current: string | null;
   chatId: string;
   toolUseIds: string[];
-  /** Bumped whenever `base` changes so the `kursor-orig` URI query changes. */
+  /** Bumped whenever `base` changes so the `klammr-orig` URI query changes. */
   version: number;
   updatedAt: number;
 }

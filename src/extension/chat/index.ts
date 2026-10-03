@@ -1,6 +1,6 @@
 /**
  * Chat host entry point: wires the ChatManager, the side-bar view, the editor
- * panel, the @-mention search, terminal capture and all `kursor.chat.*`
+ * panel, the @-mention search, terminal capture and all `klammr.chat.*`
  * commands, and returns the ChatController used by other modules.
  */
 import * as vscode from 'vscode';
@@ -31,10 +31,10 @@ export function registerChat(context: vscode.ExtensionContext, deps: ChatDeps): 
     await view.reveal(focus);
   };
 
-  // A new profile opens VS Code's own Chat container in the secondary side bar, which Kursor disables
-  // (chat.disableAIFeatures), so the pane only says "Drag a view here to display". Show Kursor's chat there once;
+  // A new profile opens VS Code's own Chat container in the secondary side bar, which Klammr disables
+  // (chat.disableAIFeatures), so the pane only says "Drag a view here to display". Show Klammr's chat there once;
   // after that VS Code restores whatever layout the user leaves.
-  const FIRST_REVEAL_KEY = 'kursor.chat.firstRevealDone';
+  const FIRST_REVEAL_KEY = 'klammr.chat.firstRevealDone';
   if (!context.globalState.get<boolean>(FIRST_REVEAL_KEY)) {
     const timer = setTimeout(() => {
       void context.globalState.update(FIRST_REVEAL_KEY, true);
@@ -48,9 +48,9 @@ export function registerChat(context: vscode.ExtensionContext, deps: ChatDeps): 
     if (manager.anyHostVisible()) return;
     pendingAttention += 1;
     view.setBadge(pendingAttention, `${pendingAttention} action${pendingAttention === 1 ? '' : 's'} waiting for your approval`);
-    if (vscode.workspace.getConfiguration('kursor').get<boolean>('agent.notifyOnPermission', true)) {
+    if (vscode.workspace.getConfiguration('klammr').get<boolean>('agent.notifyOnPermission', true)) {
       const what = request.kind === 'question' ? 'has a question for you' : request.kind === 'plan' ? 'has a plan ready for review' : `wants to run ${request.title ?? request.toolName}`;
-      void vscode.window.showInformationMessage(`Kursor ${what} (${chat.title}).`, 'Open').then((pick) => {
+      void vscode.window.showInformationMessage(`Klammr ${what} (${chat.title}).`, 'Open').then((pick) => {
         if (pick === 'Open') {
           manager.switchChat(chat.id);
           void view.reveal(true);

@@ -1,10 +1,10 @@
 /**
  * `openDiff` flow for the IDE bridge: shows `vscode.diff(left, right, tab_name)` with both sides
- * served by in-memory FileSystemProviders (`kursor-ide-left` read-only, `kursor-ide-right`
+ * served by in-memory FileSystemProviders (`klammr-ide-left` read-only, `klammr-ide-right`
  * editable) and resolves when the user decides:
- *   - accept (editor/title button `kursor.ide.acceptDiff`, or saving the right side while
+ *   - accept (editor/title button `klammr.ide.acceptDiff`, or saving the right side while
  *     `files.autoSave` is off)             → { kind: 'saved', contents }   (CLI gets FILE_SAVED)
- *   - reject (`kursor.ide.rejectDiff`, closing the tab, client disconnect, request cancelled)
+ *   - reject (`klammr.ide.rejectDiff`, closing the tab, client disconnect, request cancelled)
  *                                          → { kind: 'rejected', tabName } (CLI gets DIFF_REJECTED)
  * Accepted edits are also recorded in the EditTracker so Keep/Undo/Review work like chat edits.
  */
@@ -16,9 +16,9 @@ import type { EditTracker } from '../services';
 import type { Logger } from '../util/log';
 import { MemoryFileSystemProvider } from './memoryFs';
 
-export const LEFT_SCHEME = 'kursor-ide-left';
-export const RIGHT_SCHEME = 'kursor-ide-right';
-export const VIEWING_DIFF_CONTEXT = 'kursor.ide.viewingDiff';
+export const LEFT_SCHEME = 'klammr-ide-left';
+export const RIGHT_SCHEME = 'klammr-ide-right';
+export const VIEWING_DIFF_CONTEXT = 'klammr.ide.viewingDiff';
 /** Synthetic chat id used when recording accepted diffs in the EditTracker. */
 export const IDE_EDIT_CHAT_ID = 'ide';
 
@@ -201,7 +201,7 @@ export class IdeDiffManager implements vscode.Disposable {
   async accept(arg?: unknown): Promise<void> {
     const session = this.pickSession(arg);
     if (!session) {
-      void vscode.window.showInformationMessage('Kursor: no proposed changes are open.');
+      void vscode.window.showInformationMessage('Klammr: no proposed changes are open.');
       return;
     }
     const doc = vscode.workspace.textDocuments.find((d) => d.uri.toString() === session.rightUri.toString());
@@ -212,7 +212,7 @@ export class IdeDiffManager implements vscode.Disposable {
   async reject(arg?: unknown): Promise<void> {
     const session = this.pickSession(arg);
     if (!session) {
-      void vscode.window.showInformationMessage('Kursor: no proposed changes are open.');
+      void vscode.window.showInformationMessage('Klammr: no proposed changes are open.');
       return;
     }
     session.resolve({ kind: 'rejected', tabName: session.tabName });

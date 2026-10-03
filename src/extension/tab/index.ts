@@ -1,8 +1,8 @@
 /**
- * [D2] Kursor Tab — ghost-text completions via the user's Claude Code CLI.
+ * [D2] Klammr Tab — ghost-text completions via the user's Claude Code CLI.
  *
  * Wiring only; see README.md in this folder for the design.
- *   config.ts     live `kursor.tab.*` settings
+ *   config.ts     live `klammr.tab.*` settings
  *   state.ts      enabled / snoozed / per-language / unavailable
  *   prompt.ts     FIM system prompt + context window
  *   sanitize.ts   model output → safe ghost text
@@ -35,7 +35,7 @@ export function registerTab(context: vscode.ExtensionContext, deps: BridgeDeps):
         await handler(...args);
       } catch (e) {
         log.error(`${id} failed`, e);
-        void vscode.window.showErrorMessage(`Kursor: ${e instanceof Error ? e.message : String(e)}`);
+        void vscode.window.showErrorMessage(`Klammr: ${e instanceof Error ? e.message : String(e)}`);
       }
     });
 
@@ -64,18 +64,18 @@ export function registerTab(context: vscode.ExtensionContext, deps: BridgeDeps):
       statusBar.refresh();
     }),
 
-    command('kursor.tab.toggle', async () => {
+    command('klammr.tab.toggle', async () => {
       const next = !state.enabled;
       await state.setEnabled(next);
-      vscode.window.setStatusBarMessage(`Kursor Tab ${next ? 'enabled' : 'disabled'}`, 2500);
+      vscode.window.setStatusBarMessage(`Klammr Tab ${next ? 'enabled' : 'disabled'}`, 2500);
     }),
 
-    command('kursor.tab.snooze', async () => {
+    command('klammr.tab.snooze', async () => {
       await state.snooze(DEFAULT_SNOOZE_MINUTES);
-      vscode.window.setStatusBarMessage(`Kursor Tab snoozed for ${DEFAULT_SNOOZE_MINUTES} minutes`, 2500);
+      vscode.window.setStatusBarMessage(`Klammr Tab snoozed for ${DEFAULT_SNOOZE_MINUTES} minutes`, 2500);
     }),
 
-    command('kursor.tab.trigger', async () => {
+    command('klammr.tab.trigger', async () => {
       const editor = vscode.window.activeTextEditor;
       if (!editor) return;
       const availability = state.availabilityFor(editor.document.languageId);
@@ -88,20 +88,20 @@ export function registerTab(context: vscode.ExtensionContext, deps: BridgeDeps):
               : availability.reason === 'language'
                 ? `Enable for ${editor.document.languageId}`
                 : 'Check Claude Code status';
-        const pick = await vscode.window.showInformationMessage(`Kursor Tab is ${describeInactive(availability, state)}.`, label);
+        const pick = await vscode.window.showInformationMessage(`Klammr Tab is ${describeInactive(availability, state)}.`, label);
         if (pick !== label) return;
         if (availability.reason === 'disabled') await state.setEnabled(true);
         else if (availability.reason === 'snoozed') await state.endSnooze();
         else if (availability.reason === 'language') await state.setLanguageDisabled(editor.document.languageId, false);
         else {
-          await vscode.commands.executeCommand('kursor.claude.status');
+          await vscode.commands.executeCommand('klammr.claude.status');
           return;
         }
       }
       await vscode.commands.executeCommand('editor.action.inlineSuggest.trigger');
     }),
 
-    command('kursor.tab.statusMenu', async () => {
+    command('klammr.tab.statusMenu', async () => {
       const editor = vscode.window.activeTextEditor;
       const language = editor?.document.languageId;
       const availability = state.availabilityFor(language);
@@ -109,8 +109,8 @@ export function registerTab(context: vscode.ExtensionContext, deps: BridgeDeps):
 
       items.push(
         state.enabled
-          ? { label: '$(circle-slash) Disable Kursor Tab', description: 'Turn off ghost-text completions everywhere', run: () => state.setEnabled(false) }
-          : { label: '$(check) Enable Kursor Tab', description: 'Turn ghost-text completions back on', run: () => state.setEnabled(true) },
+          ? { label: '$(circle-slash) Disable Klammr Tab', description: 'Turn off ghost-text completions everywhere', run: () => state.setEnabled(false) }
+          : { label: '$(check) Enable Klammr Tab', description: 'Turn ghost-text completions back on', run: () => state.setEnabled(true) },
       );
       if (state.snoozed) {
         items.push({
@@ -128,8 +128,8 @@ export function registerTab(context: vscode.ExtensionContext, deps: BridgeDeps):
       if (language && language !== 'scminput') {
         items.push(
           state.isLanguageDisabled(language)
-            ? { label: `$(check) Enable for ${language}`, description: 'Remove from kursor.tab.disabledLanguages', run: () => state.setLanguageDisabled(language, false) }
-            : { label: `$(circle-slash) Disable for ${language}`, description: 'Add to kursor.tab.disabledLanguages', run: () => state.setLanguageDisabled(language, true) },
+            ? { label: `$(check) Enable for ${language}`, description: 'Remove from klammr.tab.disabledLanguages', run: () => state.setLanguageDisabled(language, false) }
+            : { label: `$(circle-slash) Disable for ${language}`, description: 'Add to klammr.tab.disabledLanguages', run: () => state.setLanguageDisabled(language, true) },
         );
       }
       if (availability.active === false && availability.reason === 'unavailable') {
@@ -137,7 +137,7 @@ export function registerTab(context: vscode.ExtensionContext, deps: BridgeDeps):
           label: '$(account) Check Claude Code status',
           description: availability.detail,
           run: async () => {
-            await vscode.commands.executeCommand('kursor.claude.status');
+            await vscode.commands.executeCommand('klammr.claude.status');
           },
         });
       }
@@ -146,21 +146,21 @@ export function registerTab(context: vscode.ExtensionContext, deps: BridgeDeps):
           label: '$(zap) Trigger a completion now',
           description: 'Alt+\\',
           run: async () => {
-            await vscode.commands.executeCommand('kursor.tab.trigger');
+            await vscode.commands.executeCommand('klammr.tab.trigger');
           },
         },
         {
           label: '$(settings-gear) Tab settings',
-          description: 'kursor.tab.*',
+          description: 'klammr.tab.*',
           run: async () => {
             await vscode.commands.executeCommand('workbench.action.openSettings', TAB_SECTION);
           },
         },
-        { label: '$(output) Show Kursor logs', run: () => log.show() },
+        { label: '$(output) Show Klammr logs', run: () => log.show() },
       );
 
       const picked = await vscode.window.showQuickPick(items, {
-        title: 'Kursor Tab',
+        title: 'Klammr Tab',
         placeHolder: availability.active ? `Active${language ? ` for ${language}` : ''} · model ${state.config.model}` : `Off: ${describeInactive(availability, state)}`,
       });
       if (picked) await picked.run();

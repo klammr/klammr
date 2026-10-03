@@ -1,22 +1,22 @@
 /**
  * Status-bar spinner + cancellation for one inline generation at a time.
- * Sets the `kursor.inlineEditRunning` context key so Esc (keybinding → kursor.inlineEdit.cancel)
+ * Sets the `klammr.inlineEditRunning` context key so Esc (keybinding → klammr.inlineEdit.cancel)
  * and the status-bar click abort the request through an AbortController.
  */
 import * as vscode from 'vscode';
 import type { Logger } from '../util/log';
 
-export const RUNNING_CONTEXT_KEY = 'kursor.inlineEditRunning';
+export const RUNNING_CONTEXT_KEY = 'klammr.inlineEditRunning';
 
 export class InlineSpinner implements vscode.Disposable {
   private readonly item: vscode.StatusBarItem;
   private current: { abort: AbortController; label: string } | undefined;
 
   constructor(private readonly log: Logger) {
-    this.item = vscode.window.createStatusBarItem('kursor.inlineEdit.status', vscode.StatusBarAlignment.Left, 100);
-    this.item.name = 'Kursor inline edit';
-    this.item.command = 'kursor.inlineEdit.cancel';
-    this.item.tooltip = 'Kursor is generating… click or press Esc to cancel';
+    this.item = vscode.window.createStatusBarItem('klammr.inlineEdit.status', vscode.StatusBarAlignment.Left, 100);
+    this.item.name = 'Klammr inline edit';
+    this.item.command = 'klammr.inlineEdit.cancel';
+    this.item.tooltip = 'Klammr is generating… click or press Esc to cancel';
   }
 
   get running(): boolean {
@@ -28,12 +28,12 @@ export class InlineSpinner implements vscode.Disposable {
     this.cancel();
     const abort = new AbortController();
     this.current = { abort, label };
-    this.item.text = `$(loading~spin) Kursor: ${label}`;
+    this.item.text = `$(loading~spin) Klammr: ${label}`;
     this.item.show();
     await this.setRunning(true);
     try {
       return await task(abort.signal, (detail) => {
-        if (this.current?.abort === abort) this.item.text = `$(loading~spin) Kursor: ${label}${detail ? ` (${detail})` : ''}`;
+        if (this.current?.abort === abort) this.item.text = `$(loading~spin) Klammr: ${label}${detail ? ` (${detail})` : ''}`;
       });
     } finally {
       if (this.current?.abort === abort) {

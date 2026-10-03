@@ -67,7 +67,7 @@ export function userMessageText(content: unknown): string {
 }
 
 const ASSISTANT_ERROR_TEXT: Record<string, string> = {
-  authentication_failed: 'Not signed in to Claude Code. Run "Kursor: Sign in to Claude Code".',
+  authentication_failed: 'Not signed in to Claude Code. Run "Klammr: Sign in to Claude Code".',
   oauth_org_not_allowed: 'Your Claude organization does not allow this login.',
   account_on_hold: 'Your Claude account is on hold.',
   verification_required: 'Your Claude account needs verification.',

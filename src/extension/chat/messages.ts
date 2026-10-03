@@ -52,7 +52,7 @@ async function openFile(p: string, line: number | undefined, endLine: number | u
 
 async function runInTerminal(code: string): Promise<void> {
   let terminal = vscode.window.activeTerminal;
-  if (!terminal || terminal.exitStatus) terminal = vscode.window.createTerminal({ name: 'Kursor' });
+  if (!terminal || terminal.exitStatus) terminal = vscode.window.createTerminal({ name: 'Klammr' });
   terminal.show(false);
   const text = code.trim();
   if (!text) return;
@@ -66,7 +66,7 @@ async function runInTerminal(code: string): Promise<void> {
 
 async function insertAtCursor(code: string): Promise<void> {
   try {
-    await vscode.commands.executeCommand('kursor.inlineEdit.insertAtCursor', { code });
+    await vscode.commands.executeCommand('klammr.inlineEdit.insertAtCursor', { code });
     return;
   } catch {
     /* fall back below */
@@ -184,7 +184,7 @@ export async function handleWebviewMessage(ctx: MessageContext, msg: WebviewToHo
           return;
         case 'apply':
           try {
-            await vscode.commands.executeCommand('kursor.inlineEdit.applyCode', { code: msg.code, path: msg.path, language: msg.language });
+            await vscode.commands.executeCommand('klammr.inlineEdit.applyCode', { code: msg.code, path: msg.path, language: msg.language });
           } catch (err) {
             log.warn('applyCode unavailable, inserting at cursor instead', err);
             await insertAtCursor(msg.code);
@@ -206,9 +206,9 @@ export async function handleWebviewMessage(ctx: MessageContext, msg: WebviewToHo
       return;
     case 'openSettings':
       try {
-        await vscode.commands.executeCommand('kursor.settings.open');
+        await vscode.commands.executeCommand('klammr.settings.open');
       } catch {
-        await vscode.commands.executeCommand('workbench.action.openSettings', '@ext:kursor.kursor');
+        await vscode.commands.executeCommand('workbench.action.openSettings', '@ext:klammr.klammr');
       }
       return;
     case 'openHistory': {

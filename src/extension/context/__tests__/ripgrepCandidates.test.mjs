@@ -8,7 +8,7 @@ import * as path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const tmp = fs.mkdtempSync(path.join(process.env.KURSOR_TEST_TMP || os.tmpdir(), 'kursor-rg-test-'));
+const tmp = fs.mkdtempSync(path.join(process.env.KLAMMR_TEST_TMP || os.tmpdir(), 'klammr-rg-test-'));
 let m;
 
 before(async () => {
@@ -18,11 +18,11 @@ before(async () => {
 after(() => fs.rmSync(tmp, { recursive: true, force: true }));
 
 test('Linux: editor bundle (ripgrep-universal in asar.unpacked) first, then PATH, then system dirs', () => {
-  const c = m.ripgrepCandidates({ appRoot: '/opt/kursor/resources/app', platform: 'linux', arch: 'x64', env: { PATH: '/usr/local/bin:/home/u/.cargo/bin' }, home: '/home/u' });
-  assert.equal(c[0], '/opt/kursor/resources/app/node_modules.asar.unpacked/@vscode/ripgrep-universal/bin/linux-x64/rg');
-  assert.equal(c[1], '/opt/kursor/resources/app/node_modules/@vscode/ripgrep-universal/bin/linux-x64/rg');
-  assert.equal(c[2], '/opt/kursor/resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg');
-  assert.equal(c[3], '/opt/kursor/resources/app/node_modules/@vscode/ripgrep/bin/rg');
+  const c = m.ripgrepCandidates({ appRoot: '/opt/klammr/resources/app', platform: 'linux', arch: 'x64', env: { PATH: '/usr/local/bin:/home/u/.cargo/bin' }, home: '/home/u' });
+  assert.equal(c[0], '/opt/klammr/resources/app/node_modules.asar.unpacked/@vscode/ripgrep-universal/bin/linux-x64/rg');
+  assert.equal(c[1], '/opt/klammr/resources/app/node_modules/@vscode/ripgrep-universal/bin/linux-x64/rg');
+  assert.equal(c[2], '/opt/klammr/resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg');
+  assert.equal(c[3], '/opt/klammr/resources/app/node_modules/@vscode/ripgrep/bin/rg');
   assert.equal(c[4], '/usr/local/bin/rg');
   assert.ok(c.includes('/usr/bin/rg'));
   assert.ok(c.includes('/home/u/.local/bin/rg'));
@@ -31,21 +31,21 @@ test('Linux: editor bundle (ripgrep-universal in asar.unpacked) first, then PATH
 });
 
 test('macOS arm64: darwin-arm64 binary and Homebrew', () => {
-  const c = m.ripgrepCandidates({ appRoot: '/Applications/Kursor.app/Contents/Resources/app', platform: 'darwin', arch: 'arm64', env: {}, home: '/Users/u' });
-  assert.equal(c[0], '/Applications/Kursor.app/Contents/Resources/app/node_modules.asar.unpacked/@vscode/ripgrep-universal/bin/darwin-arm64/rg');
+  const c = m.ripgrepCandidates({ appRoot: '/Applications/Klammr.app/Contents/Resources/app', platform: 'darwin', arch: 'arm64', env: {}, home: '/Users/u' });
+  assert.equal(c[0], '/Applications/Klammr.app/Contents/Resources/app/node_modules.asar.unpacked/@vscode/ripgrep-universal/bin/darwin-arm64/rg');
   assert.ok(c.includes('/opt/homebrew/bin/rg'));
   assert.ok(c.includes('/usr/local/bin/rg'));
 });
 
 test('Windows: rg.exe, backslashes, PATH split on ";" (case-insensitive key), scoop/winget/git', () => {
   const c = m.ripgrepCandidates({
-    appRoot: 'C:\\Users\\u\\AppData\\Local\\Programs\\Kursor\\resources\\app',
+    appRoot: 'C:\\Users\\u\\AppData\\Local\\Programs\\Klammr\\resources\\app',
     platform: 'win32',
     arch: 'x64',
     env: { Path: 'C:\\Windows\\System32;C:\\tools', LOCALAPPDATA: 'C:\\Users\\u\\AppData\\Local', ProgramFiles: 'C:\\Program Files' },
     home: 'C:\\Users\\u',
   });
-  assert.equal(c[0], 'C:\\Users\\u\\AppData\\Local\\Programs\\Kursor\\resources\\app\\node_modules.asar.unpacked\\@vscode\\ripgrep-universal\\bin\\win32-x64\\rg.exe');
+  assert.equal(c[0], 'C:\\Users\\u\\AppData\\Local\\Programs\\Klammr\\resources\\app\\node_modules.asar.unpacked\\@vscode\\ripgrep-universal\\bin\\win32-x64\\rg.exe');
   assert.ok(c.includes('C:\\tools\\rg.exe'));
   assert.ok(c.includes('C:\\Users\\u\\scoop\\shims\\rg.exe'));
   assert.ok(c.includes('C:\\Users\\u\\AppData\\Local\\Microsoft\\WinGet\\Links\\rg.exe'));

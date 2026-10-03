@@ -2,9 +2,9 @@
  * EditTracker — records the files Claude Code edits (via the bridge's
  * PreToolUse/PostToolUse snapshots), and offers Cursor-style review:
  *   Keep (accept) · Undo (restore base) · Review (diff editor), per file / all,
- *   plus per-hunk Keep/Undo through CodeLens when `kursor.agent.inlineDiffs` is on.
+ *   plus per-hunk Keep/Undo through CodeLens when `klammr.agent.inlineDiffs` is on.
  *
- * Also owns: all `kursor.edits.*` commands, the `kursor.hasPendingEdits`
+ * Also owns: all `klammr.edits.*` commands, the `klammr.hasPendingEdits`
  * context key, the "$(diff-multiple) N files · Review" status bar item and
  * persistence of pending snapshots in workspaceState (so a reload keeps the
  * review state).
@@ -17,7 +17,7 @@ import { EditDecorations } from './decorations';
 import { applyHunkForward, computeHunks, endsWithNewline, lineStats, minimalReplacement, revertHunk, type TrackedFile } from './model';
 import { ORIG_SCHEME, OrigContentProvider } from './origProvider';
 
-const STORAGE_KEY = 'kursor.edits.v1';
+const STORAGE_KEY = 'klammr.edits.v1';
 const MAX_PERSIST_FILE = 512 * 1024;
 const MAX_PERSIST_TOTAL = 4 * 1024 * 1024;
 
@@ -29,7 +29,7 @@ function relPath(fsPath: string): string {
  * Canonical key for a file: the form `vscode.Uri.fsPath` produces (normalised separators,
  * lower-case drive letter on Windows). Paths reported by the Claude Code hooks may differ from
  * the editor's (`C:\Users\…` vs `c:\Users\…`), and the editor-title buttons compare
- * `resourcePath` against `kursor.pendingEditPaths` as exact strings.
+ * `resourcePath` against `klammr.pendingEditPaths` as exact strings.
  */
 function canonical(fsPath: string): string {
   try {
@@ -50,18 +50,18 @@ export function createEditTracker(context: vscode.ExtensionContext, deps: BaseDe
   const orig = new OrigContentProvider(lookup);
   disposables.push(orig, vscode.workspace.registerTextDocumentContentProvider(ORIG_SCHEME, orig));
 
-  const status = vscode.window.createStatusBarItem('kursor.edits', vscode.StatusBarAlignment.Left, 40);
-  status.name = 'Kursor edits';
-  status.command = 'kursor.edits.reviewAll';
+  const status = vscode.window.createStatusBarItem('klammr.edits', vscode.StatusBarAlignment.Left, 40);
+  status.name = 'Klammr edits';
+  status.command = 'klammr.edits.reviewAll';
   disposables.push(status);
 
   const decorations = new EditDecorations(lookup, (doc) => syncFromDocument(doc));
   disposables.push(decorations);
-  const readInlineDiffs = (): boolean => vscode.workspace.getConfiguration('kursor').get<boolean>('agent.inlineDiffs', true);
+  const readInlineDiffs = (): boolean => vscode.workspace.getConfiguration('klammr').get<boolean>('agent.inlineDiffs', true);
   decorations.setEnabled(readInlineDiffs());
   disposables.push(
     vscode.workspace.onDidChangeConfiguration((e) => {
-      if (e.affectsConfiguration('kursor.agent.inlineDiffs')) decorations.setEnabled(readInlineDiffs());
+      if (e.affectsConfiguration('klammr.agent.inlineDiffs')) decorations.setEnabled(readInlineDiffs());
     }),
   );
 
@@ -97,12 +97,12 @@ export function createEditTracker(context: vscode.ExtensionContext, deps: BaseDe
   // ---- state helpers -------------------------------------------------------
   const fire = (): void => {
     const n = files.size;
-    void vscode.commands.executeCommand('setContext', 'kursor.hasPendingEdits', n > 0);
-    // Editor-title Keep/Undo/Review buttons use `resourcePath in kursor.pendingEditPaths`.
-    void vscode.commands.executeCommand('setContext', 'kursor.pendingEditPaths', [...files.keys()]);
+    void vscode.commands.executeCommand('setContext', 'klammr.hasPendingEdits', n > 0);
+    // Editor-title Keep/Undo/Review buttons use `resourcePath in klammr.pendingEditPaths`.
+    void vscode.commands.executeCommand('setContext', 'klammr.pendingEditPaths', [...files.keys()]);
     if (n > 0) {
       status.text = `$(diff-multiple) ${n} file${n === 1 ? '' : 's'} · Review`;
-      status.tooltip = `Kursor edited ${n} file${n === 1 ? '' : 's'} — click to review (Keep All: Ctrl+Enter in chat)`;
+      status.tooltip = `Klammr edited ${n} file${n === 1 ? '' : 's'} — click to review (Keep All: Ctrl+Enter in chat)`;
       status.show();
     } else status.hide();
     decorations.refreshAll();
@@ -244,18 +244,18 @@ export function createEditTracker(context: vscode.ExtensionContext, deps: BaseDe
       if (fsPath) {
         const f = files.get(canonical(fsPath));
         if (!f) {
-          void vscode.window.showInformationMessage(`No pending Kursor edits in ${relPath(fsPath)}.`);
+          void vscode.window.showInformationMessage(`No pending Klammr edits in ${relPath(fsPath)}.`);
           return;
         }
         const left = OrigContentProvider.uriFor(f);
         const right = f.current === null ? OrigContentProvider.emptyUriFor(f.path) : vscode.Uri.file(f.path);
         const name = path.basename(f.path);
-        const title = f.base === null ? `${name} (New file by Kursor)` : f.current === null ? `${name} (Deleted by Kursor)` : `${name} (Original ↔ Kursor)`;
+        const title = f.base === null ? `${name} (New file by Klammr)` : f.current === null ? `${name} (Deleted by Klammr)` : `${name} (Original ↔ Klammr)`;
         await vscode.commands.executeCommand('vscode.diff', left, right, title, { preview: true, preserveFocus: false });
         return;
       }
       if (!files.size) {
-        void vscode.window.showInformationMessage('No pending Kursor edits.');
+        void vscode.window.showInformationMessage('No pending Klammr edits.');
         return;
       }
       const list: [vscode.Uri, vscode.Uri | undefined, vscode.Uri | undefined][] = [];
@@ -264,7 +264,7 @@ export function createEditTracker(context: vscode.ExtensionContext, deps: BaseDe
         list.push([fileUri, f.base === null ? undefined : OrigContentProvider.uriFor(f), f.current === null ? undefined : fileUri]);
       }
       try {
-        await vscode.commands.executeCommand('vscode.changes', 'Kursor edits', list);
+        await vscode.commands.executeCommand('vscode.changes', 'Klammr edits', list);
       } catch (err) {
         log.warn('vscode.changes failed, falling back to per-file diff', err);
         const first = [...files.keys()][0];
@@ -350,39 +350,39 @@ export function createEditTracker(context: vscode.ExtensionContext, deps: BaseDe
         await fn(...args);
       } catch (err) {
         log.error(`${name} failed`, err);
-        void vscode.window.showErrorMessage(`Kursor: ${err instanceof Error ? err.message : String(err)}`);
+        void vscode.window.showErrorMessage(`Klammr: ${err instanceof Error ? err.message : String(err)}`);
       }
     });
 
   disposables.push(
-    wrap('kursor.edits.keepAll', async () => {
+    wrap('klammr.edits.keepAll', async () => {
       const n = files.size;
       await tracker.keep();
-      if (n) vscode.window.setStatusBarMessage(`Kursor: kept edits in ${n} file${n === 1 ? '' : 's'}`, 3000);
+      if (n) vscode.window.setStatusBarMessage(`Klammr: kept edits in ${n} file${n === 1 ? '' : 's'}`, 3000);
     }),
-    wrap('kursor.edits.undoAll', async () => {
+    wrap('klammr.edits.undoAll', async () => {
       const n = files.size;
       if (!n) return;
       await tracker.undo();
-      vscode.window.setStatusBarMessage(`Kursor: reverted ${n} file${n === 1 ? '' : 's'}`, 3000);
+      vscode.window.setStatusBarMessage(`Klammr: reverted ${n} file${n === 1 ? '' : 's'}`, 3000);
     }),
-    wrap('kursor.edits.reviewAll', () => tracker.review()),
-    wrap('kursor.edits.keepFile', async (arg) => {
+    wrap('klammr.edits.reviewAll', () => tracker.review()),
+    wrap('klammr.edits.keepFile', async (arg) => {
       const p = uriArg(arg);
       if (p) await tracker.keep(p);
     }),
-    wrap('kursor.edits.undoFile', async (arg) => {
+    wrap('klammr.edits.undoFile', async (arg) => {
       const p = uriArg(arg);
       if (p) await tracker.undo(p);
     }),
-    wrap('kursor.edits.reviewFile', async (arg) => {
+    wrap('klammr.edits.reviewFile', async (arg) => {
       const p = uriArg(arg);
       if (p) await tracker.review(p);
     }),
-    wrap('kursor.edits.keepHunk', async (fsPath, index) => {
+    wrap('klammr.edits.keepHunk', async (fsPath, index) => {
       if (typeof fsPath === 'string' && typeof index === 'number') await keepHunk(fsPath, index);
     }),
-    wrap('kursor.edits.undoHunk', async (fsPath, index) => {
+    wrap('klammr.edits.undoHunk', async (fsPath, index) => {
       if (typeof fsPath === 'string' && typeof index === 'number') await undoHunk(fsPath, index);
     }),
     // Files deleted outside our control stop being reviewable.

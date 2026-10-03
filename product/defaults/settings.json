@@ -1,12 +1,12 @@
 {
-  // Kursor default user settings — seeded by the Kursor installer (product/install.mjs) only when this file does not exist yet.
-  // Plain VS Code / VSCodium settings; change anything (Ctrl+, opens Settings, Ctrl+Shift+J the Kursor panel).
+  // Klammr default user settings — seeded by the Klammr installer (product/install.mjs) only when this file does not exist yet.
+  // Plain VS Code / VSCodium settings; change anything (Ctrl+, opens Settings, Ctrl+Shift+J the Klammr panel).
 
   // Look & feel: custom title bar with the command center and the menu folded into one button, activity bar
-  // on top, the Kursor chat in the secondary side bar, Kursor Dark theme. The Kursor extension supplies the
+  // on top, the Klammr chat in the secondary side bar, Klammr Dark theme. The Klammr extension supplies the
   // rest as defaults (floating Modern UI panels, Inter UI font, smooth cursor, no minimap), so they follow
   // future updates unless you set them here.
-  "workbench.colorTheme": "Kursor Dark",
+  "workbench.colorTheme": "Klammr Dark",
   "window.titleBarStyle": "custom",
   "window.commandCenter": true,
   "window.menuBarVisibility": "compact",
@@ -17,7 +17,7 @@
   "workbench.tips.enabled": false,
   "editor.fontFamily": "'JetBrainsMono Nerd Font', 'CaskaydiaMono Nerd Font', 'CaskaydiaCove Nerd Font', 'Cascadia Code', 'JetBrains Mono', 'Fira Code', 'Hack Nerd Font', 'Noto Sans Mono', 'DejaVu Sans Mono', monospace",
 
-  // AI: Kursor provides chat, inline edits and completions through the Claude Code CLI on this machine.
+  // AI: Klammr provides chat, inline edits and completions through the Claude Code CLI on this machine.
   // Keep VS Code's built-in Copilot chat UI off and ghost-text completions on.
   "chat.disableAIFeatures": true,
   "chat.commandCenter.enabled": false,

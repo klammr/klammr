@@ -2,19 +2,19 @@
  * Lightbulb actions. Everything here delegates to commands owned by the chat
  * ([B]) and inline-edit ([D1]) modules, so this file has no AI logic of its own.
  *
- *   per diagnostic (Error/Warning/Info)  QuickFix "Fix in Chat: <message>"   → kursor.chat.fixDiagnostic(uri, diagnostic)
- *   with a non-empty selection           Refactor "Edit with Kursor (Ctrl+K)" → kursor.inlineEdit.open
- *                                        Refactor "Add to Chat"               → kursor.chat.addSelectionToChat
- *                                        Refactor "Explain with Kursor"       → kursor.chat.explainSelection
+ *   per diagnostic (Error/Warning/Info)  QuickFix "Fix in Chat: <message>"   → klammr.chat.fixDiagnostic(uri, diagnostic)
+ *   with a non-empty selection           Refactor "Edit with Klammr (Ctrl+K)" → klammr.inlineEdit.open
+ *                                        Refactor "Add to Chat"               → klammr.chat.addSelectionToChat
+ *                                        Refactor "Explain with Klammr"       → klammr.chat.explainSelection
  */
 import * as vscode from 'vscode';
 
-export const KURSOR_REFACTOR_KIND = vscode.CodeActionKind.Refactor.append('kursor');
-export const PROVIDED_KINDS = [vscode.CodeActionKind.QuickFix, KURSOR_REFACTOR_KIND];
+export const KLAMMR_REFACTOR_KIND = vscode.CodeActionKind.Refactor.append('klammr');
+export const PROVIDED_KINDS = [vscode.CodeActionKind.QuickFix, KLAMMR_REFACTOR_KIND];
 
 const MAX_TITLE_MESSAGE = 60;
 
-export class KursorCodeActionProvider implements vscode.CodeActionProvider {
+export class KlammrCodeActionProvider implements vscode.CodeActionProvider {
   provideCodeActions(
     document: vscode.TextDocument,
     range: vscode.Range | vscode.Selection,
@@ -35,11 +35,11 @@ export class KursorCodeActionProvider implements vscode.CodeActionProvider {
       }
     }
 
-    if (!range.isEmpty && (!only || only.intersects(KURSOR_REFACTOR_KIND))) {
+    if (!range.isEmpty && (!only || only.intersects(KLAMMR_REFACTOR_KIND))) {
       actions.push(
-        selectionAction('Edit with Kursor (Ctrl+K)', 'kursor.inlineEdit.open', 'edit'),
-        selectionAction('Add to Chat', 'kursor.chat.addSelectionToChat', 'addToChat'),
-        selectionAction('Explain with Kursor', 'kursor.chat.explainSelection', 'explain'),
+        selectionAction('Edit with Klammr (Ctrl+K)', 'klammr.inlineEdit.open', 'edit'),
+        selectionAction('Add to Chat', 'klammr.chat.addSelectionToChat', 'addToChat'),
+        selectionAction('Explain with Klammr', 'klammr.chat.explainSelection', 'explain'),
       );
     }
     return actions;
@@ -50,16 +50,16 @@ function fixInChat(document: vscode.TextDocument, diagnostic: vscode.Diagnostic)
   const action = new vscode.CodeAction(`Fix in Chat: ${shortMessage(diagnostic)}`, vscode.CodeActionKind.QuickFix);
   action.diagnostics = [diagnostic];
   action.command = {
-    command: 'kursor.chat.fixDiagnostic',
+    command: 'klammr.chat.fixDiagnostic',
     title: 'Fix in Chat',
-    tooltip: 'Send this problem to the Kursor chat with the surrounding code',
+    tooltip: 'Send this problem to the Klammr chat with the surrounding code',
     arguments: [document.uri, diagnostic],
   };
   return action;
 }
 
 function selectionAction(title: string, command: string, suffix: string): vscode.CodeAction {
-  const action = new vscode.CodeAction(title, KURSOR_REFACTOR_KIND.append(suffix));
+  const action = new vscode.CodeAction(title, KLAMMR_REFACTOR_KIND.append(suffix));
   action.command = { command, title };
   return action;
 }

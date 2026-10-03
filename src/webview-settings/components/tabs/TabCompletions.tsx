@@ -22,10 +22,10 @@ export function TabCompletionsTab() {
   return (
     <>
       <Section
-        title="Kursor Tab"
+        title="Klammr Tab"
         description="Ghost-text completions while you type. Each suggestion is one request to the CLI on your subscription, so they are debounced and kept small."
         actions={
-          <Button ghost icon="sparkle" onClick={() => post({ type: 'runCommand', command: 'kursor.tab.statusMenu' })} title="Same menu as the status bar item">
+          <Button ghost icon="sparkle" onClick={() => post({ type: 'runCommand', command: 'klammr.tab.statusMenu' })} title="Same menu as the status bar item">
             Status menu
           </Button>
         }

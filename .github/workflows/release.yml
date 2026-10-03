@@ -1,4 +1,4 @@
-# Kursor release: on a v* tag, build the extension once, then one redistributable bundle per
+# Klammr release: on a v* tag, build the extension once, then one redistributable bundle per
 # platform/arch (product/build-bundle.mjs) on the native runner, and attach everything to a GitHub Release.
 name: release
 
@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   vsix:
-    name: extension (dist/kursor.vsix)
+    name: extension (dist/klammr.vsix)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,8 +23,8 @@ jobs:
       - run: npm run package
       - uses: actions/upload-artifact@v4
         with:
-          name: kursor-vsix
-          path: dist/kursor.vsix
+          name: klammr-vsix
+          path: dist/klammr.vsix
           if-no-files-found: error
 
   bundles:
@@ -48,13 +48,13 @@ jobs:
           node-version: 22
       - uses: actions/download-artifact@v4
         with:
-          name: kursor-vsix
+          name: klammr-vsix
           path: dist
       - name: Build bundles
         shell: bash
         run: |
           for target in ${{ matrix.targets }}; do
-            node product/build-bundle.mjs --platform "${target%-*}" --arch "${target#*-}" --vsix dist/kursor.vsix --out dist/bundles
+            node product/build-bundle.mjs --platform "${target%-*}" --arch "${target#*-}" --vsix dist/klammr.vsix --out dist/bundles
           done
           ls -la dist/bundles
       - uses: actions/upload-artifact@v4
@@ -79,5 +79,5 @@ jobs:
         with:
           generate_release_notes: true
           files: |
-            artifacts/kursor-vsix/kursor.vsix
+            artifacts/klammr-vsix/klammr.vsix
             artifacts/bundles-*/*

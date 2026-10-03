@@ -1,4 +1,4 @@
-/** All `kursor.chat.*` commands. */
+/** All `klammr.chat.*` commands. */
 import * as vscode from 'vscode';
 import type { Attachment } from '../../shared/protocol';
 import { diagnosticAttachment, fileAttachment, selectionAttachment, terminalAttachment } from '../context/providers';
@@ -42,7 +42,7 @@ export function registerChatCommands(context: vscode.ExtensionContext, deps: Com
         await fn(...args);
       } catch (err) {
         log.error(`${name} failed`, err);
-        void vscode.window.showErrorMessage(`Kursor: ${err instanceof Error ? err.message : String(err)}`);
+        void vscode.window.showErrorMessage(`Klammr: ${err instanceof Error ? err.message : String(err)}`);
       }
     });
 
@@ -69,23 +69,23 @@ export function registerChatCommands(context: vscode.ExtensionContext, deps: Com
   };
 
   context.subscriptions.push(
-    wrap('kursor.chat.open', openChat),
-    wrap('kursor.chat.newChat', async () => {
+    wrap('klammr.chat.open', openChat),
+    wrap('klammr.chat.newChat', async () => {
       manager.newChat();
       await view.reveal(true);
       manager.postToPrimary({ type: 'focusInput' });
     }),
-    wrap('kursor.chat.history', async () => {
+    wrap('klammr.chat.history', async () => {
       await view.reveal(true);
       const sessions = await manager.history();
       manager.postToPrimary({ type: 'history', sessions });
       manager.postToPrimary({ type: 'showHistory' });
     }),
-    wrap('kursor.chat.openInEditor', () => {
+    wrap('klammr.chat.openInEditor', () => {
       manager.activeOrNew();
       panel.open();
     }),
-    wrap('kursor.chat.addSelectionToNewChat', async () => {
+    wrap('klammr.chat.addSelectionToNewChat', async () => {
       const sel = selectionAttachment();
       if (!sel) {
         await openChat();
@@ -93,7 +93,7 @@ export function registerChatCommands(context: vscode.ExtensionContext, deps: Com
       }
       await manager.addAttachment(sel, { newChat: true, focus: true });
     }),
-    wrap('kursor.chat.addSelectionToChat', async () => {
+    wrap('klammr.chat.addSelectionToChat', async () => {
       const sel = selectionAttachment();
       if (!sel) {
         void vscode.window.showInformationMessage('Select some code first.');
@@ -101,7 +101,7 @@ export function registerChatCommands(context: vscode.ExtensionContext, deps: Com
       }
       await manager.addAttachment(sel, { focus: true });
     }),
-    wrap('kursor.chat.addFileToChat', async (arg, multi) => {
+    wrap('klammr.chat.addFileToChat', async (arg, multi) => {
       const uris: vscode.Uri[] = Array.isArray(multi) && multi.every((u) => u instanceof vscode.Uri) ? (multi as vscode.Uri[]) : arg instanceof vscode.Uri ? [arg] : [];
       if (!uris.length) {
         const ed = vscode.window.activeTextEditor;
@@ -122,7 +122,7 @@ export function registerChatCommands(context: vscode.ExtensionContext, deps: Com
         await manager.addAttachment(fileAttachment(uri, kind), { focus: i === uris.length - 1 });
       }
     }),
-    wrap('kursor.chat.explainSelection', async () => {
+    wrap('klammr.chat.explainSelection', async () => {
       const sel = selectionAttachment(undefined, { allowEmpty: true });
       if (!sel) {
         void vscode.window.showInformationMessage('Open a file and select the code to explain.');
@@ -131,7 +131,7 @@ export function registerChatCommands(context: vscode.ExtensionContext, deps: Com
       await view.reveal(true);
       await manager.send(undefined, 'Explain this code: what it does, how it fits into the codebase, and anything surprising.', [sel], { mode: 'ask' });
     }),
-    wrap('kursor.chat.fixDiagnostic', async (uriArg, diagArg) => {
+    wrap('klammr.chat.fixDiagnostic', async (uriArg, diagArg) => {
       let uri = uriArg instanceof vscode.Uri ? uriArg : vscode.window.activeTextEditor?.document.uri;
       let diagnostic = diagArg as vscode.Diagnostic | undefined;
       if (!uri) throw new Error('No file for the diagnostic.');
@@ -165,7 +165,7 @@ export function registerChatCommands(context: vscode.ExtensionContext, deps: Com
       await view.reveal(true);
       await manager.send(undefined, `Fix this problem: ${diagnostic.message}`, attachments);
     }),
-    wrap('kursor.chat.addTerminalSelection', async () => {
+    wrap('klammr.chat.addTerminalSelection', async () => {
       const t = await terminalText('workbench.action.terminal.copySelection');
       if (!t) {
         void vscode.window.showInformationMessage('Select text in the terminal first (or run a command with shell integration enabled).');
@@ -173,7 +173,7 @@ export function registerChatCommands(context: vscode.ExtensionContext, deps: Com
       }
       await manager.addAttachment(terminalAttachment(t.text, t.name), { focus: true });
     }),
-    wrap('kursor.chat.debugTerminal', async () => {
+    wrap('klammr.chat.debugTerminal', async () => {
       const t = await terminalText('workbench.action.terminal.copyLastCommandAndLastCommandOutput');
       if (!t) {
         void vscode.window.showInformationMessage('No terminal output found. Run a command first (shell integration required).');
@@ -182,8 +182,8 @@ export function registerChatCommands(context: vscode.ExtensionContext, deps: Com
       await view.reveal(true);
       await manager.send(undefined, 'Debug this terminal output: explain what went wrong and fix it.', [terminalAttachment(t.text, t.name)]);
     }),
-    wrap('kursor.chat.exportChat', () => manager.exportChat()),
-    wrap('kursor.chat.stop', () => manager.stop()),
-    wrap('kursor.chat.focusInput', () => manager.focusInput()),
+    wrap('klammr.chat.exportChat', () => manager.exportChat()),
+    wrap('klammr.chat.stop', () => manager.stop()),
+    wrap('klammr.chat.focusInput', () => manager.focusInput()),
   );
 }

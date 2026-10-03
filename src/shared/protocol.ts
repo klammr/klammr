@@ -1,5 +1,5 @@
 /**
- * Kursor — shared contract between the extension host and the chat webview.
+ * Klammr — shared contract between the extension host and the chat webview.
  * This file is imported by BOTH bundles. Keep it free of `vscode` and Node imports.
  *
  * Ownership: the extension host is the source of truth for all chat state.
@@ -279,7 +279,7 @@ export type WebviewToHost =
   | { type: 'deleteSession'; sessionId: string }
   | { type: 'pickImage' }
   | { type: 'runCommand'; command: string; args?: unknown[] }
-  /** Keyboard focus entered/left the webview (lets `kursor.chat.open` toggle only when the chat is focused). */
+  /** Keyboard focus entered/left the webview (lets `klammr.chat.open` toggle only when the chat is focused). */
   | { type: 'focusChanged'; focused: boolean }
   | { type: 'log'; level: 'info' | 'warn' | 'error'; text: string };
 

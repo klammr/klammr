@@ -7,7 +7,7 @@ import * as vscode from 'vscode';
 import type { Logger } from '../util/log';
 import { TAB_SECTION, TabConfig, effectiveTarget, readTabConfig } from './config';
 
-export const SNOOZE_KEY = 'kursor.tab.snoozedUntil';
+export const SNOOZE_KEY = 'klammr.tab.snoozedUntil';
 export const DEFAULT_SNOOZE_MINUTES = 30;
 
 export type TabAvailability =
@@ -82,7 +82,7 @@ export class TabState implements vscode.Disposable {
     try {
       await vscode.workspace.getConfiguration(TAB_SECTION).update('enabled', enabled, effectiveTarget('enabled'));
     } catch (e) {
-      this.log.error('failed to write kursor.tab.enabled', e);
+      this.log.error('failed to write klammr.tab.enabled', e);
       throw e;
     }
   }
@@ -116,7 +116,7 @@ export class TabState implements vscode.Disposable {
         .getConfiguration(TAB_SECTION)
         .update('disabledLanguages', next, effectiveTarget('disabledLanguages'));
     } catch (e) {
-      this.log.error('failed to write kursor.tab.disabledLanguages', e);
+      this.log.error('failed to write klammr.tab.disabledLanguages', e);
       throw e;
     }
   }

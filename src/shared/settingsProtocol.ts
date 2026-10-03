@@ -1,9 +1,9 @@
 /**
- * Kursor — shared contract between the extension host and the "Kursor Settings" webview panel.
+ * Klammr — shared contract between the extension host and the "Klammr Settings" webview panel.
  * Imported by BOTH bundles (src/extension/settings and src/webview-settings). Keep it free of
  * `vscode` and Node imports.
  *
- * Ownership: the host is the source of truth. It reads `kursor.*` from the VS Code configuration
+ * Ownership: the host is the source of truth. It reads `klammr.*` from the VS Code configuration
  * and pushes full `SettingsValues` snapshots; the panel renders them and posts `setSetting`
  * intents, which the host writes to `ConfigurationTarget.Global`. Every change made elsewhere
  * (settings editor, settings.json, another window) comes back through `onDidChangeConfiguration`
@@ -17,7 +17,7 @@ export const SETTINGS_TABS: readonly SettingsTab[] = ['general', 'agents', 'tab'
 export type AgentPermissionMode = 'acceptEdits' | 'default' | 'auto' | 'bypassPermissions';
 export type ToolCallDensity = 'compact' | 'balanced' | 'detailed';
 
-/** Every `kursor.*` setting declared in package.json, keyed without the `kursor.` prefix. */
+/** Every `klammr.*` setting declared in package.json, keyed without the `klammr.` prefix. */
 export interface SettingsValues {
   'claude.path': string;
   'claude.model': string;
@@ -150,7 +150,7 @@ export interface SettingsState {
   rules: { items: RuleListItem[]; loading: boolean; error?: string };
   workspace: WorkspaceInfo;
   about: AboutInfo;
-  /** Tab the host wants the panel to show (e.g. `kursor.settings.open` with an argument). */
+  /** Tab the host wants the panel to show (e.g. `klammr.settings.open` with an argument). */
   initialTab?: SettingsTab;
 }
 

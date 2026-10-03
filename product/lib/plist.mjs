@@ -1,4 +1,4 @@
-// Kursor product scripts — minimal XML property-list reader/writer for Info.plist edits.
+// Klammr product scripts — minimal XML property-list reader/writer for Info.plist edits.
 // Deterministic on every host (plutil/PlistBuddy only exist on macOS); output uses Apple's own
 // layout (tabs, one element per line) so a diff against the original shows only the changed values.
 //

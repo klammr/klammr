@@ -1,5 +1,5 @@
 /**
- * [E] IDE bridge — lets a `claude` CLI started in Kursor's integrated terminal see the
+ * [E] IDE bridge — lets a `claude` CLI started in Klammr's integrated terminal see the
  * editor (selection, diagnostics, open files) and show its proposed edits as diff tabs.
  * See README.md in this directory for the design.
  */
@@ -10,7 +10,7 @@ import { SelectionTracker } from './selection';
 import { IdeServer } from './server';
 import type { IdeToolHost } from './tools';
 
-const SETTING_SECTION = 'kursor';
+const SETTING_SECTION = 'klammr';
 const SETTING_ENABLE = 'ide.enableServer';
 const SELECTION_DEBOUNCE_MS = 100;
 /** Delay before pushing the current selection to a freshly connected client (lets its handshake settle). */
@@ -73,21 +73,21 @@ export function registerIdeServer(context: vscode.ExtensionContext, deps: IdeDep
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
         log.error(`${id} failed`, err);
-        void vscode.window.showErrorMessage(`Kursor: ${message}`);
+        void vscode.window.showErrorMessage(`Klammr: ${message}`);
       }
     });
   context.subscriptions.push(
-    command('kursor.ide.acceptDiff', (arg) => diff.accept(arg)),
-    command('kursor.ide.rejectDiff', (arg) => diff.reject(arg)),
-    command('kursor.ide.insertAtMention', async () => {
+    command('klammr.ide.acceptDiff', (arg) => diff.accept(arg)),
+    command('klammr.ide.rejectDiff', (arg) => diff.reject(arg)),
+    command('klammr.ide.insertAtMention', async () => {
       const mention = selection.activeAtMention();
       if (!mention) {
-        void vscode.window.showInformationMessage('Kursor: open a file in the editor to reference it in the terminal session.');
+        void vscode.window.showInformationMessage('Klammr: open a file in the editor to reference it in the terminal session.');
         return;
       }
       if (!server.isConnected) {
         const pick = await vscode.window.showInformationMessage(
-          'Kursor: no terminal session is connected. Start `claude` in the integrated terminal, then try again.',
+          'Klammr: no terminal session is connected. Start `claude` in the integrated terminal, then try again.',
           'Open Terminal',
         );
         if (pick === 'Open Terminal') await vscode.commands.executeCommand('workbench.action.terminal.focus');
@@ -111,10 +111,10 @@ export function registerIdeServer(context: vscode.ExtensionContext, deps: IdeDep
           } catch (err) {
             const message = err instanceof Error ? err.message : String(err);
             log.error('IDE bridge failed to start', err);
-            void vscode.window.showErrorMessage(`Kursor: the IDE bridge could not start (${message}). A terminal \`claude\` will not see this editor.`);
+            void vscode.window.showErrorMessage(`Klammr: the IDE bridge could not start (${message}). A terminal \`claude\` will not see this editor.`);
           }
         } else if (!enabled && server.isRunning) {
-          await server.stop('disabled by kursor.ide.enableServer');
+          await server.stop('disabled by klammr.ide.enableServer');
         }
       })
       .catch((err: unknown) => log.error('IDE bridge state change failed', err));

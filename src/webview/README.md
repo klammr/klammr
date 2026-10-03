@@ -1,7 +1,7 @@
-# `src/webview` — Kursor chat UI
+# `src/webview` — Klammr chat UI
 
 React 18 + TypeScript, bundled by esbuild (`node esbuild.mjs`) into `dist/webview.js` (+ `dist/webview.css`,
-emitted from `styles.css`). The host (`src/extension/chat`) renders it in the `kursor.chat` secondary-side-bar
+emitted from `styles.css`). The host (`src/extension/chat`) renders it in the `klammr.chat` secondary-side-bar
 view and in the "Open Chat in Editor" panel. The only contract is `src/shared/protocol.ts`: the host owns all
 chat state and posts `AppState` / `ChatState` snapshots plus `textDelta`s; the UI posts `WebviewToHost` intents.
 Nothing here imports from `src/extension`.
@@ -55,7 +55,7 @@ window focus/blur ──▶ post({type:'focusChanged'}) (lets Ctrl+I toggle the 
 | `ReviewBar` | sticky "N files +A −D · Review · Undo All · Keep All", expandable per-file list |
 | `InputBox` | textarea, pills, `Popover` (@ mentions with categories → drill-in, `/` commands), image paste/drop + `text/uri-list` file drops, toolbar: @, image (`pickImage`), mode menu, model menu with effort submenu, `ContextRing`, send/stop; running hint line |
 | `Menu` / `Popover` | anchored dropdown (keyboard nav, outside click, Esc) / list popover above the input |
-| `EmptyState` | logo + hints; `SignInPanel` when `claude.ready` is false or `loggedIn === false` (Sign in → `kursor.claude.login`, Set path → settings, Re-check) |
+| `EmptyState` | logo + hints; `SignInPanel` when `claude.ready` is false or `loggedIn === false` (Sign in → `klammr.claude.login`, Set path → settings, Re-check) |
 | `HistoryView` | search box, entries (resume / switch to open tab, two-click delete, refresh) |
 | `Toasts` | top-right auto-dismissing notifications |
 

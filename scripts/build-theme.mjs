@@ -1,4 +1,4 @@
-// Generates media/themes/kursor-dark.json from the brand palette in docs/BRAND.md.
+// Generates media/themes/klammr-dark.json from the brand palette in docs/BRAND.md.
 //
 //   npm run theme                          write the theme
 //   node scripts/build-theme.mjs --check   exit 1 when the committed theme is out of date (CI)
@@ -11,7 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const OUT = path.join(ROOT, 'media', 'themes', 'kursor-dark.json');
+const OUT = path.join(ROOT, 'media', 'themes', 'klammr-dark.json');
 
 // ---- Brand tokens (docs/BRAND.md) -----------------------------------------------------------
 const brand = {
@@ -523,7 +523,7 @@ const colors = {
   'debugToolBar.background': ui.raised,
   'debugToolBar.border': ui.line,
 
-  // ---- minimap (off by default in Kursor)
+  // ---- minimap (off by default in Klammr)
   'minimap.background': ui.card,
   'minimap.selectionHighlight': a(brand.violet, 0.4),
   'minimap.findMatchHighlight': a(brand.warn, 0.6),
@@ -836,7 +836,7 @@ const semanticTokenColors = {
 
 const theme = {
   $schema: 'vscode://schemas/color-theme',
-  name: 'Kursor Dark',
+  name: 'Klammr Dark',
   type: 'dark',
   semanticHighlighting: true,
   colors,

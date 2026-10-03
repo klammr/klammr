@@ -1,12 +1,12 @@
 {
-  "name": "kursor",
-  "displayName": "Kursor",
+  "name": "klammr",
+  "displayName": "Klammr",
   "description": "Cursor-style AI coding: agent chat, Ctrl+K inline edits, Tab completions, terminal and commit helpers. Powered by the Claude Code CLI installed on your machine.",
   "version": "0.1.1",
-  "publisher": "kursor",
+  "publisher": "klammr",
   "private": true,
   "license": "MIT",
-  "icon": "product/icons/kursor-256.png",
+  "icon": "product/icons/klammr-256.png",
   "engines": {
     "vscode": "^1.106.0",
     "node": ">=20"
@@ -42,435 +42,435 @@
     "viewsContainers": {
       "secondarySidebar": [
         {
-          "id": "kursor",
-          "title": "Kursor",
-          "icon": "media/kursor-activity.svg"
+          "id": "klammr",
+          "title": "Klammr",
+          "icon": "media/klammr-activity.svg"
         }
       ]
     },
     "views": {
-      "kursor": [
+      "klammr": [
         {
           "type": "webview",
-          "id": "kursor.chat",
+          "id": "klammr.chat",
           "name": "Chat",
-          "icon": "media/kursor-activity.svg",
-          "contextualTitle": "Kursor"
+          "icon": "media/klammr-activity.svg",
+          "contextualTitle": "Klammr"
         }
       ]
     },
     "themes": [
       {
-        "label": "Kursor Dark",
+        "label": "Klammr Dark",
         "uiTheme": "vs-dark",
-        "path": "./media/themes/kursor-dark.json"
+        "path": "./media/themes/klammr-dark.json"
       }
     ],
     "commands": [
       {
-        "command": "kursor.chat.open",
+        "command": "klammr.chat.open",
         "title": "Toggle Chat",
-        "category": "Kursor",
+        "category": "Klammr",
         "icon": "$(comment-discussion)"
       },
       {
-        "command": "kursor.chat.newChat",
+        "command": "klammr.chat.newChat",
         "title": "New Chat",
-        "category": "Kursor",
+        "category": "Klammr",
         "icon": "$(add)"
       },
       {
-        "command": "kursor.chat.history",
+        "command": "klammr.chat.history",
         "title": "Chat History",
-        "category": "Kursor",
+        "category": "Klammr",
         "icon": "$(history)"
       },
       {
-        "command": "kursor.chat.openInEditor",
+        "command": "klammr.chat.openInEditor",
         "title": "Open Chat in Editor",
-        "category": "Kursor",
+        "category": "Klammr",
         "icon": "$(link-external)"
       },
       {
-        "command": "kursor.chat.addSelectionToNewChat",
+        "command": "klammr.chat.addSelectionToNewChat",
         "title": "Add Selection to New Chat",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.chat.addSelectionToChat",
+        "command": "klammr.chat.addSelectionToChat",
         "title": "Add Selection to Chat",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.chat.addFileToChat",
+        "command": "klammr.chat.addFileToChat",
         "title": "Add File to Chat",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.chat.explainSelection",
-        "title": "Explain with Kursor",
-        "category": "Kursor"
+        "command": "klammr.chat.explainSelection",
+        "title": "Explain with Klammr",
+        "category": "Klammr"
       },
       {
-        "command": "kursor.chat.fixDiagnostic",
+        "command": "klammr.chat.fixDiagnostic",
         "title": "Fix in Chat",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.chat.addTerminalSelection",
+        "command": "klammr.chat.addTerminalSelection",
         "title": "Add Terminal Selection to Chat",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.chat.debugTerminal",
-        "title": "Debug Terminal Output with Kursor",
-        "category": "Kursor"
+        "command": "klammr.chat.debugTerminal",
+        "title": "Debug Terminal Output with Klammr",
+        "category": "Klammr"
       },
       {
-        "command": "kursor.chat.exportChat",
+        "command": "klammr.chat.exportChat",
         "title": "Export Chat as Markdown",
-        "category": "Kursor",
+        "category": "Klammr",
         "icon": "$(export)"
       },
       {
-        "command": "kursor.chat.stop",
+        "command": "klammr.chat.stop",
         "title": "Stop Generation",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.chat.focusInput",
+        "command": "klammr.chat.focusInput",
         "title": "Focus Chat Input",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.edits.keepAll",
+        "command": "klammr.edits.keepAll",
         "title": "Keep All Agent Edits",
-        "category": "Kursor",
+        "category": "Klammr",
         "icon": "$(check-all)"
       },
       {
-        "command": "kursor.edits.undoAll",
+        "command": "klammr.edits.undoAll",
         "title": "Undo All Agent Edits",
-        "category": "Kursor",
+        "category": "Klammr",
         "icon": "$(discard)"
       },
       {
-        "command": "kursor.edits.reviewAll",
+        "command": "klammr.edits.reviewAll",
         "title": "Review Agent Edits",
-        "category": "Kursor",
+        "category": "Klammr",
         "icon": "$(diff-multiple)"
       },
       {
-        "command": "kursor.edits.keepFile",
+        "command": "klammr.edits.keepFile",
         "title": "Keep Agent Edits in This File",
-        "category": "Kursor",
+        "category": "Klammr",
         "icon": "$(check)"
       },
       {
-        "command": "kursor.edits.undoFile",
+        "command": "klammr.edits.undoFile",
         "title": "Undo Agent Edits in This File",
-        "category": "Kursor",
+        "category": "Klammr",
         "icon": "$(discard)"
       },
       {
-        "command": "kursor.edits.reviewFile",
+        "command": "klammr.edits.reviewFile",
         "title": "Review Agent Edits in This File",
-        "category": "Kursor",
+        "category": "Klammr",
         "icon": "$(diff)"
       },
       {
-        "command": "kursor.edits.keepHunk",
+        "command": "klammr.edits.keepHunk",
         "title": "Keep This Change",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.edits.undoHunk",
+        "command": "klammr.edits.undoHunk",
         "title": "Undo This Change",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.inlineEdit.open",
-        "title": "Edit with Kursor (Ctrl+K)",
-        "category": "Kursor",
+        "command": "klammr.inlineEdit.open",
+        "title": "Edit with Klammr (Ctrl+K)",
+        "category": "Klammr",
         "icon": "$(sparkle)"
       },
       {
-        "command": "kursor.inlineEdit.acceptAll",
+        "command": "klammr.inlineEdit.acceptAll",
         "title": "Accept Inline Edit",
-        "category": "Kursor",
+        "category": "Klammr",
         "icon": "$(check)"
       },
       {
-        "command": "kursor.inlineEdit.rejectAll",
+        "command": "klammr.inlineEdit.rejectAll",
         "title": "Reject Inline Edit",
-        "category": "Kursor",
+        "category": "Klammr",
         "icon": "$(close)"
       },
       {
-        "command": "kursor.inlineEdit.acceptBlock",
+        "command": "klammr.inlineEdit.acceptBlock",
         "title": "Accept Inline Edit Block",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.inlineEdit.rejectBlock",
+        "command": "klammr.inlineEdit.rejectBlock",
         "title": "Reject Inline Edit Block",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.inlineEdit.quickQuestion",
+        "command": "klammr.inlineEdit.quickQuestion",
         "title": "Quick Question about Selection",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.inlineEdit.applyCode",
+        "command": "klammr.inlineEdit.applyCode",
         "title": "Apply Code Block to File",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.inlineEdit.insertAtCursor",
+        "command": "klammr.inlineEdit.insertAtCursor",
         "title": "Insert Code Block at Cursor",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.inlineEdit.cancel",
+        "command": "klammr.inlineEdit.cancel",
         "title": "Cancel Inline Edit",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.inlineEdit.submit",
+        "command": "klammr.inlineEdit.submit",
         "title": "Submit Inline Edit Prompt",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.tab.toggle",
+        "command": "klammr.tab.toggle",
         "title": "Toggle Tab Completions",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.tab.snooze",
+        "command": "klammr.tab.snooze",
         "title": "Snooze Tab Completions",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.tab.trigger",
+        "command": "klammr.tab.trigger",
         "title": "Trigger Tab Completion",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.tab.statusMenu",
-        "title": "Kursor Tab Menu",
-        "category": "Kursor"
+        "command": "klammr.tab.statusMenu",
+        "title": "Klammr Tab Menu",
+        "category": "Klammr"
       },
       {
-        "command": "kursor.tab.accepted",
-        "title": "Kursor Tab: Completion Accepted",
-        "category": "Kursor"
+        "command": "klammr.tab.accepted",
+        "title": "Klammr Tab: Completion Accepted",
+        "category": "Klammr"
       },
       {
-        "command": "kursor.terminal.generate",
+        "command": "klammr.terminal.generate",
         "title": "Generate Terminal Command (Ctrl+K)",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.scm.generateCommitMessage",
-        "title": "Generate Commit Message with Kursor",
-        "category": "Kursor",
+        "command": "klammr.scm.generateCommitMessage",
+        "title": "Generate Commit Message with Klammr",
+        "category": "Klammr",
         "icon": "$(sparkle)",
         "enablement": "!operationInProgress"
       },
       {
-        "command": "kursor.settings.open",
-        "title": "Kursor Settings",
-        "category": "Kursor",
+        "command": "klammr.settings.open",
+        "title": "Klammr Settings",
+        "category": "Klammr",
         "icon": "$(settings-gear)"
       },
       {
-        "command": "kursor.rules.new",
-        "title": "New Kursor Rule",
-        "category": "Kursor"
+        "command": "klammr.rules.new",
+        "title": "New Klammr Rule",
+        "category": "Klammr"
       },
       {
-        "command": "kursor.claude.login",
+        "command": "klammr.claude.login",
         "title": "Sign in to Claude Code",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.claude.status",
+        "command": "klammr.claude.status",
         "title": "Claude Code Status",
-        "category": "Kursor"
+        "category": "Klammr"
       },
       {
-        "command": "kursor.showLogs",
-        "title": "Show Kursor Logs",
-        "category": "Kursor"
+        "command": "klammr.showLogs",
+        "title": "Show Klammr Logs",
+        "category": "Klammr"
       },
       {
-        "command": "kursor.ide.acceptDiff",
+        "command": "klammr.ide.acceptDiff",
         "title": "Accept Proposed Changes",
-        "category": "Kursor",
+        "category": "Klammr",
         "icon": "$(check)",
-        "enablement": "kursor.ide.viewingDiff"
+        "enablement": "klammr.ide.viewingDiff"
       },
       {
-        "command": "kursor.ide.rejectDiff",
+        "command": "klammr.ide.rejectDiff",
         "title": "Reject Proposed Changes",
-        "category": "Kursor",
+        "category": "Klammr",
         "icon": "$(close)",
-        "enablement": "kursor.ide.viewingDiff"
+        "enablement": "klammr.ide.viewingDiff"
       },
       {
-        "command": "kursor.ide.insertAtMention",
+        "command": "klammr.ide.insertAtMention",
         "title": "Insert @-mention into Terminal Session",
-        "category": "Kursor"
+        "category": "Klammr"
       }
     ],
     "keybindings": [
       {
-        "command": "kursor.chat.open",
+        "command": "klammr.chat.open",
         "key": "ctrl+i",
         "mac": "cmd+i",
         "when": "!terminalFocus"
       },
       {
-        "command": "kursor.chat.addSelectionToNewChat",
+        "command": "klammr.chat.addSelectionToNewChat",
         "key": "ctrl+l",
         "mac": "cmd+l",
-        "when": "!terminalFocus && !kursor.inlineEditInputFocus"
+        "when": "!terminalFocus && !klammr.inlineEditInputFocus"
       },
       {
-        "command": "kursor.chat.addSelectionToChat",
+        "command": "klammr.chat.addSelectionToChat",
         "key": "ctrl+shift+l",
         "mac": "cmd+shift+l",
         "when": "editorTextFocus"
       },
       {
-        "command": "kursor.chat.newChat",
+        "command": "klammr.chat.newChat",
         "key": "ctrl+n",
         "mac": "cmd+n",
-        "when": "focusedView == kursor.chat"
+        "when": "focusedView == klammr.chat"
       },
       {
-        "command": "kursor.chat.newChat",
+        "command": "klammr.chat.newChat",
         "key": "ctrl+t",
         "mac": "cmd+t",
-        "when": "focusedView == kursor.chat"
+        "when": "focusedView == klammr.chat"
       },
       {
-        "command": "kursor.chat.history",
+        "command": "klammr.chat.history",
         "key": "ctrl+alt+'",
         "mac": "cmd+alt+'",
-        "when": "focusedView == kursor.chat"
+        "when": "focusedView == klammr.chat"
       },
       {
-        "command": "kursor.chat.stop",
+        "command": "klammr.chat.stop",
         "key": "ctrl+shift+backspace",
         "mac": "cmd+shift+backspace",
-        "when": "focusedView == kursor.chat && kursor.chatRunning"
+        "when": "focusedView == klammr.chat && klammr.chatRunning"
       },
       {
-        "command": "kursor.edits.keepAll",
+        "command": "klammr.edits.keepAll",
         "key": "ctrl+enter",
         "mac": "cmd+enter",
-        "when": "focusedView == kursor.chat && kursor.hasPendingEdits && !kursor.chatRunning"
+        "when": "focusedView == klammr.chat && klammr.hasPendingEdits && !klammr.chatRunning"
       },
       {
-        "command": "kursor.edits.undoAll",
+        "command": "klammr.edits.undoAll",
         "key": "ctrl+shift+backspace",
         "mac": "cmd+shift+backspace",
-        "when": "focusedView == kursor.chat && kursor.hasPendingEdits && !kursor.chatRunning"
+        "when": "focusedView == klammr.chat && klammr.hasPendingEdits && !klammr.chatRunning"
       },
       {
-        "command": "kursor.inlineEdit.open",
+        "command": "klammr.inlineEdit.open",
         "key": "ctrl+k",
         "mac": "cmd+k",
-        "when": "editorTextFocus && !editorReadonly && !kursor.inlineDiffVisible"
+        "when": "editorTextFocus && !editorReadonly && !klammr.inlineDiffVisible"
       },
       {
-        "command": "kursor.inlineEdit.open",
+        "command": "klammr.inlineEdit.open",
         "key": "ctrl+k",
         "mac": "cmd+k",
-        "when": "editorTextFocus && kursor.inlineDiffVisible"
+        "when": "editorTextFocus && klammr.inlineDiffVisible"
       },
       {
-        "command": "kursor.inlineEdit.acceptAll",
+        "command": "klammr.inlineEdit.acceptAll",
         "key": "ctrl+enter",
         "mac": "cmd+enter",
-        "when": "editorTextFocus && kursor.inlineDiffVisible"
+        "when": "editorTextFocus && klammr.inlineDiffVisible"
       },
       {
-        "command": "kursor.inlineEdit.rejectAll",
+        "command": "klammr.inlineEdit.rejectAll",
         "key": "ctrl+backspace",
         "mac": "cmd+backspace",
-        "when": "editorTextFocus && kursor.inlineDiffVisible"
+        "when": "editorTextFocus && klammr.inlineDiffVisible"
       },
       {
-        "command": "kursor.inlineEdit.rejectAll",
+        "command": "klammr.inlineEdit.rejectAll",
         "key": "ctrl+shift+backspace",
         "mac": "cmd+shift+backspace",
-        "when": "editorTextFocus && kursor.inlineDiffVisible"
+        "when": "editorTextFocus && klammr.inlineDiffVisible"
       },
       {
-        "command": "kursor.inlineEdit.rejectAll",
+        "command": "klammr.inlineEdit.rejectAll",
         "key": "ctrl+z",
         "mac": "cmd+z",
-        "when": "editorTextFocus && kursor.inlineDiffVisible"
+        "when": "editorTextFocus && klammr.inlineDiffVisible"
       },
       {
-        "command": "kursor.inlineEdit.acceptBlock",
+        "command": "klammr.inlineEdit.acceptBlock",
         "key": "ctrl+alt+y",
         "mac": "cmd+alt+y",
-        "when": "editorTextFocus && kursor.inlineDiffVisible"
+        "when": "editorTextFocus && klammr.inlineDiffVisible"
       },
       {
-        "command": "kursor.inlineEdit.rejectBlock",
+        "command": "klammr.inlineEdit.rejectBlock",
         "key": "ctrl+alt+n",
         "mac": "cmd+alt+n",
-        "when": "editorTextFocus && kursor.inlineDiffVisible"
+        "when": "editorTextFocus && klammr.inlineDiffVisible"
       },
       {
-        "command": "kursor.inlineEdit.cancel",
+        "command": "klammr.inlineEdit.cancel",
         "key": "escape",
-        "when": "kursor.inlineEditRunning && editorTextFocus"
+        "when": "klammr.inlineEditRunning && editorTextFocus"
       },
       {
-        "command": "kursor.inlineEdit.submit",
+        "command": "klammr.inlineEdit.submit",
         "key": "alt+enter",
         "args": {
           "action": "question"
         },
-        "when": "kursor.inlineEditInputFocus && inQuickOpen"
+        "when": "klammr.inlineEditInputFocus && inQuickOpen"
       },
       {
-        "command": "kursor.inlineEdit.submit",
+        "command": "klammr.inlineEdit.submit",
         "key": "ctrl+shift+enter",
         "mac": "cmd+shift+enter",
         "args": {
           "action": "wholeFile"
         },
-        "when": "kursor.inlineEditInputFocus && inQuickOpen"
+        "when": "klammr.inlineEditInputFocus && inQuickOpen"
       },
       {
-        "command": "kursor.inlineEdit.submit",
+        "command": "klammr.inlineEdit.submit",
         "key": "ctrl+l",
         "mac": "cmd+l",
         "args": {
           "action": "sendToChat"
         },
-        "when": "kursor.inlineEditInputFocus && inQuickOpen"
+        "when": "klammr.inlineEditInputFocus && inQuickOpen"
       },
       {
-        "command": "kursor.terminal.generate",
+        "command": "klammr.terminal.generate",
         "key": "ctrl+k",
         "mac": "cmd+k",
         "when": "terminalFocus"
       },
       {
-        "command": "kursor.settings.open",
+        "command": "klammr.settings.open",
         "key": "ctrl+shift+j",
         "mac": "cmd+shift+j"
       },
       {
-        "command": "kursor.tab.trigger",
+        "command": "klammr.tab.trigger",
         "key": "alt+\\",
         "when": "editorTextFocus"
       },
@@ -541,189 +541,189 @@
     "menus": {
       "view/title": [
         {
-          "command": "kursor.chat.newChat",
-          "when": "view == kursor.chat",
+          "command": "klammr.chat.newChat",
+          "when": "view == klammr.chat",
           "group": "navigation@1"
         },
         {
-          "command": "kursor.chat.history",
-          "when": "view == kursor.chat",
+          "command": "klammr.chat.history",
+          "when": "view == klammr.chat",
           "group": "navigation@2"
         },
         {
-          "command": "kursor.chat.openInEditor",
-          "when": "view == kursor.chat",
+          "command": "klammr.chat.openInEditor",
+          "when": "view == klammr.chat",
           "group": "navigation@3"
         },
         {
-          "command": "kursor.settings.open",
-          "when": "view == kursor.chat",
+          "command": "klammr.settings.open",
+          "when": "view == klammr.chat",
           "group": "navigation@4"
         },
         {
-          "command": "kursor.chat.exportChat",
-          "when": "view == kursor.chat",
+          "command": "klammr.chat.exportChat",
+          "when": "view == klammr.chat",
           "group": "1_actions@1"
         },
         {
-          "command": "kursor.showLogs",
-          "when": "view == kursor.chat",
+          "command": "klammr.showLogs",
+          "when": "view == klammr.chat",
           "group": "9_misc@1"
         }
       ],
       "editor/context": [
         {
-          "command": "kursor.chat.addSelectionToChat",
+          "command": "klammr.chat.addSelectionToChat",
           "when": "editorHasSelection",
-          "group": "kursor@1"
+          "group": "klammr@1"
         },
         {
-          "command": "kursor.inlineEdit.open",
+          "command": "klammr.inlineEdit.open",
           "when": "!editorReadonly",
-          "group": "kursor@2"
+          "group": "klammr@2"
         },
         {
-          "command": "kursor.chat.explainSelection",
+          "command": "klammr.chat.explainSelection",
           "when": "editorHasSelection",
-          "group": "kursor@3"
+          "group": "klammr@3"
         }
       ],
       "editor/title": [
         {
-          "command": "kursor.inlineEdit.acceptAll",
-          "when": "kursor.inlineDiffVisible && kursor.inlineDiffResource == resourcePath",
+          "command": "klammr.inlineEdit.acceptAll",
+          "when": "klammr.inlineDiffVisible && klammr.inlineDiffResource == resourcePath",
           "group": "navigation@1"
         },
         {
-          "command": "kursor.inlineEdit.rejectAll",
-          "when": "kursor.inlineDiffVisible && kursor.inlineDiffResource == resourcePath",
+          "command": "klammr.inlineEdit.rejectAll",
+          "when": "klammr.inlineDiffVisible && klammr.inlineDiffResource == resourcePath",
           "group": "navigation@2"
         },
         {
-          "command": "kursor.edits.keepFile",
-          "when": "kursor.hasPendingEdits && resourceScheme == file && resourcePath in kursor.pendingEditPaths && !kursor.inlineDiffVisible",
+          "command": "klammr.edits.keepFile",
+          "when": "klammr.hasPendingEdits && resourceScheme == file && resourcePath in klammr.pendingEditPaths && !klammr.inlineDiffVisible",
           "group": "navigation@3"
         },
         {
-          "command": "kursor.edits.undoFile",
-          "when": "kursor.hasPendingEdits && resourceScheme == file && resourcePath in kursor.pendingEditPaths && !kursor.inlineDiffVisible",
+          "command": "klammr.edits.undoFile",
+          "when": "klammr.hasPendingEdits && resourceScheme == file && resourcePath in klammr.pendingEditPaths && !klammr.inlineDiffVisible",
           "group": "navigation@4"
         },
         {
-          "command": "kursor.edits.reviewFile",
-          "when": "kursor.hasPendingEdits && resourceScheme == file && resourcePath in kursor.pendingEditPaths && !kursor.inlineDiffVisible",
+          "command": "klammr.edits.reviewFile",
+          "when": "klammr.hasPendingEdits && resourceScheme == file && resourcePath in klammr.pendingEditPaths && !klammr.inlineDiffVisible",
           "group": "navigation@5"
         },
         {
-          "command": "kursor.ide.acceptDiff",
-          "when": "kursor.ide.viewingDiff && resourceScheme == kursor-ide-right",
+          "command": "klammr.ide.acceptDiff",
+          "when": "klammr.ide.viewingDiff && resourceScheme == klammr-ide-right",
           "group": "navigation@1"
         },
         {
-          "command": "kursor.ide.rejectDiff",
-          "when": "kursor.ide.viewingDiff && resourceScheme == kursor-ide-right",
+          "command": "klammr.ide.rejectDiff",
+          "when": "klammr.ide.viewingDiff && resourceScheme == klammr-ide-right",
           "group": "navigation@2"
         }
       ],
       "explorer/context": [
         {
-          "command": "kursor.chat.addFileToChat",
+          "command": "klammr.chat.addFileToChat",
           "when": "!explorerResourceIsFolder",
-          "group": "kursor@1"
+          "group": "klammr@1"
         }
       ],
       "terminal/context": [
         {
-          "command": "kursor.chat.addTerminalSelection",
-          "group": "kursor@1"
+          "command": "klammr.chat.addTerminalSelection",
+          "group": "klammr@1"
         },
         {
-          "command": "kursor.chat.debugTerminal",
-          "group": "kursor@2"
+          "command": "klammr.chat.debugTerminal",
+          "group": "klammr@2"
         },
         {
-          "command": "kursor.terminal.generate",
-          "group": "kursor@3"
+          "command": "klammr.terminal.generate",
+          "group": "klammr@3"
         }
       ],
       "scm/title": [
         {
-          "command": "kursor.scm.generateCommitMessage",
+          "command": "klammr.scm.generateCommitMessage",
           "group": "navigation@1",
           "when": "scmProvider == git"
         }
       ],
       "commandPalette": [
         {
-          "command": "kursor.inlineEdit.acceptBlock",
+          "command": "klammr.inlineEdit.acceptBlock",
           "when": "false"
         },
         {
-          "command": "kursor.inlineEdit.rejectBlock",
+          "command": "klammr.inlineEdit.rejectBlock",
           "when": "false"
         },
         {
-          "command": "kursor.inlineEdit.applyCode",
+          "command": "klammr.inlineEdit.applyCode",
           "when": "false"
         },
         {
-          "command": "kursor.inlineEdit.insertAtCursor",
+          "command": "klammr.inlineEdit.insertAtCursor",
           "when": "false"
         },
         {
-          "command": "kursor.inlineEdit.cancel",
+          "command": "klammr.inlineEdit.cancel",
           "when": "false"
         },
         {
-          "command": "kursor.inlineEdit.submit",
+          "command": "klammr.inlineEdit.submit",
           "when": "false"
         },
         {
-          "command": "kursor.edits.keepHunk",
+          "command": "klammr.edits.keepHunk",
           "when": "false"
         },
         {
-          "command": "kursor.edits.undoHunk",
+          "command": "klammr.edits.undoHunk",
           "when": "false"
         },
         {
-          "command": "kursor.chat.fixDiagnostic",
+          "command": "klammr.chat.fixDiagnostic",
           "when": "false"
         },
         {
-          "command": "kursor.tab.statusMenu",
+          "command": "klammr.tab.statusMenu",
           "when": "false"
         },
         {
-          "command": "kursor.tab.accepted",
+          "command": "klammr.tab.accepted",
           "when": "false"
         },
         {
-          "command": "kursor.ide.acceptDiff",
-          "when": "kursor.ide.viewingDiff"
+          "command": "klammr.ide.acceptDiff",
+          "when": "klammr.ide.viewingDiff"
         },
         {
-          "command": "kursor.ide.rejectDiff",
-          "when": "kursor.ide.viewingDiff"
+          "command": "klammr.ide.rejectDiff",
+          "when": "klammr.ide.viewingDiff"
         }
       ]
     },
     "configuration": {
-      "title": "Kursor",
+      "title": "Klammr",
       "properties": {
-        "kursor.claude.path": {
+        "klammr.claude.path": {
           "type": "string",
           "default": "",
           "order": 1,
           "markdownDescription": "Path to the `claude` executable (Claude Code CLI). Leave empty to auto-detect from your login shell `PATH` (`~/.local/bin/claude`, mise shims, etc.)."
         },
-        "kursor.claude.model": {
+        "klammr.claude.model": {
           "type": "string",
           "default": "",
           "order": 2,
           "markdownDescription": "Default model for the chat/agent (`opus`, `sonnet`, `fable`, `haiku`, or a full model id). Empty = Claude Code's default."
         },
-        "kursor.claude.effort": {
+        "klammr.claude.effort": {
           "type": "string",
           "enum": [
             "",
@@ -737,7 +737,7 @@
           "order": 3,
           "description": "Effort level for the chat/agent. Empty = Claude Code's default."
         },
-        "kursor.agent.defaultMode": {
+        "klammr.agent.defaultMode": {
           "type": "string",
           "enum": [
             "agent",
@@ -748,7 +748,7 @@
           "order": 10,
           "description": "Mode new chats start in."
         },
-        "kursor.agent.permissionMode": {
+        "klammr.agent.permissionMode": {
           "type": "string",
           "enum": [
             "acceptEdits",
@@ -766,50 +766,50 @@
           "order": 11,
           "description": "How agent-mode tool calls are approved."
         },
-        "kursor.agent.inlineDiffs": {
+        "klammr.agent.inlineDiffs": {
           "type": "boolean",
           "default": true,
           "order": 12,
           "description": "Highlight agent edits in the editor with Keep/Undo actions (Cursor \"Inline Diffs\")."
         },
-        "kursor.agent.autoSave": {
+        "klammr.agent.autoSave": {
           "type": "boolean",
           "default": true,
           "order": 13,
           "description": "Save dirty editors before the agent reads or writes files."
         },
-        "kursor.agent.attachOpenFile": {
+        "klammr.agent.attachOpenFile": {
           "type": "boolean",
           "default": true,
           "order": 14,
           "description": "Tell the agent which file is active and what is selected when you send a message."
         },
-        "kursor.agent.notifyOnPermission": {
+        "klammr.agent.notifyOnPermission": {
           "type": "boolean",
           "default": true,
           "order": 15,
           "description": "Show a desktop notification when the agent is waiting for approval and the chat is not visible."
         },
-        "kursor.tab.enabled": {
+        "klammr.tab.enabled": {
           "type": "boolean",
           "default": true,
           "order": 20,
-          "description": "Enable Kursor Tab ghost-text completions."
+          "description": "Enable Klammr Tab ghost-text completions."
         },
-        "kursor.tab.debounceMs": {
+        "klammr.tab.debounceMs": {
           "type": "number",
           "default": 900,
           "minimum": 150,
           "order": 21,
           "description": "Milliseconds of typing pause before requesting a Tab completion."
         },
-        "kursor.tab.model": {
+        "klammr.tab.model": {
           "type": "string",
           "default": "haiku",
           "order": 22,
           "description": "Model used for Tab completions (fast models recommended)."
         },
-        "kursor.tab.disabledLanguages": {
+        "klammr.tab.disabledLanguages": {
           "type": "array",
           "items": {
             "type": "string"
@@ -823,56 +823,56 @@
           "order": 23,
           "description": "Language ids where Tab completions are off."
         },
-        "kursor.tab.contextLines": {
+        "klammr.tab.contextLines": {
           "type": "number",
           "default": 120,
           "order": 24,
           "description": "Lines of prefix/suffix context sent with each Tab request."
         },
-        "kursor.inlineEdit.model": {
+        "klammr.inlineEdit.model": {
           "type": "string",
           "default": "sonnet",
           "order": 30,
           "description": "Model used for Ctrl+K inline edits."
         },
-        "kursor.terminal.model": {
+        "klammr.terminal.model": {
           "type": "string",
           "default": "sonnet",
           "order": 31,
           "description": "Model used for Ctrl+K terminal command generation."
         },
-        "kursor.commit.model": {
+        "klammr.commit.model": {
           "type": "string",
           "default": "sonnet",
           "order": 32,
           "description": "Model used for commit message generation."
         },
-        "kursor.rules.user": {
+        "klammr.rules.user": {
           "type": "string",
           "default": "",
           "editPresentation": "multilineText",
           "order": 40,
           "markdownDescription": "User rules: instructions applied to every chat (like Cursor's User Rules). Project rules are read from `.cursor/rules/*.mdc`, `.cursorrules` and `AGENTS.md`; `CLAUDE.md` is handled by Claude Code itself."
         },
-        "kursor.rules.useProjectRules": {
+        "klammr.rules.useProjectRules": {
           "type": "boolean",
           "default": true,
           "order": 41,
           "markdownDescription": "Read `.cursor/rules/*.mdc`, `.cursorrules` and `AGENTS.md` from the workspace."
         },
-        "kursor.ide.enableServer": {
+        "klammr.ide.enableServer": {
           "type": "boolean",
           "default": true,
           "order": 50,
-          "markdownDescription": "Run the IDE bridge (lock file in `~/.claude/ide`) so a `claude` started in the integrated terminal can see your selection, diagnostics and open diffs in Kursor."
+          "markdownDescription": "Run the IDE bridge (lock file in `~/.claude/ide`) so a `claude` started in the integrated terminal can see your selection, diagnostics and open diffs in Klammr."
         },
-        "kursor.chat.showThinking": {
+        "klammr.chat.showThinking": {
           "type": "boolean",
           "default": true,
           "order": 60,
           "description": "Show collapsible thinking indicators in chat."
         },
-        "kursor.chat.toolCallDensity": {
+        "klammr.chat.toolCallDensity": {
           "type": "string",
           "enum": [
             "compact",
@@ -886,7 +886,7 @@
       }
     },
     "configurationDefaults": {
-      "workbench.colorTheme": "Kursor Dark",
+      "workbench.colorTheme": "Klammr Dark",
       "workbench.experimental.modernUI": true,
       "workbench.experimental.fontFamily": "Inter, \"Inter Variable\", \"Adwaita Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, Ubuntu, \"Noto Sans\", sans-serif",
       "workbench.activityBar.location": "top",
@@ -901,8 +901,8 @@
     },
     "colors": [
       {
-        "id": "kursor.addedLineBackground",
-        "description": "Background of lines added by Kursor edits.",
+        "id": "klammr.addedLineBackground",
+        "description": "Background of lines added by Klammr edits.",
         "defaults": {
           "dark": "#5fd38a26",
           "light": "#5fd38a26",
@@ -911,8 +911,8 @@
         }
       },
       {
-        "id": "kursor.removedLineBackground",
-        "description": "Background of lines removed by Kursor edits.",
+        "id": "klammr.removedLineBackground",
+        "description": "Background of lines removed by Klammr edits.",
         "defaults": {
           "dark": "#ff6b7826",
           "light": "#ff6b7826",
@@ -928,9 +928,9 @@
     "watch": "node esbuild.mjs --watch",
     "theme": "node scripts/build-theme.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p src/webview/tsconfig.json && tsc --noEmit -p src/webview-settings/tsconfig.json",
-    "package": "npm run typecheck && npm run build:prod && vsce package --no-dependencies --skip-license --no-rewrite-relative-links -o dist/kursor.vsix",
-    "install:kursor": "node product/install.mjs",
-    "uninstall:kursor": "node product/uninstall.mjs",
+    "package": "npm run typecheck && npm run build:prod && vsce package --no-dependencies --skip-license --no-rewrite-relative-links -o dist/klammr.vsix",
+    "install:klammr": "node product/install.mjs",
+    "uninstall:klammr": "node product/uninstall.mjs",
     "bundle": "node product/build-bundle.mjs"
   },
   "devDependencies": {

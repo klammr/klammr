@@ -16,8 +16,8 @@ const src = path.resolve(here, '..');
 // The bundle keeps `ws`/the MCP SDK external, so it must live under the repo for Node to resolve them.
 const repoRoot = path.resolve(here, '..', '..', '..', '..');
 fs.mkdirSync(path.join(repoRoot, 'node_modules', '.cache'), { recursive: true });
-const tmpRoot = fs.mkdtempSync(path.join(repoRoot, 'node_modules', '.cache', 'kursor-ide-server-test-'));
-const lockRoot = fs.mkdtempSync(path.join(process.env.KURSOR_TEST_TMP || os.tmpdir(), 'kursor-ide-lock-'));
+const tmpRoot = fs.mkdtempSync(path.join(repoRoot, 'node_modules', '.cache', 'klammr-ide-server-test-'));
+const lockRoot = fs.mkdtempSync(path.join(process.env.KLAMMR_TEST_TMP || os.tmpdir(), 'klammr-ide-lock-'));
 const mockPath = path.join(here, 'vscode-mock.mjs');
 
 const logLines = [];
@@ -68,7 +68,7 @@ before(async () => {
     closeAllDiffTabs: async () => 2,
     latestSelection: () => ({ text: 'sel', filePath: '/tmp/proj/a.ts', fileUrl: 'file:///tmp/proj/a.ts', selection: { start: { line: 1, character: 0 }, end: { line: 1, character: 3 }, isEmpty: false } }),
   };
-  server = new serverMod.IdeServer(log, { ideName: 'Kursor (mock)', version: '0.1.0-test', workspaceFolders: () => vscode.state.workspaceFolders.map((f) => f.uri.fsPath), env: envCollection, lockDir }, host);
+  server = new serverMod.IdeServer(log, { ideName: 'Klammr (mock)', version: '0.1.0-test', workspaceFolders: () => vscode.state.workspaceFolders.map((f) => f.uri.fsPath), env: envCollection, lockDir }, host);
 });
 
 after(async () => {
@@ -90,7 +90,7 @@ test('start: random loopback port, lock file, terminal env', async () => {
   assert.deepEqual(Object.keys(lock), ['pid', 'workspaceFolders', 'ideName', 'transport', 'runningInWindows', 'authToken']);
   assert.equal(lock.pid, process.ppid);
   assert.deepEqual(lock.workspaceFolders, ['/tmp/proj']);
-  assert.equal(lock.ideName, 'Kursor (mock)');
+  assert.equal(lock.ideName, 'Klammr (mock)');
   assert.equal(lock.transport, 'ws');
   assert.match(lock.authToken, /^[0-9a-f-]{36}$/);
   token = lock.authToken;
@@ -129,7 +129,7 @@ test('MCP handshake, tools/list, tool calls and notifications', async () => {
   const c = await connected;
   assert.equal(server.isConnected, true);
   assert.equal(c.clientName, 'claude-test');
-  assert.equal(client.getServerVersion().name, 'Kursor IDE');
+  assert.equal(client.getServerVersion().name, 'Klammr IDE');
 
   await client.notification({ method: 'ide_connected', params: { pid: 777 } });
   await new Promise((r) => setTimeout(r, 50));

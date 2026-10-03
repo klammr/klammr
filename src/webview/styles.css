@@ -1,4 +1,4 @@
-/* Kursor chat webview — colours come from --vscode-* variables so it follows any theme. The only fixed colours are
+/* Klammr chat webview — colours come from --vscode-* variables so it follows any theme. The only fixed colours are
    the brand marks (docs/BRAND.md): the logo, the cursor bar (streaming caret) and the send button, plus the syntax
    palette for code blocks. Type follows the brand: the workbench UI font (Inter first), code in the editor font. */
 
@@ -485,7 +485,7 @@ kbd {
 .toast-info > .codicon { color: var(--vscode-notificationsInfoIcon-foreground, var(--k-info)); }
 .toast-text { flex: 1; white-space: pre-wrap; word-break: break-word; }
 
-/* ---------- highlight.js: the Kursor Dark syntax palette, with a light counterpart ---------- */
+/* ---------- highlight.js: the Klammr Dark syntax palette, with a light counterpart ---------- */
 .hljs { color: inherit; background: transparent; }
 .hljs-comment, .hljs-quote { color: #6e768a; font-style: italic; }
 .hljs-keyword, .hljs-selector-tag, .hljs-doctag { color: #c99bff; }

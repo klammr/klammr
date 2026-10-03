@@ -1,6 +1,6 @@
-// Kursor product scripts — Apple ICNS and Windows ICO writers (plus readers used to verify them).
+// Klammr product scripts — Apple ICNS and Windows ICO writers (plus readers used to verify them).
 // Both containers accept raw PNG payloads: ICNS since Mac OS X 10.7 for the ic07…ic14 types,
-// ICO since Windows Vista. The PNGs come straight from product/icons/kursor-<size>.png.
+// ICO since Windows Vista. The PNGs come straight from product/icons/klammr-<size>.png.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -12,11 +12,11 @@ export function pngSize(buf) {
   return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
 }
 
-// Reads product/icons/kursor-<n>.png for every size found → Map<size, Buffer>.
+// Reads product/icons/klammr-<n>.png for every size found → Map<size, Buffer>.
 export function loadIconPngs(iconsDir) {
   const out = new Map();
   for (const name of fs.readdirSync(iconsDir)) {
-    const m = /^kursor-(\d+)\.png$/.exec(name);
+    const m = /^klammr-(\d+)\.png$/.exec(name);
     if (!m) continue;
     const buf = fs.readFileSync(path.join(iconsDir, name));
     const { width, height } = pngSize(buf);

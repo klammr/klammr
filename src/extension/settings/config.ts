@@ -1,5 +1,5 @@
 /**
- * Typed access to the `kursor.*` configuration for the settings panel.
+ * Typed access to the `klammr.*` configuration for the settings panel.
  *
  * `SETTING_SPECS` mirrors `contributes.configuration` in package.json (type, default, enum,
  * minimum). The manifest stays authoritative: `verifySpecsAgainstManifest()` logs a warning at
@@ -20,7 +20,7 @@ import {
 } from '../../shared/settingsProtocol';
 import type { Logger } from '../util/log';
 
-export const SECTION = 'kursor';
+export const SECTION = 'klammr';
 
 type SettingType = 'string' | 'boolean' | 'number' | 'string[]';
 

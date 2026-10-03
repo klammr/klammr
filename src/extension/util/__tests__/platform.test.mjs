@@ -9,7 +9,7 @@ import * as path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const tmp = fs.mkdtempSync(path.join(process.env.KURSOR_TEST_TMP || os.tmpdir(), 'kursor-platform-test-'));
+const tmp = fs.mkdtempSync(path.join(process.env.KLAMMR_TEST_TMP || os.tmpdir(), 'klammr-platform-test-'));
 let p;
 
 before(async () => {

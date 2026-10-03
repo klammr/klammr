@@ -70,7 +70,7 @@ export function Header({ app }: { app: AppState }) {
   const showHistory = useStore((s) => s.showHistory);
   const active = app.chats.find((c) => c.id === app.activeChatId);
   const multi = app.chats.length > 1;
-  // In the side bar the native title bar already reads "Kursor: <chat>" and carries New chat / History / Settings,
+  // In the side bar the native title bar already reads "Klammr: <chat>" and carries New chat / History / Settings,
   // so the webview adds only a tab strip for several chats (or the history header). The editor panel keeps all of it.
   const inView = document.body.dataset.host !== 'panel';
   if (inView && !showHistory && !multi) return null;
@@ -91,7 +91,7 @@ export function Header({ app }: { app: AppState }) {
         </div>
       ) : (
         <div className="header-title" title={active?.title}>
-          <span className="header-name">{active?.title || 'Kursor'}</span>
+          <span className="header-name">{active?.title || 'Klammr'}</span>
           {app.workspaceName && <span className="header-ws">{app.workspaceName}</span>}
         </div>
       )}
@@ -108,7 +108,7 @@ export function Header({ app }: { app: AppState }) {
               <Icon name="export" />
             </button>
           )}
-          <button type="button" className="icon-btn" onClick={() => post({ type: 'openSettings' })} title="Kursor settings (Ctrl+Shift+J)">
+          <button type="button" className="icon-btn" onClick={() => post({ type: 'openSettings' })} title="Klammr settings (Ctrl+Shift+J)">
             <Icon name="settings-gear" />
           </button>
         </div>

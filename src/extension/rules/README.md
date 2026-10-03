@@ -9,7 +9,7 @@ Cursor-style rules, appended to Claude Code's system prompt for every chat sessi
 | `glob.ts` | yes | tiny glob matcher (`**`, `*`, `?`, `[…]`, `{a,b}`); patterns without `/` match file names anywhere, others match the relative path (also with an implicit `**/`) |
 | `scan.ts` | yes | discovery: `.cursor/rules/**` (`.mdc`/`.md`), nested `.cursor/rules` dirs (bounded walk, scoped to their subtree), `.cursorrules` (legacy, always), `AGENTS.md` (always) |
 | `appendix.ts` | yes | markdown builder with a 60k-char cap (proportional body truncation, then a hard cut) |
-| `rules.ts` | no | `createRulesService()`: config (`kursor.rules.user`, `kursor.rules.useProjectRules`), per-cwd cache (30 s TTL), `FileSystemWatcher` on `**/.cursor/rules/**` and `**/{.cursorrules,AGENTS.md}` (debounced), `onDidChange` |
+| `rules.ts` | no | `createRulesService()`: config (`klammr.rules.user`, `klammr.rules.useProjectRules`), per-cwd cache (30 s TTL), `FileSystemWatcher` on `**/.cursor/rules/**` and `**/{.cursorrules,AGENTS.md}` (debounced), `onDidChange` |
 
 Rule kinds (`RuleInfo.kind`): `always` (alwaysApply), `auto` (globs), `agent`
 (description only — indexed as "Read `path` when relevant"), `manual` (neither),

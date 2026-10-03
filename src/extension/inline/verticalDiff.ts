@@ -21,8 +21,8 @@ import {
 } from './diffBlocks';
 import { DiffDecorations } from './decorations';
 
-export const DIFF_VISIBLE_KEY = 'kursor.inlineDiffVisible';
-export const DIFF_RESOURCE_KEY = 'kursor.inlineDiffResource';
+export const DIFF_VISIBLE_KEY = 'klammr.inlineDiffVisible';
+export const DIFF_RESOURCE_KEY = 'klammr.inlineDiffResource';
 
 /** What produced the diff — kept so Ctrl+K on a visible diff can refine it against the original text. */
 export interface DiffOrigin {

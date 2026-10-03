@@ -39,7 +39,7 @@ import { defaultPermissionTitle, labelForSuggestion } from './labels';
 
 export const EDIT_TOOLS: readonly string[] = ['Edit', 'Write', 'NotebookEdit'];
 const EDIT_TOOL_MATCHER = 'Edit|Write|NotebookEdit';
-const ASK_MODE_MESSAGE = 'Kursor is in Ask mode: file edits are disabled. Explain the change instead, or ask the user to switch to Agent mode.';
+const ASK_MODE_MESSAGE = 'Klammr is in Ask mode: file edits are disabled. Explain the change instead, or ask the user to switch to Agent mode.';
 /** Files above this size are not snapshotted (no fileChanged event; a warning is logged). */
 const MAX_SNAPSHOT_BYTES = 8 * 1024 * 1024;
 const MAX_SNAPSHOTS = 256;

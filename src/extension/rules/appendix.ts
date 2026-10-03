@@ -16,7 +16,7 @@ import type { LoadedRule } from './scan';
 export const MAX_APPENDIX_CHARS = 60_000;
 const MAX_USER_RULES_CHARS = 20_000;
 const MIN_BODY_CHARS = 1_500;
-const TRUNCATED_NOTE = '\n\n…(truncated by Kursor; open the file for the full rule)';
+const TRUNCATED_NOTE = '\n\n…(truncated by Klammr; open the file for the full rule)';
 
 export interface AppendixInput {
   cwd: string;

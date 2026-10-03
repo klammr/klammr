@@ -19,7 +19,7 @@ import { CompletionCache } from './cache';
 import { FIM_SYSTEM_PROMPT, buildFimContext, buildFimPrompt } from './prompt';
 import { SanitizedCompletion, sanitizeCompletion } from './sanitize';
 
-export const TAB_ACCEPTED_COMMAND = 'kursor.tab.accepted';
+export const TAB_ACCEPTED_COMMAND = 'klammr.tab.accepted';
 
 const ERROR_BACKOFF_MS = 30_000;
 const UNAVAILABLE_BACKOFF_MS = 60_000;
@@ -171,7 +171,7 @@ export class TabCompletionProvider implements vscode.InlineCompletionItemProvide
     }
     if (signal.aborted) return undefined;
     if (!status.ok || status.loggedIn === false) {
-      const reason = !status.ok ? (status.error ?? 'Claude Code CLI not found') : 'not signed in (run Kursor: Sign in)';
+      const reason = !status.ok ? (status.error ?? 'Claude Code CLI not found') : 'not signed in (run Klammr: Sign in)';
       this.state.setUnavailable(reason);
       this.backoffUntil = Date.now() + UNAVAILABLE_BACKOFF_MS;
       log.warn(`Tab unavailable: ${reason}`);
@@ -235,7 +235,7 @@ export class TabCompletionProvider implements vscode.InlineCompletionItemProvide
     const range = c.replaceToLineEnd
       ? new vscode.Range(position, document.lineAt(position.line).range.end)
       : new vscode.Range(position, position);
-    const item = new vscode.InlineCompletionItem(c.text, range, { command: TAB_ACCEPTED_COMMAND, title: 'Kursor Tab: accepted' });
+    const item = new vscode.InlineCompletionItem(c.text, range, { command: TAB_ACCEPTED_COMMAND, title: 'Klammr Tab: accepted' });
     this.stats.shown++;
     return new vscode.InlineCompletionList([item]);
   }

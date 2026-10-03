@@ -1,5 +1,5 @@
-// Kursor product scripts — macOS integration and its removal.
-// Ad-hoc re-signing of the modified bundle, quarantine removal, the `kursor` CLI symlink
+// Klammr product scripts — macOS integration and its removal.
+// Ad-hoc re-signing of the modified bundle, quarantine removal, the `klammr` CLI symlink
 // (~/.local/bin, plus /usr/local/bin with --system). Only runs on a macOS host.
 
 import fs from 'node:fs';
@@ -43,27 +43,27 @@ export function installCliLinks(paths) {
   if (!onPath && !paths.system) log.warn(`${paths.binDir} is not in your PATH — add it to your shell profile (or re-run with --system for /usr/local/bin)`);
 }
 
-export function kursorRunning(paths) {
+export function klammrRunning(paths) {
   return have('pgrep') && run('pgrep', ['-f', '--', `${paths.appRoot}/Contents/MacOS/`]).ok;
 }
 
 function removeLinkIfOurs(link) {
   try {
     if (!fs.lstatSync(link).isSymbolicLink()) return;
-    if (!fs.readlinkSync(link).includes('Kursor.app/')) return;
+    if (!fs.readlinkSync(link).includes('Klammr.app/')) return;
   } catch { return; }
   try { fs.unlinkSync(link); log.ok(`removed ${link}`); } catch (e) { log.warn(`could not remove ${link} (${e.code}):  sudo rm "${link}"`); }
 }
 
 export function uninstallDarwin(paths, { yes, keepConfig, purge }, allRoots) {
-  log.step('Removing Kursor');
-  if (kursorRunning(paths)) log.warn('Kursor appears to be running — quit it first');
+  log.step('Removing Klammr');
+  if (klammrRunning(paths)) log.warn('Klammr appears to be running — quit it first');
   for (const root of allRoots) {
     if (!exists(root)) continue;
     try { removePath(root); } catch (e) { log.warn(`could not remove ${root} (${e.code}):  sudo rm -rf "${root}"`); }
     const parent = path.dirname(root);
     if (isDir(parent)) {
-      for (const n of fs.readdirSync(parent)) if (n.startsWith('Kursor.app.staging.') || n.startsWith('Kursor.app.old.')) removePath(path.join(parent, n));
+      for (const n of fs.readdirSync(parent)) if (n.startsWith('Klammr.app.staging.') || n.startsWith('Klammr.app.old.')) removePath(path.join(parent, n));
     }
   }
   removeLinkIfOurs(paths.cliLink);
@@ -75,7 +75,7 @@ export function uninstallDarwin(paths, { yes, keepConfig, purge }, allRoots) {
   } else {
     if (!process.stdin.isTTY && !yes) log.info('no terminal to ask on — keeping settings and extensions (use --yes to delete, --keep-config to silence this)');
     if (exists(paths.configRoot) || paths.stateFiles.some(exists)) {
-      if (confirm(`Delete ${paths.configRoot} and Kursor's Library caches/state (settings, keybindings, window state)?`, false, yes)) {
+      if (confirm(`Delete ${paths.configRoot} and Klammr's Library caches/state (settings, keybindings, window state)?`, false, yes)) {
         removePath(paths.configRoot);
         for (const p of paths.stateFiles) removePath(p);
       } else log.info(`kept ${paths.configRoot}`);

@@ -16,7 +16,7 @@ export class DiffDecorations implements vscode.Disposable {
   constructor() {
     this.added = vscode.window.createTextEditorDecorationType({
       isWholeLine: true,
-      backgroundColor: new vscode.ThemeColor('kursor.addedLineBackground'),
+      backgroundColor: new vscode.ThemeColor('klammr.addedLineBackground'),
       outlineWidth: '1px',
       outlineStyle: 'solid',
       outlineColor: new vscode.ThemeColor('diffEditor.insertedTextBorder'),
@@ -26,7 +26,7 @@ export class DiffDecorations implements vscode.Disposable {
     });
     this.removed = vscode.window.createTextEditorDecorationType({
       isWholeLine: true,
-      backgroundColor: new vscode.ThemeColor('kursor.removedLineBackground'),
+      backgroundColor: new vscode.ThemeColor('klammr.removedLineBackground'),
       outlineWidth: '1px',
       outlineStyle: 'solid',
       outlineColor: new vscode.ThemeColor('diffEditor.removedTextBorder'),

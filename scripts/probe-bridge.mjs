@@ -21,7 +21,7 @@ const repoRoot = path.resolve(path.dirname(here), '..');
 
 async function bundleAndRun() {
   const esbuild = await import('esbuild');
-  const outDir = mkdtempSync(path.join(process.env.KURSOR_PROBE_TMP || os.tmpdir(), 'kursor-probe-'));
+  const outDir = mkdtempSync(path.join(process.env.KLAMMR_PROBE_TMP || os.tmpdir(), 'klammr-probe-'));
   const outfile = path.join(outDir, 'probe-bridge.cjs');
   await esbuild.build({
     entryPoints: [here],
@@ -37,7 +37,7 @@ async function bundleAndRun() {
   });
   const r = spawnSync(process.execPath, [outfile, ...process.argv.slice(2)], {
     stdio: 'inherit',
-    env: { ...process.env, KURSOR_PROBE_BUNDLED: '1' },
+    env: { ...process.env, KLAMMR_PROBE_BUNDLED: '1' },
   });
   rmSync(outDir, { recursive: true, force: true });
   process.exit(r.status ?? 1);
@@ -45,7 +45,7 @@ async function bundleAndRun() {
 
 function makeLogger(prefix = '') {
   const w = (level) => (msg, ...args) => {
-    if (level === 'debug' && !process.env.KURSOR_PROBE_DEBUG) return;
+    if (level === 'debug' && !process.env.KLAMMR_PROBE_DEBUG) return;
     console.error(`[${level}]${prefix} ${msg}${args.length ? ' ' + args.map((a) => (a instanceof Error ? a.stack : JSON.stringify(a))).join(' ') : ''}`);
   };
   return { info: w('info'), warn: w('warn'), error: w('error'), debug: w('debug'), show() {}, child: (p) => makeLogger(`${prefix}[${p}]`) };
@@ -83,7 +83,7 @@ async function main() {
   const t0 = Date.now();
   const stamp = () => `+${String(Date.now() - t0).padStart(5)}ms`;
 
-  const resolved = await resolveClaudeExecutable({ configuredPath: process.env.KURSOR_CLAUDE_PATH || '', log });
+  const resolved = await resolveClaudeExecutable({ configuredPath: process.env.KLAMMR_CLAUDE_PATH || '', log });
   if (!resolved) {
     console.error('claude executable not found');
     process.exit(2);
@@ -95,7 +95,7 @@ async function main() {
   if (!status.ok) process.exit(2);
 
   // 1. streaming session -----------------------------------------------------
-  const cwd = mkdtempSync(path.join(os.tmpdir(), 'kursor-probe-cwd-'));
+  const cwd = mkdtempSync(path.join(os.tmpdir(), 'klammr-probe-cwd-'));
   console.log(`${stamp()} session cwd: ${cwd}`);
   let resolveResult;
   const gotResult = new Promise((r) => (resolveResult = r));
@@ -107,7 +107,7 @@ async function main() {
       cwd,
       mode: 'agent',
       permissionMode: 'acceptEdits',
-      model: process.env.KURSOR_PROBE_MODEL || 'haiku',
+      model: process.env.KLAMMR_PROBE_MODEL || 'haiku',
       appendSystemPrompt: 'You are running inside a probe script. Keep answers minimal.',
     },
     {
@@ -137,7 +137,7 @@ async function main() {
     {
       systemPrompt: 'You are a terse assistant. Answer with plain text only, no markdown.',
       prompt: 'Say hi in 3 words',
-      model: process.env.KURSOR_PROBE_MODEL || 'haiku',
+      model: process.env.KLAMMR_PROBE_MODEL || 'haiku',
       cwd,
       onDelta: (d) => {
         streamed += d;
@@ -153,7 +153,7 @@ async function main() {
   process.exit(0);
 }
 
-if (!process.env.KURSOR_PROBE_BUNDLED) {
+if (!process.env.KLAMMR_PROBE_BUNDLED) {
   bundleAndRun().catch((err) => {
     console.error(err);
     process.exit(1);

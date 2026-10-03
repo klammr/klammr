@@ -1,6 +1,6 @@
 /**
  * The workbench UI font for the webviews. Webviews do not inherit `workbench.experimental.fontFamily` (which
- * Kursor defaults to its brand stack: Inter, then the system sans), so the chat and settings HTML carry it as
+ * Klammr defaults to its brand stack: Inter, then the system sans), so the chat and settings HTML carry it as
  * the `--k-ui-font` custom property. Their stylesheets fall back to the same stack when it is unset.
  */
 import * as vscode from 'vscode';

@@ -2,12 +2,12 @@
  * The Ctrl+K prompt: a QuickPick (VS Code has no floating editor widget API) whose action items
  * are `alwaysShow` so free text never filters them away; the history section is shown while the
  * input is empty and selecting an entry fills the input. Keybindings (Alt+Enter, Ctrl+Shift+Enter,
- * Ctrl+L) reach the open prompt through `kursor.inlineEdit.submit {action}` → `submit()`.
+ * Ctrl+L) reach the open prompt through `klammr.inlineEdit.submit {action}` → `submit()`.
  */
 import * as vscode from 'vscode';
 import type { Logger } from '../util/log';
 
-export const INPUT_FOCUS_KEY = 'kursor.inlineEditInputFocus';
+export const INPUT_FOCUS_KEY = 'klammr.inlineEditInputFocus';
 
 export type PromptAction = 'edit' | 'question' | 'wholeFile' | 'sendToChat' | 'acceptAll' | 'rejectAll';
 

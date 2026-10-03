@@ -1,11 +1,11 @@
-// Kursor product scripts — turning an extracted VSCodium tree into Kursor, per platform.
+// Klammr product scripts — turning an extracted VSCodium tree into Klammr, per platform.
 // Pure file surgery: nothing here touches the user's home or runs the editor, so it is the same
 // code path for a real install, for --stage-only and for build-bundle.mjs (cross-platform).
 //
-//   Linux   tarball root: codium → kursor, bin/codium → bin/kursor (launcher patched), icon, completions
-//   macOS   VSCodium.app → Kursor.app: Info.plist identity, generated Kursor.icns, bin/kursor
-//   Windows VSCodium.exe → Kursor.exe, bin\kursor.cmd + bin\kursor, generated Kursor.ico, tile manifest
-//   all     resources/app/product.json + package.json identity patch, kursor-install.json marker
+//   Linux   tarball root: codium → klammr, bin/codium → bin/klammr (launcher patched), icon, completions
+//   macOS   VSCodium.app → Klammr.app: Info.plist identity, generated Klammr.icns, bin/klammr
+//   Windows VSCodium.exe → Klammr.exe, bin\klammr.cmd + bin\klammr, generated Klammr.ico, tile manifest
+//   all     resources/app/product.json + package.json identity patch, klammr-install.json marker
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -22,27 +22,27 @@ import { parsePlist, serializePlist } from './plist.mjs';
 export function patchProductJson(file, { repoUrl = REPO_URL } = {}) {
   const p = readJson(file);
   Object.assign(p, {
-    nameShort: 'Kursor',
-    nameLong: 'Kursor',
-    applicationName: 'kursor',
-    dataFolderName: '.kursor',
-    sharedDataFolderName: '.kursor-shared',
-    urlProtocol: 'kursor',
-    serverApplicationName: 'kursor-server',
-    serverDataFolderName: '.kursor-server',
-    tunnelApplicationName: 'kursor-tunnel',
-    linuxIconName: 'kursor',
-    win32DirName: 'Kursor',
-    win32NameVersion: 'Kursor',
-    win32ShellNameShort: 'Kursor',
-    win32RegValueName: 'Kursor',
-    win32MutexName: 'kursor',
-    win32AppUserModelId: 'Kursor.Kursor',
-    win32TunnelServiceMutex: 'kursor-tunnelservice',
-    win32TunnelMutex: 'kursor-tunnel',
-    darwinBundleIdentifier: 'com.kursor.editor',
+    nameShort: 'Klammr',
+    nameLong: 'Klammr',
+    applicationName: 'klammr',
+    dataFolderName: '.klammr',
+    sharedDataFolderName: '.klammr-shared',
+    urlProtocol: 'klammr',
+    serverApplicationName: 'klammr-server',
+    serverDataFolderName: '.klammr-server',
+    tunnelApplicationName: 'klammr-tunnel',
+    linuxIconName: 'klammr',
+    win32DirName: 'Klammr',
+    win32NameVersion: 'Klammr',
+    win32ShellNameShort: 'Klammr',
+    win32RegValueName: 'Klammr',
+    win32MutexName: 'klammr',
+    win32AppUserModelId: 'Klammr.Klammr',
+    win32TunnelServiceMutex: 'klammr-tunnelservice',
+    win32TunnelMutex: 'klammr-tunnel',
+    darwinBundleIdentifier: 'com.klammr.editor',
   });
-  // The macOS/Windows builds carry VSCodium's self-update endpoints; Kursor is updated by its installer.
+  // The macOS/Windows builds carry VSCodium's self-update endpoints; Klammr is updated by its installer.
   delete p.updateUrl;
   delete p.downloadUrl;
   if (repoUrl) {
@@ -64,19 +64,19 @@ export function patchProductJson(file, { repoUrl = REPO_URL } = {}) {
       'introductoryVideosUrl', 'tipsAndTricksUrl', 'twitterUrl']) delete p[k];
   }
   writeJson(file, p);
-  const ok = p.nameShort === 'Kursor' && p.nameLong === 'Kursor' && p.applicationName === 'kursor'
-    && p.dataFolderName === '.kursor' && p.urlProtocol === 'kursor' && p.version === VSCODIUM_VERSION
+  const ok = p.nameShort === 'Klammr' && p.nameLong === 'Klammr' && p.applicationName === 'klammr'
+    && p.dataFolderName === '.klammr' && p.urlProtocol === 'klammr' && p.version === VSCODIUM_VERSION
     && typeof p.commit === 'string' && typeof p.checksums === 'object' && p.checksums
     && p.extensionsGallery && typeof p.extensionsGallery.serviceUrl === 'string';
   if (!ok) die(`product.json verification failed after patching (${file})`);
   return p;
 }
 
-// Electron reads `name` and `desktopName`; desktopName gives the Wayland app_id / X11 WM_CLASS "kursor".
+// Electron reads `name` and `desktopName`; desktopName gives the Wayland app_id / X11 WM_CLASS "klammr".
 export function patchPackageJson(file) {
   const p = readJson(file);
-  p.name = 'Kursor';
-  p.desktopName = 'kursor.desktop';
+  p.name = 'Klammr';
+  p.desktopName = 'klammr.desktop';
   writeJson(file, p);
   if (typeof p.main !== 'string') die(`package.json verification failed after patching (${file})`);
 }
@@ -92,7 +92,7 @@ const BRAND_MEDIA = [
   ['letterpress-light.svg', 'letterpress-light.svg'],
   ['letterpress-hcDark.svg', 'letterpress-hcDark.svg'],
   ['letterpress-hcLight.svg', 'letterpress-hcLight.svg'],
-  ['kursor-mark.svg', 'code-icon.svg'],
+  ['klammr-mark.svg', 'code-icon.svg'],
 ];
 export function patchWorkbenchMedia(appDir) {
   const media = path.join(appDir, 'out', 'media');
@@ -114,8 +114,8 @@ function patchCompletions(dir) {
   if (!isDir(dir)) return;
   const bash = path.join(dir, 'bash', 'codium');
   const zsh = path.join(dir, 'zsh', '_codium');
-  if (isFile(bash)) { replaceInFile(bash, 'codium', 'kursor'); fs.renameSync(bash, path.join(dir, 'bash', 'kursor')); }
-  if (isFile(zsh)) { replaceInFile(zsh, 'codium', 'kursor'); fs.renameSync(zsh, path.join(dir, 'zsh', '_kursor')); }
+  if (isFile(bash)) { replaceInFile(bash, 'codium', 'klammr'); fs.renameSync(bash, path.join(dir, 'bash', 'klammr')); }
+  if (isFile(zsh)) { replaceInFile(zsh, 'codium', 'klammr'); fs.renameSync(zsh, path.join(dir, 'zsh', '_klammr')); }
 }
 
 function rename(from, to) {
@@ -128,7 +128,7 @@ function mustPatch(file, from, to, what) {
 
 function writeMarker(file, { platform, arch, sha256, source }) {
   writeJson(file, {
-    product: 'Kursor',
+    product: 'Klammr',
     platform,
     arch,
     vscodiumVersion: VSCODIUM_VERSION,
@@ -146,18 +146,18 @@ function rebrandLinux(root, info) {
     if (!exists(f)) die(`unexpected tarball layout (missing ${path.relative(root, f)})`);
   }
   // 1. Binaries: the Electron executable and the CLI launchers.
-  rename(path.join(root, 'codium'), path.join(root, 'kursor'));
-  rename(path.join(root, 'bin', 'codium'), path.join(root, 'bin', 'kursor'));
-  if (exists(path.join(root, 'bin', 'codium-tunnel'))) rename(path.join(root, 'bin', 'codium-tunnel'), path.join(root, 'bin', 'kursor-tunnel'));
+  rename(path.join(root, 'codium'), path.join(root, 'klammr'));
+  rename(path.join(root, 'bin', 'codium'), path.join(root, 'bin', 'klammr'));
+  if (exists(path.join(root, 'bin', 'codium-tunnel'))) rename(path.join(root, 'bin', 'codium-tunnel'), path.join(root, 'bin', 'klammr-tunnel'));
 
-  // 2. bin/kursor (POSIX sh launcher): run the renamed executable, resolve our install dir, fix messages.
-  const launcher = path.join(root, 'bin', 'kursor');
-  mustPatch(launcher, 'ELECTRON="$VSCODE_PATH/codium"', 'ELECTRON="$VSCODE_PATH/kursor"', 'launcher patch');
-  replaceInFile(launcher, "which -a 'codium'", "which -a 'kursor'");
+  // 2. bin/klammr (POSIX sh launcher): run the renamed executable, resolve our install dir, fix messages.
+  const launcher = path.join(root, 'bin', 'klammr');
+  mustPatch(launcher, 'ELECTRON="$VSCODE_PATH/codium"', 'ELECTRON="$VSCODE_PATH/klammr"', 'launcher patch');
+  replaceInFile(launcher, "which -a 'codium'", "which -a 'klammr'");
   // Fallback only used when `readlink` is missing; $HOME is expanded by sh at run time.
-  replaceInFile(launcher, 'VSCODE_PATH="/usr/share/codium"', 'VSCODE_PATH="$HOME/.local/opt/kursor"');
-  replaceInFile(launcher, 'VSCodium', 'Kursor');
-  replaceInFile(launcher, '\\`codium\\`', '\\`kursor\\`'); // the file escapes its backticks
+  replaceInFile(launcher, 'VSCODE_PATH="/usr/share/codium"', 'VSCODE_PATH="$HOME/.local/opt/klammr"');
+  replaceInFile(launcher, 'VSCodium', 'Klammr');
+  replaceInFile(launcher, '\\`codium\\`', '\\`klammr\\`'); // the file escapes its backticks
   fs.chmodSync(launcher, 0o755);
 
   patchProductJson(path.join(app, 'product.json'));
@@ -165,7 +165,7 @@ function rebrandLinux(root, info) {
   patchWorkbenchMedia(app);
 
   // Window/about icon used by Electron on Linux.
-  fs.copyFileSync(path.join(PRODUCT_DIR, 'icons', 'kursor-1024.png'), path.join(app, 'resources', 'linux', 'code.png'));
+  fs.copyFileSync(path.join(PRODUCT_DIR, 'icons', 'klammr-1024.png'), path.join(app, 'resources', 'linux', 'code.png'));
   patchCompletions(path.join(root, 'resources', 'completions'));
   writeMarker(markerOf('linux', root), info);
   return root;
@@ -175,32 +175,32 @@ function rebrandLinux(root, info) {
 function rebrandDarwin(extractDir, info) {
   const src = path.join(extractDir, 'VSCodium.app');
   if (!isDir(src)) die(`unexpected zip layout: ${src} not found`);
-  const root = path.join(extractDir, 'Kursor.app');
+  const root = path.join(extractDir, 'Klammr.app');
   fs.renameSync(src, root);
   const contents = path.join(root, 'Contents');
   const resources = path.join(contents, 'Resources');
   const app = appDirOf('darwin', root);
 
   // 1. Info.plist identity. The executable keeps its name (CFBundleExecutable/MacOS/VSCodium) so the
-  //    helper apps and the CLI launcher keep working; everything user-visible becomes Kursor.
+  //    helper apps and the CLI launcher keep working; everything user-visible becomes Klammr.
   const plistFile = path.join(contents, 'Info.plist');
   const plist = parsePlist(fs.readFileSync(plistFile, 'utf8'));
   const executable = plist.get('CFBundleExecutable');
   if (!executable || !isFile(path.join(contents, 'MacOS', executable))) die('Info.plist: CFBundleExecutable does not point at an existing binary');
   const oldIcon = plist.get('CFBundleIconFile');
-  plist.set('CFBundleName', 'Kursor');
-  plist.set('CFBundleDisplayName', 'Kursor');
-  plist.set('CFBundleIdentifier', 'com.kursor.editor');
-  plist.set('CFBundleIconFile', 'Kursor.icns');
-  plist.set('CFBundleIconName', 'Kursor');
-  plist.set('CFBundleHelpBookFolder', 'Kursor HelpBook');
-  plist.set('CFBundleHelpBookName', 'Kursor HelpBook');
+  plist.set('CFBundleName', 'Klammr');
+  plist.set('CFBundleDisplayName', 'Klammr');
+  plist.set('CFBundleIdentifier', 'com.klammr.editor');
+  plist.set('CFBundleIconFile', 'Klammr.icns');
+  plist.set('CFBundleIconName', 'Klammr');
+  plist.set('CFBundleHelpBookFolder', 'Klammr HelpBook');
+  plist.set('CFBundleHelpBookName', 'Klammr HelpBook');
   const urlTypes = plist.get('CFBundleURLTypes');
   if (!Array.isArray(urlTypes) || !urlTypes.length) die('Info.plist: CFBundleURLTypes missing');
-  urlTypes[0].set('CFBundleURLName', 'Kursor');
-  urlTypes[0].set('CFBundleURLSchemes', ['kursor']);
+  urlTypes[0].set('CFBundleURLName', 'Klammr');
+  urlTypes[0].set('CFBundleURLSchemes', ['klammr']);
   for (const doc of plist.get('CFBundleDocumentTypes') || []) {
-    if (doc.get('CFBundleTypeName') === 'VSCodium document') doc.set('CFBundleTypeName', 'Kursor document');
+    if (doc.get('CFBundleTypeName') === 'VSCodium document') doc.set('CFBundleTypeName', 'Klammr document');
   }
   fs.writeFileSync(plistFile, serializePlist(plist));
   if (have('plutil')) {
@@ -209,16 +209,16 @@ function rebrandDarwin(extractDir, info) {
   }
 
   // 2. Application icon generated from product/icons/*.png.
-  fs.writeFileSync(path.join(resources, 'Kursor.icns'), buildIcns(loadIconPngs(path.join(PRODUCT_DIR, 'icons'))));
-  if (oldIcon && oldIcon !== 'Kursor.icns' && isFile(path.join(resources, oldIcon))) fs.unlinkSync(path.join(resources, oldIcon));
+  fs.writeFileSync(path.join(resources, 'Klammr.icns'), buildIcns(loadIconPngs(path.join(PRODUCT_DIR, 'icons'))));
+  if (oldIcon && oldIcon !== 'Klammr.icns' && isFile(path.join(resources, oldIcon))) fs.unlinkSync(path.join(resources, oldIcon));
 
   // 3. CLI launcher (bash, resolves the bundle from its own path, so nothing is hard-coded).
-  rename(path.join(app, 'bin', 'codium'), path.join(app, 'bin', 'kursor'));
-  const launcher = path.join(app, 'bin', 'kursor');
+  rename(path.join(app, 'bin', 'codium'), path.join(app, 'bin', 'klammr'));
+  const launcher = path.join(app, 'bin', 'klammr');
   mustPatch(launcher, `ELECTRON="$CONTENTS/MacOS/${executable}"`, `ELECTRON="$CONTENTS/MacOS/${executable}"`, 'launcher check');
-  replaceInFile(launcher, "which -a 'codium'", "which -a 'kursor'");
+  replaceInFile(launcher, "which -a 'codium'", "which -a 'klammr'");
   fs.chmodSync(launcher, 0o755);
-  if (exists(path.join(app, 'bin', 'codium-tunnel'))) rename(path.join(app, 'bin', 'codium-tunnel'), path.join(app, 'bin', 'kursor-tunnel'));
+  if (exists(path.join(app, 'bin', 'codium-tunnel'))) rename(path.join(app, 'bin', 'codium-tunnel'), path.join(app, 'bin', 'klammr-tunnel'));
 
   patchProductJson(path.join(app, 'product.json'));
   patchPackageJson(path.join(app, 'package.json'));
@@ -234,39 +234,39 @@ function rebrandWin32(root, info) {
   for (const f of [path.join(root, 'VSCodium.exe'), path.join(root, 'bin', 'codium.cmd'), path.join(app, 'product.json')]) {
     if (!exists(f)) die(`unexpected zip layout (missing ${path.relative(root, f)})`);
   }
-  rename(path.join(root, 'VSCodium.exe'), path.join(root, 'Kursor.exe'));
+  rename(path.join(root, 'VSCodium.exe'), path.join(root, 'Klammr.exe'));
 
-  // bin\kursor.cmd (cmd.exe) and bin\kursor (sh, for Git Bash / WSL) both reference the exe by name.
-  rename(path.join(root, 'bin', 'codium.cmd'), path.join(root, 'bin', 'kursor.cmd'));
-  mustPatch(path.join(root, 'bin', 'kursor.cmd'), '\\VSCodium.exe"', '\\Kursor.exe"', 'kursor.cmd patch');
+  // bin\klammr.cmd (cmd.exe) and bin\klammr (sh, for Git Bash / WSL) both reference the exe by name.
+  rename(path.join(root, 'bin', 'codium.cmd'), path.join(root, 'bin', 'klammr.cmd'));
+  mustPatch(path.join(root, 'bin', 'klammr.cmd'), '\\VSCodium.exe"', '\\Klammr.exe"', 'klammr.cmd patch');
   if (exists(path.join(root, 'bin', 'codium'))) {
-    rename(path.join(root, 'bin', 'codium'), path.join(root, 'bin', 'kursor'));
-    const sh = path.join(root, 'bin', 'kursor');
-    mustPatch(sh, 'NAME="VSCodium"', 'NAME="Kursor"', 'bin/kursor patch');
-    replaceInFile(sh, 'APP_NAME="codium"', 'APP_NAME="kursor"');
+    rename(path.join(root, 'bin', 'codium'), path.join(root, 'bin', 'klammr'));
+    const sh = path.join(root, 'bin', 'klammr');
+    mustPatch(sh, 'NAME="VSCodium"', 'NAME="Klammr"', 'bin/klammr patch');
+    replaceInFile(sh, 'APP_NAME="codium"', 'APP_NAME="klammr"');
     if (process.platform !== 'win32') fs.chmodSync(sh, 0o755); // zip entries made on Windows carry no mode
   }
-  if (exists(path.join(root, 'bin', 'codium-tunnel.exe'))) rename(path.join(root, 'bin', 'codium-tunnel.exe'), path.join(root, 'bin', 'kursor-tunnel.exe'));
+  if (exists(path.join(root, 'bin', 'codium-tunnel.exe'))) rename(path.join(root, 'bin', 'codium-tunnel.exe'), path.join(root, 'bin', 'klammr-tunnel.exe'));
 
-  // Icon: Kursor.ico next to the exe (shortcuts and the protocol handler point at it); the exe's own
+  // Icon: Klammr.ico next to the exe (shortcuts and the protocol handler point at it); the exe's own
   // resource icon is replaced only when rcedit is available.
   const pngs = loadIconPngs(path.join(PRODUCT_DIR, 'icons'));
-  const ico = path.join(root, 'Kursor.ico');
+  const ico = path.join(root, 'Klammr.ico');
   fs.writeFileSync(ico, buildIco(pngs));
   info.rcedit = false;
   if (have('rcedit')) {
-    const r = run('rcedit', [path.join(root, 'Kursor.exe'), '--set-icon', ico]);
-    if (r.ok) info.rcedit = true; else log.warn(`rcedit failed (${(r.stderr || r.stdout).trim()}) — Kursor.exe keeps VSCodium's embedded icon`);
+    const r = run('rcedit', [path.join(root, 'Klammr.exe'), '--set-icon', ico]);
+    if (r.ok) info.rcedit = true; else log.warn(`rcedit failed (${(r.stderr || r.stdout).trim()}) — Klammr.exe keeps VSCodium's embedded icon`);
   }
 
   // Start-menu tile manifest is matched by exe name.
   const manifest = path.join(root, 'VSCodium.VisualElementsManifest.xml');
   if (isFile(manifest)) {
-    replaceInFile(manifest, 'ShortDisplayName="VSCodium"', 'ShortDisplayName="Kursor"');
-    fs.renameSync(manifest, path.join(root, 'Kursor.VisualElementsManifest.xml'));
+    replaceInFile(manifest, 'ShortDisplayName="VSCodium"', 'ShortDisplayName="Klammr"');
+    fs.renameSync(manifest, path.join(root, 'Klammr.VisualElementsManifest.xml'));
     const tiles = path.join(app, 'resources', 'win32');
-    if (isFile(path.join(tiles, 'code_150x150.png'))) fs.copyFileSync(path.join(PRODUCT_DIR, 'icons', 'kursor-256.png'), path.join(tiles, 'code_150x150.png'));
-    if (isFile(path.join(tiles, 'code_70x70.png'))) fs.copyFileSync(path.join(PRODUCT_DIR, 'icons', 'kursor-128.png'), path.join(tiles, 'code_70x70.png'));
+    if (isFile(path.join(tiles, 'code_150x150.png'))) fs.copyFileSync(path.join(PRODUCT_DIR, 'icons', 'klammr-256.png'), path.join(tiles, 'code_150x150.png'));
+    if (isFile(path.join(tiles, 'code_70x70.png'))) fs.copyFileSync(path.join(PRODUCT_DIR, 'icons', 'klammr-128.png'), path.join(tiles, 'code_70x70.png'));
   }
 
   patchProductJson(path.join(app, 'product.json'));
@@ -277,14 +277,14 @@ function rebrandWin32(root, info) {
 }
 
 // rebrand(platform, extractDir, info) → path of the staged application root
-//   (linux/win32: extractDir itself; darwin: extractDir/Kursor.app). `info` = { platform, arch, sha256 }.
+//   (linux/win32: extractDir itself; darwin: extractDir/Klammr.app). `info` = { platform, arch, sha256 }.
 export function rebrand(platform, extractDir, info) {
-  if (!isFile(path.join(PRODUCT_DIR, 'icons', 'kursor-1024.png'))) die('icon assets missing — run from a complete checkout or bundle');
-  if (!isFile(path.join(BRAND_DIR, 'kursor-mark.svg'))) die('brand assets missing (product/brand) — run from a complete checkout or bundle');
+  if (!isFile(path.join(PRODUCT_DIR, 'icons', 'klammr-1024.png'))) die('icon assets missing — run from a complete checkout or bundle');
+  if (!isFile(path.join(BRAND_DIR, 'klammr-mark.svg'))) die('brand assets missing (product/brand) — run from a complete checkout or bundle');
   const root = platform === 'linux' ? rebrandLinux(extractDir, info)
     : platform === 'darwin' ? rebrandDarwin(extractDir, info)
       : rebrandWin32(extractDir, info);
-  log.ok(`rebranded VSCodium ${VSCODIUM_VERSION} (${platform}-${info.arch}) as Kursor`);
+  log.ok(`rebranded VSCodium ${VSCODIUM_VERSION} (${platform}-${info.arch}) as Klammr`);
   return root;
 }
 
@@ -301,8 +301,8 @@ export function describeTree(platform, root) {
     const plist = parsePlist(fs.readFileSync(path.join(root, 'Contents', 'Info.plist'), 'utf8'));
     lines.push(`Info.plist    CFBundleName=${plist.get('CFBundleName')} CFBundleIdentifier=${plist.get('CFBundleIdentifier')} CFBundleExecutable=${plist.get('CFBundleExecutable')} CFBundleIconFile=${plist.get('CFBundleIconFile')} URL schemes=${JSON.stringify(plist.get('CFBundleURLTypes')[0].get('CFBundleURLSchemes'))}`);
   }
-  if (platform === 'win32') lines.push(`files         ${['Kursor.exe', 'Kursor.ico', 'bin\\kursor.cmd', 'bin\\kursor'].filter((f) => exists(path.join(root, ...f.split('\\')))).join(' ')}`);
-  if (platform === 'linux') lines.push(`files         ${['kursor', 'bin/kursor', 'bin/kursor-tunnel'].filter((f) => exists(path.join(root, f))).join(' ')}`);
+  if (platform === 'win32') lines.push(`files         ${['Klammr.exe', 'Klammr.ico', 'bin\\klammr.cmd', 'bin\\klammr'].filter((f) => exists(path.join(root, ...f.split('\\')))).join(' ')}`);
+  if (platform === 'linux') lines.push(`files         ${['klammr', 'bin/klammr', 'bin/klammr-tunnel'].filter((f) => exists(path.join(root, f))).join(' ')}`);
   const branded = BRAND_MEDIA.filter(([src, dst]) => {
     const f = path.join(app, 'out', 'media', dst);
     return isFile(f) && fs.readFileSync(f, 'utf8') === fs.readFileSync(path.join(BRAND_DIR, src), 'utf8');

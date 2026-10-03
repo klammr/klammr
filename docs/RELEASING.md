@@ -1,6 +1,6 @@
 # Releasing and keeping updates clean
 
-Kursor follows a small, strict routine so every update is traceable and users can upgrade in one step.
+Klammr follows a small, strict routine so every update is traceable and users can upgrade in one step.
 
 ## Commits
 
@@ -30,15 +30,15 @@ $EDITOR CHANGELOG.md
 git commit -am "release: v0.2.0"
 
 # 3. tag and push — the tag triggers .github/workflows/release.yml
-git tag -a v0.2.0 -m "Kursor 0.2.0"
+git tag -a v0.2.0 -m "Klammr 0.2.0"
 git push origin main --follow-tags
 ```
 
-The release workflow builds `kursor.vsix` once, then one bundle per platform/arch on native runners
+The release workflow builds `klammr.vsix` once, then one bundle per platform/arch on native runners
 (Linux x64/arm64, macOS arm64/x64, Windows x64/arm64) and attaches everything, with `.sha256` sidecars,
 to the GitHub Release for the tag. Fill in the release notes from the changelog section.
 
-## Updating an installed Kursor
+## Updating an installed Klammr
 
 Users upgrade by downloading the new bundle and running its installer, or by `git pull` and re-running
 `product/install.sh` / `product\install.cmd`. The installer replaces the application directory atomically,

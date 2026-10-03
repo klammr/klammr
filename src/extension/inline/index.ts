@@ -31,14 +31,14 @@ export function registerInlineEdit(context: vscode.ExtensionContext, deps: Inlin
         if (isAbortError(e)) return;
         const message = e instanceof Error ? e.message : String(e);
         log.error(`${id} failed: ${message}`, e);
-        const pick = await vscode.window.showErrorMessage(`Kursor: ${message}`, 'Show Logs');
+        const pick = await vscode.window.showErrorMessage(`Klammr: ${message}`, 'Show Logs');
         if (pick === 'Show Logs') log.show();
       }
     });
 
   const requireDiff = (target: unknown) => {
     const handler = manager.resolve(target);
-    if (!handler) void vscode.window.setStatusBarMessage('$(info) Kursor: no inline edit to accept or reject here', 3000);
+    if (!handler) void vscode.window.setStatusBarMessage('$(info) Klammr: no inline edit to accept or reject here', 3000);
     return handler;
   };
 
@@ -64,36 +64,36 @@ export function registerInlineEdit(context: vscode.ExtensionContext, deps: Inlin
     controller,
     vscode.languages.registerCodeLensProvider('*', codeLens),
 
-    command('kursor.inlineEdit.open', () => {
+    command('klammr.inlineEdit.open', () => {
       if (!vscode.workspace.isTrusted) {
-        void vscode.window.showWarningMessage('Kursor: trust this workspace to use inline edits.', 'Manage Workspace Trust').then((pick) => {
+        void vscode.window.showWarningMessage('Klammr: trust this workspace to use inline edits.', 'Manage Workspace Trust').then((pick) => {
           if (pick) void vscode.commands.executeCommand('workbench.trust.manage');
         });
         return undefined;
       }
       return controller.open();
     }),
-    command('kursor.inlineEdit.quickQuestion', () => controller.quickQuestionCommand()),
-    command('kursor.inlineEdit.submit', (args) => {
+    command('klammr.inlineEdit.quickQuestion', () => controller.quickQuestionCommand()),
+    command('klammr.inlineEdit.submit', (args) => {
       const action = (args as { action?: unknown } | undefined)?.action;
       if (typeof action !== 'string' || !PROMPT_ACTIONS.has(action)) return controller.open();
       return controller.submit(action as PromptAction);
     }),
-    command('kursor.inlineEdit.cancel', () => controller.cancel()),
+    command('klammr.inlineEdit.cancel', () => controller.cancel()),
 
-    command('kursor.inlineEdit.acceptAll', async (target) => {
+    command('klammr.inlineEdit.acceptAll', async (target) => {
       const handler = requireDiff(target);
       if (handler) await handler.acceptAll();
     }),
-    command('kursor.inlineEdit.rejectAll', async (target) => {
+    command('klammr.inlineEdit.rejectAll', async (target) => {
       const handler = requireDiff(target);
       if (handler) await handler.rejectAll();
     }),
-    command('kursor.inlineEdit.acceptBlock', (target, index) => blockCommand(true, target, index)),
-    command('kursor.inlineEdit.rejectBlock', (target, index) => blockCommand(false, target, index)),
+    command('klammr.inlineEdit.acceptBlock', (target, index) => blockCommand(true, target, index)),
+    command('klammr.inlineEdit.rejectBlock', (target, index) => blockCommand(false, target, index)),
 
-    command('kursor.inlineEdit.applyCode', (args) => apply.applyCode(args)),
-    command('kursor.inlineEdit.insertAtCursor', (args) => apply.insertAtCursor(args)),
+    command('klammr.inlineEdit.applyCode', (args) => apply.applyCode(args)),
+    command('klammr.inlineEdit.insertAtCursor', (args) => apply.insertAtCursor(args)),
   );
 
   void manager.updateContext();

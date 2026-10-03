@@ -9,7 +9,7 @@ import assert from 'node:assert/strict';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '..', '..', '..', '..');
-const out = mkdtempSync(join(process.env.TMPDIR ?? tmpdir(), 'kursor-inline-test-'));
+const out = mkdtempSync(join(process.env.TMPDIR ?? tmpdir(), 'klammr-inline-test-'));
 
 async function load(name) {
   const outfile = join(out, `${name}.mjs`);

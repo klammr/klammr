@@ -132,11 +132,11 @@ export class InlineEditController implements vscode.Disposable {
     });
   }
 
-  /** kursor.inlineEdit.open — also the follow-up entry point while a diff is visible. */
+  /** klammr.inlineEdit.open — also the follow-up entry point while a diff is visible. */
   async open(preferred?: PromptAction): Promise<void> {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
-      void vscode.window.showInformationMessage('Kursor: open a file to use inline edit (Ctrl+K).');
+      void vscode.window.showInformationMessage('Klammr: open a file to use inline edit (Ctrl+K).');
       return;
     }
     if (this.spinner.running) this.spinner.cancel();
@@ -177,13 +177,13 @@ export class InlineEditController implements vscode.Disposable {
     }
   }
 
-  /** kursor.inlineEdit.quickQuestion */
+  /** klammr.inlineEdit.quickQuestion */
   async quickQuestionCommand(): Promise<void> {
     if (this.prompt.submit('question')) return;
     await this.open('question');
   }
 
-  /** kursor.inlineEdit.submit {action} — from the prompt keybindings; opens the prompt when it is closed. */
+  /** klammr.inlineEdit.submit {action} — from the prompt keybindings; opens the prompt when it is closed. */
   async submit(action: PromptAction): Promise<void> {
     if (this.prompt.submit(action)) return;
     await this.open(action);
@@ -248,7 +248,7 @@ export class InlineEditController implements vscode.Disposable {
     const log = this.deps.log;
     const regionLines = target.endLine - target.startLine + 1;
     if (regionLines > MAX_REGION_LINES) {
-      void vscode.window.showWarningMessage(`Kursor: the selected region is too large for inline edit (${regionLines} lines, max ${MAX_REGION_LINES}). Select a smaller range or use the chat.`);
+      void vscode.window.showWarningMessage(`Klammr: the selected region is too large for inline edit (${regionLines} lines, max ${MAX_REGION_LINES}). Select a smaller range or use the chat.`);
       return;
     }
     const documentLines = splitLines(doc.getText());
@@ -289,7 +289,7 @@ export class InlineEditController implements vscode.Disposable {
       });
       this.history.add(instruction);
       if (tracker.invalidated || !regionUnchanged(doc, tracker.start, oldLines)) {
-        void vscode.window.showWarningMessage('Kursor: the code changed while the edit was being generated, so the result was discarded.');
+        void vscode.window.showWarningMessage('Klammr: the code changed while the edit was being generated, so the result was discarded.');
         return;
       }
       const cleaned = cleanModelOutput(raw, {
@@ -299,7 +299,7 @@ export class InlineEditController implements vscode.Disposable {
         insertMode: target.insertMode,
       });
       if (cleaned.length === 0) {
-        void vscode.window.showWarningMessage('Kursor: the model returned no code for this instruction.');
+        void vscode.window.showWarningMessage('Klammr: the model returned no code for this instruction.');
         return;
       }
       const newLines = target.insertMode ? [...indentInserted(cleaned, oldLines[0] ?? ''), oldLines[0] ?? ''] : cleaned;
@@ -310,7 +310,7 @@ export class InlineEditController implements vscode.Disposable {
         wholeFile: target.wholeFile,
       });
       if (blocks === 0) {
-        void vscode.window.setStatusBarMessage('$(info) Kursor: no changes suggested', 4000);
+        void vscode.window.setStatusBarMessage('$(info) Klammr: no changes suggested', 4000);
       }
     } catch (e) {
       if (isAbortError(e)) {
@@ -359,7 +359,7 @@ export class InlineEditController implements vscode.Disposable {
 }
 
 function inlineModel(): string | undefined {
-  const model = vscode.workspace.getConfiguration('kursor').get<string>('inlineEdit.model', 'sonnet').trim();
+  const model = vscode.workspace.getConfiguration('klammr').get<string>('inlineEdit.model', 'sonnet').trim();
   return model || undefined;
 }
 

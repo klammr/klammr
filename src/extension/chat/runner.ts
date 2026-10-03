@@ -19,7 +19,7 @@ import type { EditTracker, RulesService } from '../services';
 import type { Logger } from '../util/log';
 import { relPathOf } from '../context/providers';
 import { lineStats } from '../edits/model';
-import { KURSOR_SYSTEM_NOTE } from './prompt';
+import { KLAMMR_SYSTEM_NOTE } from './prompt';
 import { capOutput, findToolBlock, hasQueuedMessages, lastAssistant, newId, systemNote } from './state';
 
 type ToolBlock = Extract<Block, { type: 'tool' }>;
@@ -124,7 +124,7 @@ export class ChatRunner implements vscode.Disposable {
     } catch (err) {
       this.deps.log.warn('rules appendix failed', err);
     }
-    return [KURSOR_SYSTEM_NOTE, rules.trim()].filter(Boolean).join('\n\n');
+    return [KLAMMR_SYSTEM_NOTE, rules.trim()].filter(Boolean).join('\n\n');
   }
 
   async ensureSession(contextPaths: string[] = []): Promise<ClaudeSession> {
@@ -480,7 +480,7 @@ export class ChatRunner implements vscode.Disposable {
       case 'exit':
         if (this.running) {
           const msg = `Claude Code exited unexpectedly${e.code !== null ? ` (code ${e.code})` : ''}.`;
-          chat.messages.push(systemNote(msg, 'error', { label: 'Show logs', command: 'kursor.showLogs' }));
+          chat.messages.push(systemNote(msg, 'error', { label: 'Show logs', command: 'klammr.showLogs' }));
           chat.error = msg;
           this.finishTurn({ isError: true, errorText: msg });
           chat.status = 'error';

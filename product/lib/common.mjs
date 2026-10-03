@@ -1,4 +1,4 @@
-// Kursor product scripts — shared by install.mjs, uninstall.mjs and build-bundle.mjs.
+// Klammr product scripts — shared by install.mjs, uninstall.mjs and build-bundle.mjs.
 // Constants (VSCodium version, pinned hash, release assets), per-platform paths, logging, prompts,
 // process helpers, download + sha256 verification, archive extraction and small fs utilities.
 // Node >= 18, ESM, no dependencies outside node:*.
@@ -16,13 +16,13 @@ export const PRODUCT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.u
 export const REPO_DIR = path.resolve(PRODUCT_DIR, '..');
 
 export const VSCODIUM_PINNED_VERSION = '1.135.06055';
-export const VSCODIUM_VERSION = process.env.KURSOR_VSCODIUM_VERSION || VSCODIUM_PINNED_VERSION;
+export const VSCODIUM_VERSION = process.env.KLAMMR_VSCODIUM_VERSION || VSCODIUM_PINNED_VERSION;
 // Hashes known at release time; every other asset is verified against VSCodium's published .sha256 sidecar.
 export const PINNED_SHA256 = {
   'linux-x64': 'c09d8ac8dd7f52b09ee159ee24b440541dfd8f937a0f6f88cc428c78e48ee1f2',
 };
 // Optional https URL of this repository: when set, Help › Report Issue / Documentation point at it.
-export const REPO_URL = process.env.KURSOR_REPO_URL || 'https://github.com/brucegrootgames/kursor';
+export const REPO_URL = process.env.KLAMMR_REPO_URL || 'https://github.com/brucegrootgames/kursor';
 
 export const PLATFORMS = ['linux', 'darwin', 'win32'];
 export const ARCHES = ['x64', 'arm64'];
@@ -39,53 +39,53 @@ export function assetFor(platform, arch, version = VSCODIUM_VERSION) {
   };
 }
 
-// Hyprland binding added by --hypr-bind (focus an existing Kursor window or launch one through uwsm).
-export const HYPR_BIND_MARKER = 'kursor:install';
+// Hyprland binding added by --hypr-bind (focus an existing Klammr window or launch one through uwsm).
+export const HYPR_BIND_MARKER = 'klammr:install';
 export const HYPR_BIND_LINE =
-  `o.bind("SUPER + SHIFT + K", "Kursor", "omarchy-launch-or-focus kursor 'uwsm-app -- kursor'") -- ${HYPR_BIND_MARKER}`;
+  `o.bind("SUPER + SHIFT + K", "Klammr", "omarchy-launch-or-focus klammr 'uwsm-app -- klammr'") -- ${HYPR_BIND_MARKER}`;
 
 // ---- locations --------------------------------------------------------------------------------
 // Everything the installer touches, for one target platform. `system` selects the machine-wide
 // location on macOS/Windows (never used on Linux: that install is always under $HOME).
-export function kursorPaths(platform, { system = false, env = process.env, home = os.homedir() } = {}) {
+export function klammrPaths(platform, { system = false, env = process.env, home = os.homedir() } = {}) {
   const P = platform === 'win32' ? path.win32 : path.posix;
   const j = (...a) => P.join(...a);
-  const base = { platform, home, dataDir: j(home, '.kursor') }; // extensions/ + argv.json ($HOME/<dataFolderName>)
+  const base = { platform, home, dataDir: j(home, '.klammr') }; // extensions/ + argv.json ($HOME/<dataFolderName>)
 
   if (platform === 'linux') {
     const cfg = env.XDG_CONFIG_HOME || j(home, '.config');
     const data = env.XDG_DATA_HOME || j(home, '.local', 'share');
     const cache = env.XDG_CACHE_HOME || j(home, '.cache');
-    const appRoot = j(home, '.local', 'opt', 'kursor');
+    const appRoot = j(home, '.local', 'opt', 'klammr');
     return {
       ...base,
       appRoot,
       appDir: j(appRoot, 'resources', 'app'),
-      cli: j(appRoot, 'bin', 'kursor'),
-      electron: j(appRoot, 'kursor'),
-      marker: j(appRoot, 'kursor-install.json'),
+      cli: j(appRoot, 'bin', 'klammr'),
+      electron: j(appRoot, 'klammr'),
+      marker: j(appRoot, 'klammr-install.json'),
       binDir: j(home, '.local', 'bin'),
-      wrapper: j(home, '.local', 'bin', 'kursor'),
-      configRoot: j(cfg, 'Kursor'),
-      userDir: j(cfg, 'Kursor', 'User'),
-      flagsFile: j(cfg, 'kursor-flags.conf'),
+      wrapper: j(home, '.local', 'bin', 'klammr'),
+      configRoot: j(cfg, 'Klammr'),
+      userDir: j(cfg, 'Klammr', 'User'),
+      flagsFile: j(cfg, 'klammr-flags.conf'),
       appsDir: j(data, 'applications'),
       iconDir: j(data, 'icons', 'hicolor'),
       mimeDir: j(data, 'mime'),
       mimeapps: j(cfg, 'mimeapps.list'),
-      cacheDir: env.KURSOR_CACHE_DIR || j(cache, 'kursor'),
+      cacheDir: env.KLAMMR_CACHE_DIR || j(cache, 'klammr'),
       omarchy: {
         hookDir: j(home, '.config', 'omarchy', 'hooks', 'theme-set.d'),
-        hookFile: j(home, '.config', 'omarchy', 'hooks', 'theme-set.d', 'kursor-theme.hook'),
+        hookFile: j(home, '.config', 'omarchy', 'hooks', 'theme-set.d', 'klammr-theme.hook'),
         defaultEditorFile: j(home, '.local', 'state', 'omarchy', 'defaults', 'editor'),
-        skipToggle: j(home, '.local', 'state', 'omarchy', 'toggles', 'skip-kursor-theme-changes'),
+        skipToggle: j(home, '.local', 'state', 'omarchy', 'toggles', 'skip-klammr-theme-changes'),
         hyprBindings: j(home, '.config', 'hypr', 'bindings.lua'),
       },
     };
   }
 
   if (platform === 'darwin') {
-    const appRoot = j(system ? '/Applications' : j(home, 'Applications'), 'Kursor.app');
+    const appRoot = j(system ? '/Applications' : j(home, 'Applications'), 'Klammr.app');
     const contents = j(appRoot, 'Contents');
     const appSupport = j(home, 'Library', 'Application Support');
     return {
@@ -93,19 +93,19 @@ export function kursorPaths(platform, { system = false, env = process.env, home 
       system,
       appRoot,
       appDir: j(contents, 'Resources', 'app'),
-      cli: j(contents, 'Resources', 'app', 'bin', 'kursor'),
+      cli: j(contents, 'Resources', 'app', 'bin', 'klammr'),
       electron: j(contents, 'MacOS', 'VSCodium'),
-      marker: j(contents, 'Resources', 'kursor-install.json'),
+      marker: j(contents, 'Resources', 'klammr-install.json'),
       binDir: j(home, '.local', 'bin'),
-      cliLink: j(home, '.local', 'bin', 'kursor'),
-      systemCliLink: '/usr/local/bin/kursor',
-      configRoot: j(appSupport, 'Kursor'),
-      userDir: j(appSupport, 'Kursor', 'User'),
-      cacheDir: env.KURSOR_CACHE_DIR || j(home, 'Library', 'Caches', 'kursor'),
+      cliLink: j(home, '.local', 'bin', 'klammr'),
+      systemCliLink: '/usr/local/bin/klammr',
+      configRoot: j(appSupport, 'Klammr'),
+      userDir: j(appSupport, 'Klammr', 'User'),
+      cacheDir: env.KLAMMR_CACHE_DIR || j(home, 'Library', 'Caches', 'klammr'),
       stateFiles: [
-        j(home, 'Library', 'Caches', 'Kursor'),
-        j(home, 'Library', 'Saved Application State', 'com.kursor.editor.savedState'),
-        j(home, 'Library', 'Preferences', 'com.kursor.editor.plist'),
+        j(home, 'Library', 'Caches', 'Klammr'),
+        j(home, 'Library', 'Saved Application State', 'com.klammr.editor.savedState'),
+        j(home, 'Library', 'Preferences', 'com.klammr.editor.plist'),
       ],
     };
   }
@@ -114,24 +114,24 @@ export function kursorPaths(platform, { system = false, env = process.env, home 
   const local = env.LOCALAPPDATA || j(home, 'AppData', 'Local');
   const roaming = env.APPDATA || j(home, 'AppData', 'Roaming');
   const programFiles = env.ProgramFiles || 'C:\\Program Files';
-  const appRoot = system ? j(programFiles, 'Kursor') : j(local, 'Programs', 'Kursor');
+  const appRoot = system ? j(programFiles, 'Klammr') : j(local, 'Programs', 'Klammr');
   return {
     ...base,
     system,
     appRoot,
     appDir: j(appRoot, 'resources', 'app'),
-    exe: j(appRoot, 'Kursor.exe'),
-    electron: j(appRoot, 'Kursor.exe'),
-    cli: j(appRoot, 'bin', 'kursor.cmd'),
+    exe: j(appRoot, 'Klammr.exe'),
+    electron: j(appRoot, 'Klammr.exe'),
+    cli: j(appRoot, 'bin', 'klammr.cmd'),
     cliJs: j(appRoot, 'resources', 'app', 'out', 'cli.js'),
-    ico: j(appRoot, 'Kursor.ico'),
-    marker: j(appRoot, 'kursor-install.json'),
+    ico: j(appRoot, 'Klammr.ico'),
+    marker: j(appRoot, 'klammr-install.json'),
     binDir: j(appRoot, 'bin'),
-    configRoot: j(roaming, 'Kursor'),
-    userDir: j(roaming, 'Kursor', 'User'),
-    cacheDir: env.KURSOR_CACHE_DIR || j(local, 'kursor', 'cache'),
-    startMenuLnk: j(roaming, 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Kursor.lnk'),
-    desktopLnk: j(env.USERPROFILE || home, 'Desktop', 'Kursor.lnk'),
+    configRoot: j(roaming, 'Klammr'),
+    userDir: j(roaming, 'Klammr', 'User'),
+    cacheDir: env.KLAMMR_CACHE_DIR || j(local, 'klammr', 'cache'),
+    startMenuLnk: j(roaming, 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Klammr.lnk'),
+    desktopLnk: j(env.USERPROFILE || home, 'Desktop', 'Klammr.lnk'),
   };
 }
 
@@ -140,7 +140,7 @@ export function appDirOf(platform, root) {
   return platform === 'darwin' ? path.join(root, 'Contents', 'Resources', 'app') : path.join(root, 'resources', 'app');
 }
 export function markerOf(platform, root) {
-  return platform === 'darwin' ? path.join(root, 'Contents', 'Resources', 'kursor-install.json') : path.join(root, 'kursor-install.json');
+  return platform === 'darwin' ? path.join(root, 'Contents', 'Resources', 'klammr-install.json') : path.join(root, 'klammr-install.json');
 }
 
 // ---- output -----------------------------------------------------------------------------------
@@ -231,7 +231,7 @@ export function have(cmd) {
 }
 
 // PowerShell (Windows integration). Scripts receive their inputs through environment variables
-// (KURSOR_*), never by string interpolation, so paths with spaces or quotes cannot break them.
+// (KLAMMR_*), never by string interpolation, so paths with spaces or quotes cannot break them.
 export function powershell(script, env = {}) {
   const exe = have('powershell.exe') || have('pwsh') || 'powershell.exe';
   const encoded = Buffer.from(script, 'utf16le').toString('base64');
@@ -340,7 +340,7 @@ export function swapIn(stagedRoot, appRoot) {
   const old = `${appRoot}.old.${process.pid}`;
   if (exists(appRoot)) {
     try { fs.renameSync(appRoot, old); } catch (e) {
-      die(`cannot replace ${appRoot} (${e.code}). Is Kursor running? Close it and retry.`);
+      die(`cannot replace ${appRoot} (${e.code}). Is Klammr running? Close it and retry.`);
     }
   }
   fs.renameSync(stagedRoot, appRoot);
@@ -358,7 +358,7 @@ export function sha256File(file) {
 function httpsGet(url, redirects = 0) {
   return new Promise((resolve, reject) => {
     if (redirects > 10) return reject(new Error('too many redirects'));
-    const req = https.get(url, { headers: { 'User-Agent': 'kursor-installer', Accept: '*/*' } }, (res) => {
+    const req = https.get(url, { headers: { 'User-Agent': 'klammr-installer', Accept: '*/*' } }, (res) => {
       const { statusCode, headers } = res;
       if (statusCode >= 300 && statusCode < 400 && headers.location) {
         res.resume();
@@ -465,8 +465,8 @@ export function extractArchive(archive, dest) {
   const failures = [];
   for (const [tool, args] of attempts) {
     if (tool === '__expand-archive__') {
-      const r = powershell('Expand-Archive -LiteralPath $env:KURSOR_ZIP -DestinationPath $env:KURSOR_DEST -Force',
-        { KURSOR_ZIP: archive, KURSOR_DEST: dest });
+      const r = powershell('Expand-Archive -LiteralPath $env:KLAMMR_ZIP -DestinationPath $env:KLAMMR_DEST -Force',
+        { KLAMMR_ZIP: archive, KLAMMR_DEST: dest });
       if (r.ok) return 'Expand-Archive';
       failures.push(`Expand-Archive: ${r.stderr}`);
       continue;

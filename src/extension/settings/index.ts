@@ -1,8 +1,8 @@
 /**
- * [F] Kursor Settings — entry point.
+ * [F] Klammr Settings — entry point.
  *
- * Registers the singleton settings panel (`kursor.settings.open`, Ctrl+Shift+J) and the
- * "New Kursor Rule" command (`kursor.rules.new`). See README.md in this directory.
+ * Registers the singleton settings panel (`klammr.settings.open`, Ctrl+Shift+J) and the
+ * "New Klammr Rule" command (`klammr.rules.new`). See README.md in this directory.
  */
 import * as vscode from 'vscode';
 import type { SettingsDeps } from '../services';
@@ -14,7 +14,7 @@ import { defaultCwd } from './workspace';
 
 export { SETTINGS_VIEW_TYPE } from './panel';
 
-/** Accepts `kursor.settings.open('rules')`, `{ tab: 'rules' }`, or nothing. */
+/** Accepts `klammr.settings.open('rules')`, `{ tab: 'rules' }`, or nothing. */
 function tabFromArgs(arg: unknown): SettingsTab | undefined {
   if (isSettingsTab(arg)) return arg;
   const tab = (arg as { tab?: unknown } | undefined)?.tab;
@@ -31,20 +31,20 @@ export function registerSettings(context: vscode.ExtensionContext, deps: Setting
   const report = (what: string, err: unknown): void => {
     log.error(`${what} failed`, err);
     const text = err instanceof Error ? err.message : String(err);
-    void vscode.window.showErrorMessage(`Kursor: ${what} failed — ${text}`, 'Show Logs').then((pick) => {
+    void vscode.window.showErrorMessage(`Klammr: ${what} failed — ${text}`, 'Show Logs').then((pick) => {
       if (pick === 'Show Logs') log.show();
     });
   };
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('kursor.settings.open', (arg?: unknown) => {
+    vscode.commands.registerCommand('klammr.settings.open', (arg?: unknown) => {
       try {
         controller.open(tabFromArgs(arg));
       } catch (err) {
-        report('opening Kursor Settings', err);
+        report('opening Klammr Settings', err);
       }
     }),
-    vscode.commands.registerCommand('kursor.rules.new', async (arg?: unknown) => {
+    vscode.commands.registerCommand('klammr.rules.new', async (arg?: unknown) => {
       try {
         const preferred = typeof arg === 'string' ? arg : (arg as { cwd?: unknown } | undefined)?.cwd;
         await createNewRuleInteractive(log, typeof preferred === 'string' ? preferred : defaultCwd());

@@ -1,5 +1,5 @@
 /**
- * [D2] Ctrl+K in the terminal — `kursor.terminal.generate`.
+ * [D2] Ctrl+K in the terminal — `klammr.terminal.generate`.
  *
  * Flow: InputBox ("Describe the command…") → oneShot (shell, cwd, OS in the
  * prompt; cancellable progress notification) → QuickPick with
@@ -21,18 +21,18 @@ interface ActionItem extends vscode.QuickPickItem {
   action: Action;
 }
 
-const LAST_REQUEST_KEY = 'kursor.terminal.lastRequest';
+const LAST_REQUEST_KEY = 'klammr.terminal.lastRequest';
 
 export function registerTerminal(context: vscode.ExtensionContext, deps: TerminalDeps): void {
   context.subscriptions.push(
-    vscode.commands.registerCommand('kursor.terminal.generate', async () => {
+    vscode.commands.registerCommand('klammr.terminal.generate', async () => {
       try {
         await generateCommand(context, deps);
       } catch (e) {
         if (isAbortError(e)) return;
-        deps.log.error('kursor.terminal.generate failed', e);
+        deps.log.error('klammr.terminal.generate failed', e);
         const pick = await vscode.window.showErrorMessage(
-          `Kursor: could not generate a command — ${e instanceof Error ? e.message : String(e)}`,
+          `Klammr: could not generate a command — ${e instanceof Error ? e.message : String(e)}`,
           'Show Logs',
         );
         if (pick === 'Show Logs') deps.log.show();
@@ -47,7 +47,7 @@ async function generateCommand(context: vscode.ExtensionContext, deps: TerminalD
 
   let terminal = vscode.window.activeTerminal;
   if (!terminal) {
-    terminal = vscode.window.createTerminal({ name: 'Kursor' });
+    terminal = vscode.window.createTerminal({ name: 'Klammr' });
     terminal.show(true);
   }
 
@@ -56,7 +56,7 @@ async function generateCommand(context: vscode.ExtensionContext, deps: TerminalD
 
   for (;;) {
     const input = await vscode.window.showInputBox({
-      title: previous ? 'Kursor: edit the request' : 'Kursor: generate a terminal command',
+      title: previous ? 'Klammr: edit the request' : 'Klammr: generate a terminal command',
       prompt: 'Describe the command… (Enter to generate, Esc to cancel)',
       placeHolder: 'e.g. find all TODO comments under src, show the 10 largest files, undo the last commit but keep changes',
       value: request,
@@ -69,11 +69,11 @@ async function generateCommand(context: vscode.ExtensionContext, deps: TerminalD
     void context.workspaceState.update(LAST_REQUEST_KEY, request);
 
     const ctx = await gatherTerminalContext(terminal);
-    const model = (vscode.workspace.getConfiguration('kursor.terminal').get<string>('model', 'sonnet') || 'sonnet').trim();
+    const model = (vscode.workspace.getConfiguration('klammr.terminal').get<string>('model', 'sonnet') || 'sonnet').trim();
     log.info(`generate: "${request}" (shell=${ctx.shell}, cwd=${ctx.cwd}, model=${model})`);
 
     const command = await vscode.window.withProgress(
-      { location: vscode.ProgressLocation.Notification, title: 'Kursor: generating command…', cancellable: true },
+      { location: vscode.ProgressLocation.Notification, title: 'Klammr: generating command…', cancellable: true },
       async (_progress, token) => {
         const controller = new AbortController();
         const sub = token.onCancellationRequested(() => controller.abort());
@@ -98,7 +98,7 @@ async function generateCommand(context: vscode.ExtensionContext, deps: TerminalD
     if (command === undefined) return; // cancelled
 
     if (!command) {
-      const pick = await vscode.window.showWarningMessage('Kursor could not turn that request into a command.', 'Edit request', 'Cancel');
+      const pick = await vscode.window.showWarningMessage('Klammr could not turn that request into a command.', 'Edit request', 'Cancel');
       if (pick !== 'Edit request') return;
       previous = undefined;
       continue;
@@ -117,7 +117,7 @@ async function generateCommand(context: vscode.ExtensionContext, deps: TerminalD
         return;
       case 'copy':
         await vscode.env.clipboard.writeText(command);
-        vscode.window.setStatusBarMessage('Kursor: command copied to clipboard', 2500);
+        vscode.window.setStatusBarMessage('Klammr: command copied to clipboard', 2500);
         return;
       case 'chat':
         await deps.chat.sendPrompt(
@@ -136,7 +136,7 @@ async function generateCommand(context: vscode.ExtensionContext, deps: TerminalD
 function pickAction(request: string, command: string, ctx: TerminalContext): Promise<Action> {
   return new Promise<Action>((resolve) => {
     const qp = vscode.window.createQuickPick<ActionItem>();
-    qp.title = `Kursor: ${request}`;
+    qp.title = `Klammr: ${request}`;
     qp.placeholder = command;
     qp.ignoreFocusOut = true;
     qp.matchOnDescription = true;
@@ -146,7 +146,7 @@ function pickAction(request: string, command: string, ctx: TerminalContext): Pro
       { label: '$(insert) Insert', description: 'Type it into the terminal without running (Esc does this too)', action: 'insert' },
       { label: '$(edit) Edit prompt', description: 'Refine the request and generate again', action: 'edit' },
       { label: '$(copy) Copy', description: 'Copy the command to the clipboard', action: 'copy' },
-      { label: '$(comment-discussion) Ask in Chat', description: 'Discuss this command with Kursor', action: 'chat' },
+      { label: '$(comment-discussion) Ask in Chat', description: 'Discuss this command with Klammr', action: 'chat' },
     ];
     qp.activeItems = [qp.items[0]];
     let settled = false;

@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kursor — a Cursor-style editor powered by your own Claude Code</title>
-<meta name="description" content="Kursor is an open-source, Cursor-style AI code editor: agent chat, Ctrl+K inline edits and Tab completions, driven by the Claude Code CLI already installed on your machine. Linux, macOS and Windows.">
-<meta property="og:title" content="Kursor">
+<title>Klammr — a Cursor-style editor powered by your own Claude Code</title>
+<meta name="description" content="Klammr is an open-source, Cursor-style AI code editor: agent chat, Ctrl+K inline edits and Tab completions, driven by the Claude Code CLI already installed on your machine. Linux, macOS and Windows.">
+<meta property="og:title" content="Klammr">
 <meta property="og:description" content="A Cursor-style editor that runs on the Claude Code you already have.">
 <meta property="og:image" content="https://brucegrootgames.github.io/kursor/img/social-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" type="image/svg+xml" href="img/kursor.svg">
+<link rel="icon" type="image/svg+xml" href="img/klammr.svg">
 <link rel="icon" type="image/png" href="img/favicon.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <meta name="theme-color" content="#0f1014">
@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  /* Kursor website. Tokens from docs/BRAND.md: Ink page, Surface panels, Border hairlines, Mist and Muted text.
+  /* Klammr website. Tokens from docs/BRAND.md: Ink page, Surface panels, Border hairlines, Mist and Muted text.
      The violet → orchid gradient appears only on the headline highlight, the primary action and the cursor bar. */
   :root {
     --ink: #0f1014; --panel: #14161c; --surface: #1a1d25; --raised: #222631; --border: #262a35; --border-strong: #353a48;
@@ -284,7 +284,7 @@
 
 <header class="nav">
   <div class="wrap nav-row">
-    <a class="brand" href="#top"><img src="img/kursor.svg" alt="" width="28" height="28">Kursor</a>
+    <a class="brand" href="#top"><img src="img/klammr.svg" alt="" width="28" height="28">Klammr</a>
     <nav class="links" aria-label="Sections">
       <a href="#features">Features</a>
       <a href="#how">How it works</a>
@@ -305,7 +305,7 @@
     <div class="wrap hero-copy">
       <a class="pill" href="https://github.com/brucegrootgames/kursor/releases/latest"><i></i>Open source<span>·</span>Linux, macOS, Windows</a>
       <h1>The Cursor experience,<br> on <span class="hl">your own Claude Code</span><span class="caret" aria-hidden="true"></span></h1>
-      <p class="lead">Kursor is an open-source, Cursor-style AI editor built on VS Code (VSCodium). Agent chat, <kbd>Ctrl</kbd>+<kbd>K</kbd> inline edits and Tab completions, all powered by the Claude Code CLI already installed and signed in on your machine. No new account, no API keys, no middleman.</p>
+      <p class="lead">Klammr is an open-source, Cursor-style AI editor built on VS Code (VSCodium). Agent chat, <kbd>Ctrl</kbd>+<kbd>K</kbd> inline edits and Tab completions, all powered by the Claude Code CLI already installed and signed in on your machine. No new account, no API keys, no middleman.</p>
       <div class="actions">
         <a class="btn btn-primary" href="#install">Install for Linux, macOS, Windows</a>
         <a class="btn" href="https://github.com/brucegrootgames/kursor/releases/latest">Download a release</a>
@@ -313,7 +313,7 @@
       <p class="fine">MIT licensed. Usage runs on your own Claude plan. Not affiliated with Anthropic or Anysphere (Cursor).</p>
     </div>
     <div class="wrap hero-shot">
-      <figure class="frame"><img src="img/overview.png" alt="Kursor: editor with the agent chat in the right side bar showing Read, Search, Edit and Run tool rows, an edited file with Review / Undo / Keep, test output and the review bar" width="1600" height="1387" fetchpriority="high"></figure>
+      <figure class="frame"><img src="img/overview.png" alt="Klammr: editor with the agent chat in the right side bar showing Read, Search, Edit and Run tool rows, an edited file with Review / Undo / Keep, test output and the review bar" width="1600" height="1387" fetchpriority="high"></figure>
     </div>
     <div class="wrap">
       <div class="facts">
@@ -330,7 +330,7 @@
       <header class="section-head">
         <p class="eyebrow">Features</p>
         <h2>Everything you reach for in Cursor</h2>
-        <p class="sub">The same muscle memory, the same panes, the same review flow. Kursor's extension reimplements the Cursor UI on top of the Claude Code agent loop.</p>
+        <p class="sub">The same muscle memory, the same panes, the same review flow. Klammr's extension reimplements the Cursor UI on top of the Claude Code agent loop.</p>
       </header>
 
       <article class="showcase">
@@ -389,7 +389,7 @@
         <div class="card">
           <span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 17.5h5M10.5 20.5h3M12 3.5a5.5 5.5 0 0 0-3.2 10c.5.4.8 1 .8 1.7v.3h4.8v-.3c0-.7.3-1.3.8-1.7a5.5 5.5 0 0 0-3.2-10z"/></svg></span>
           <h3>Fix in Chat</h3>
-          <p>Lightbulb actions on diagnostics and selections: Fix in Chat, Add to Chat, Explain, Edit with Kursor. Terminal context menu: add selection, debug last command.</p>
+          <p>Lightbulb actions on diagnostics and selections: Fix in Chat, Add to Chat, Explain, Edit with Klammr. Terminal context menu: add selection, debug last command.</p>
         </div>
         <div class="card">
           <span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><path d="M12 4.5v15M12 12h8.5"/></svg></span>
@@ -405,14 +405,14 @@
       <header class="section-head">
         <p class="eyebrow">How it works</p>
         <h2>Two pieces, and your own Claude Code</h2>
-        <p class="sub">Kursor is a rebranded VSCodium build and a VS Code extension. The extension never talks to Anthropic directly.</p>
+        <p class="sub">Klammr is a rebranded VSCodium build and a VS Code extension. The extension never talks to Anthropic directly.</p>
       </header>
       <ol class="steps">
-        <li class="step"><span class="step-n">01</span><h3>Your Claude Code</h3><p>Kursor finds the <code>claude</code> binary you already installed (mise, npm, Homebrew, the native installer) and spawns it unmodified with the Claude Agent SDK's streaming protocol. It signs in with <em>its</em> login; Kursor never reads, stores or forwards credentials.</p></li>
-        <li class="step"><span class="step-n">02</span><h3>The editor</h3><p>A stock VSCodium release, renamed to Kursor with its own icon, data folders and <code>kursor://</code> scheme. Open VSX for extensions. The Kursor extension adds the chat pane, inline edits, completions and the Cursor keymap.</p></li>
+        <li class="step"><span class="step-n">01</span><h3>Your Claude Code</h3><p>Klammr finds the <code>claude</code> binary you already installed (mise, npm, Homebrew, the native installer) and spawns it unmodified with the Claude Agent SDK's streaming protocol. It signs in with <em>its</em> login; Klammr never reads, stores or forwards credentials.</p></li>
+        <li class="step"><span class="step-n">02</span><h3>The editor</h3><p>A stock VSCodium release, renamed to Klammr with its own icon, data folders and <code>klammr://</code> scheme. Open VSX for extensions. The Klammr extension adds the chat pane, inline edits, completions and the Cursor keymap.</p></li>
         <li class="step"><span class="step-n">03</span><h3>Your machine, your plan</h3><p>Every chat turn, inline edit and completion is a Claude Code call under your own Pro, Max, Team or Console account, at normal Claude Code rates. Nothing leaves your machine except what Claude Code itself sends.</p></li>
       </ol>
-      <p class="notice"><strong>Trademark and terms.</strong> Kursor is an independent open-source project. It is not affiliated with, endorsed by, or built by Anthropic or Anysphere. "Claude" and "Claude Code" are trademarks of Anthropic; "Cursor" is a trademark of Anysphere. Kursor runs the unmodified Claude Code binary that you install and sign into yourself; your use of Claude Code is governed by Anthropic's terms.</p>
+      <p class="notice"><strong>Trademark and terms.</strong> Klammr is an independent open-source project. It is not affiliated with, endorsed by, or built by Anthropic or Anysphere. "Claude" and "Claude Code" are trademarks of Anthropic; "Cursor" is a trademark of Anysphere. Klammr runs the unmodified Claude Code binary that you install and sign into yourself; your use of Claude Code is governed by Anthropic's terms.</p>
     </div>
   </section>
 
@@ -438,34 +438,34 @@
           <button class="copy" type="button" data-copy><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.8"/><path d="M10.5 3.2A1.7 1.7 0 0 0 9 2.5H4.3A1.8 1.8 0 0 0 2.5 4.3V9c0 .6.3 1.2.8 1.5"/></svg><span>Copy</span></button>
         </div>
         <div class="panel" id="panel-linux" role="tabpanel" aria-labelledby="tab-linux">
-<pre><code><span class="c"># from a release bundle (Kursor-linux-x64-&lt;version&gt;.tar.gz)</span>
-tar -xzf Kursor-linux-x64-*.tar.gz &amp;&amp; cd Kursor-linux-x64-*/
+<pre><code><span class="c"># from a release bundle (Klammr-linux-x64-&lt;version&gt;.tar.gz)</span>
+tar -xzf Klammr-linux-x64-*.tar.gz &amp;&amp; cd Klammr-linux-x64-*/
 bash install.sh  <span class="c"># add --hypr-bind --default-editor on Omarchy</span>
 
 <span class="c"># or from source</span>
-git clone https://github.com/brucegrootgames/kursor.git &amp;&amp; cd kursor
+git clone https://github.com/brucegrootgames/kursor.git &amp;&amp; cd klammr
 npm install &amp;&amp; npm run package &amp;&amp; bash product/install.sh</code></pre>
-          <ol><li>Installs to <strong>~/.local/opt/kursor</strong>, command <strong>kursor</strong>, a launcher entry and icons. No root.</li><li>On Omarchy it also installs a theme hook so Kursor follows <code>omarchy theme set</code>.</li><li>Launch with <code>kursor</code> or from your app launcher.</li></ol>
+          <ol><li>Installs to <strong>~/.local/opt/klammr</strong>, command <strong>klammr</strong>, a launcher entry and icons. No root.</li><li>On Omarchy it also installs a theme hook so Klammr follows <code>omarchy theme set</code>.</li><li>Launch with <code>klammr</code> or from your app launcher.</li></ol>
         </div>
         <div class="panel" id="panel-mac" role="tabpanel" aria-labelledby="tab-mac" hidden>
-<pre><code><span class="c"># from a release bundle (Kursor-darwin-arm64 or darwin-x64)</span>
-tar -xzf Kursor-darwin-arm64-*.tar.gz &amp;&amp; cd Kursor-darwin-arm64-*/
+<pre><code><span class="c"># from a release bundle (Klammr-darwin-arm64 or darwin-x64)</span>
+tar -xzf Klammr-darwin-arm64-*.tar.gz &amp;&amp; cd Klammr-darwin-arm64-*/
 bash install.sh  <span class="c"># --system for /Applications</span>
 
 <span class="c"># or from source</span>
-git clone https://github.com/brucegrootgames/kursor.git &amp;&amp; cd kursor
+git clone https://github.com/brucegrootgames/kursor.git &amp;&amp; cd klammr
 npm install &amp;&amp; npm run package &amp;&amp; bash product/install.sh</code></pre>
-          <ol><li>Installs <strong>~/Applications/Kursor.app</strong> and a <strong>kursor</strong> command in ~/.local/bin.</li><li>The app is re-signed ad hoc after rebranding; the first launch may need right-click → Open.</li><li>All shortcuts use <kbd>⌘</kbd> instead of <kbd>Ctrl</kbd>.</li></ol>
+          <ol><li>Installs <strong>~/Applications/Klammr.app</strong> and a <strong>klammr</strong> command in ~/.local/bin.</li><li>The app is re-signed ad hoc after rebranding; the first launch may need right-click → Open.</li><li>All shortcuts use <kbd>⌘</kbd> instead of <kbd>Ctrl</kbd>.</li></ol>
         </div>
         <div class="panel" id="panel-win" role="tabpanel" aria-labelledby="tab-win" hidden>
-<pre><code><span class="c"># from a release bundle (Kursor-win32-x64-&lt;version&gt;.zip), in PowerShell</span>
-Expand-Archive Kursor-win32-x64-*.zip -DestinationPath . ; cd Kursor-win32-x64-*
+<pre><code><span class="c"># from a release bundle (Klammr-win32-x64-&lt;version&gt;.zip), in PowerShell</span>
+Expand-Archive Klammr-win32-x64-*.zip -DestinationPath . ; cd Klammr-win32-x64-*
 .\install.cmd  <span class="c"># --desktop-shortcut, --system for Program Files</span>
 
 <span class="c"># or from source</span>
-git clone https://github.com/brucegrootgames/kursor.git ; cd kursor
+git clone https://github.com/brucegrootgames/kursor.git ; cd klammr
 npm install ; npm run package ; product\install.cmd</code></pre>
-          <ol><li>Installs to <strong>%LOCALAPPDATA%\Programs\Kursor</strong> with a Start Menu shortcut, <strong>kursor</strong> on your user PATH and the <code>kursor://</code> protocol.</li><li>Open a new terminal afterwards for <code>kursor</code> to be found.</li></ol>
+          <ol><li>Installs to <strong>%LOCALAPPDATA%\Programs\Klammr</strong> with a Start Menu shortcut, <strong>klammr</strong> on your user PATH and the <code>klammr://</code> protocol.</li><li>Open a new terminal afterwards for <code>klammr</code> to be found.</li></ol>
         </div>
       </div>
     </div>
@@ -505,7 +505,7 @@ npm install ; npm run package ; product\install.cmd</code></pre>
           <h3>Anywhere</h3>
           <dl>
             <div class="kb-row"><dt>Toggle the agent chat</dt><dd><span class="combo"><kbd>Ctrl</kbd><kbd>I</kbd></span></dd></div>
-            <div class="kb-row"><dt>Kursor Settings</dt><dd><span class="combo"><kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>J</kbd></span></dd></div>
+            <div class="kb-row"><dt>Klammr Settings</dt><dd><span class="combo"><kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>J</kbd></span></dd></div>
           </dl>
         </div>
       </div>
@@ -520,11 +520,11 @@ npm install ; npm run package ; product\install.cmd</code></pre>
         <h2>Questions, answered</h2>
       </header>
       <div class="faq">
-        <details open><summary>Do I need an Anthropic API key?</summary><p>No. Kursor uses the Claude Code CLI on your machine, signed in with your own Claude account (Pro, Max, Team or Enterprise) or Console key. Sign in once with <code>claude auth login</code>.</p></details>
-        <details><summary>What does it cost?</summary><p>Kursor is free and MIT licensed. Chat turns, inline edits and Tab completions are regular Claude Code requests under your plan. Tab completions use a fast model and are debounced; turn them off from the status bar if you'd rather not spend quota on them.</p></details>
-        <details><summary>Does Kursor send my code anywhere?</summary><p>Only to Claude Code, which sends it to Anthropic as any Claude Code session would. The extension has no server, no telemetry and no analytics. Workspaces in Restricted Mode are never read until you trust them.</p></details>
-        <details><summary>Can I keep using my VS Code extensions?</summary><p>Yes. Kursor is VSCodium with the Open VSX gallery, so most extensions install normally. Your existing VS Code settings are not touched; Kursor keeps its own profile.</p></details>
-        <details><summary>Is Tab as good as Cursor's?</summary><p>Not yet. Cursor trains a dedicated model for next-edit prediction; Kursor asks a general fast model for a short continuation, with a ~1 s pause and a ~2.5 s round trip. It is useful for boilerplate, not for keystroke-level prediction.</p></details>
+        <details open><summary>Do I need an Anthropic API key?</summary><p>No. Klammr uses the Claude Code CLI on your machine, signed in with your own Claude account (Pro, Max, Team or Enterprise) or Console key. Sign in once with <code>claude auth login</code>.</p></details>
+        <details><summary>What does it cost?</summary><p>Klammr is free and MIT licensed. Chat turns, inline edits and Tab completions are regular Claude Code requests under your plan. Tab completions use a fast model and are debounced; turn them off from the status bar if you'd rather not spend quota on them.</p></details>
+        <details><summary>Does Klammr send my code anywhere?</summary><p>Only to Claude Code, which sends it to Anthropic as any Claude Code session would. The extension has no server, no telemetry and no analytics. Workspaces in Restricted Mode are never read until you trust them.</p></details>
+        <details><summary>Can I keep using my VS Code extensions?</summary><p>Yes. Klammr is VSCodium with the Open VSX gallery, so most extensions install normally. Your existing VS Code settings are not touched; Klammr keeps its own profile.</p></details>
+        <details><summary>Is Tab as good as Cursor's?</summary><p>Not yet. Cursor trains a dedicated model for next-edit prediction; Klammr asks a general fast model for a short continuation, with a ~1 s pause and a ~2.5 s round trip. It is useful for boilerplate, not for keystroke-level prediction.</p></details>
         <details><summary>How do updates work?</summary><p>Every release ships bundles for all platforms. Download the new one and run its installer, or <code>git pull</code> and re-run <code>product/install.sh</code> / <code>install.cmd</code>: the app directory is replaced, your settings and chats stay.</p></details>
       </div>
     </div>
@@ -534,20 +534,20 @@ npm install ; npm run package ; product\install.cmd</code></pre>
     <div class="wrap">
       <header class="section-head">
         <p class="eyebrow">Brand</p>
-        <h2>A cursor and a bracket</h2>
-        <p class="sub">A text cursor and a code bracket make the K. The cursor is the only thing that carries colour. Assets are free to use when referring to Kursor; the full guide is in <a href="https://github.com/brucegrootgames/kursor/blob/main/docs/BRAND.md">docs/BRAND.md</a>.</p>
+        <h2>A cursor between brackets</h2>
+        <p class="sub">A text cursor held in a pair of brackets: the moment before you type, and the name itself (<em>Klammer</em> is German for bracket). The cursor is the only thing that carries colour. Assets are free to use when referring to Klammr; the full guide is in <a href="https://github.com/brucegrootgames/kursor/blob/main/docs/BRAND.md">docs/BRAND.md</a>.</p>
       </header>
       <div class="assets">
-        <div class="asset"><div class="box"><img src="brand/kursor-mark.svg" alt="Kursor mark on its tile" width="92" height="92"></div><b>Mark · tile</b>App icon, favicon, avatars<span class="dl"><a href="brand/kursor-mark.svg" download>SVG</a><a href="brand/kursor-mark-512.png" download>PNG 512</a></span></div>
-        <div class="asset"><div class="box"><svg viewBox="0 0 256 256" width="92" height="92" role="img" aria-label="Kursor glyph"><defs><linearGradient id="gbar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f9bff"/><stop offset="1" stop-color="#b57cff"/></linearGradient></defs><rect x="78" y="62" width="24" height="132" rx="10" fill="url(#gbar)"/><polyline points="176,70 110,128 176,186" fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/></svg></div><b>Glyph</b>Any dark surface<span class="dl"><a href="brand/kursor-glyph.svg" download>SVG</a></span></div>
-        <div class="asset"><div class="box light"><svg viewBox="0 0 24 24" width="76" height="76" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Kursor mono mark"><line x1="8.3" y1="5.5" x2="8.3" y2="18.5"/><polyline points="16.6,6.3 10.3,12 16.6,17.7"/></svg></div><b>Mono</b>Any single colour<span class="dl"><a href="brand/kursor-mark-mono.svg" download>SVG</a></span></div>
-        <div class="asset"><div class="box"><img src="brand/kursor-wordmark.svg" alt="Kursor wordmark" width="210" height="60"></div><b>Wordmark</b>Headers, docs, social<span class="dl"><a href="brand/kursor-wordmark.svg" download>SVG</a><a href="brand/social-card.svg" download>Social card</a></span></div>
+        <div class="asset"><div class="box"><img src="brand/klammr-mark.svg" alt="Klammr mark on its tile" width="92" height="92"></div><b>Mark · tile</b>App icon, favicon, avatars<span class="dl"><a href="brand/klammr-mark.svg" download>SVG</a><a href="brand/klammr-mark-512.png" download>PNG 512</a></span></div>
+        <div class="asset"><div class="box"><svg viewBox="0 0 256 256" width="92" height="92" role="img" aria-label="Klammr glyph"><defs><linearGradient id="gbar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f9bff"/><stop offset="1" stop-color="#b57cff"/></linearGradient></defs><rect x="117" y="81" width="22" height="94" rx="10" fill="url(#gbar)"/><g fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"><polyline points="103,68 70,68 70,188 103,188"/><polyline points="153,68 186,68 186,188 153,188"/></g></svg></div><b>Glyph</b>Any dark surface<span class="dl"><a href="brand/klammr-glyph.svg" download>SVG</a></span></div>
+        <div class="asset"><div class="box light"><svg viewBox="0 0 24 24" width="76" height="76" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Klammr mono mark"><polyline points="9.7,6.4 6.6,6.4 6.6,17.6 9.7,17.6"/><polyline points="14.3,6.4 17.4,6.4 17.4,17.6 14.3,17.6"/><line x1="12" y1="8.7" x2="12" y2="15.3"/></svg></div><b>Mono</b>Any single colour<span class="dl"><a href="brand/klammr-mark-mono.svg" download>SVG</a></span></div>
+        <div class="asset"><div class="box"><img src="brand/klammr-wordmark.svg" alt="Klammr wordmark" width="210" height="60"></div><b>Wordmark</b>Headers, docs, social<span class="dl"><a href="brand/klammr-wordmark.svg" download>SVG</a><a href="brand/social-card.svg" download>Social card</a></span></div>
       </div>
       <div class="palette">
         <div class="swatch"><i style="background:#0f1014"></i><div><b>Ink</b><code>#0F1014</code><br>Page and app background</div></div>
         <div class="swatch"><i style="background:#1a1d25"></i><div><b>Surface</b><code>#1A1D25</code><br>Cards, panels, inputs</div></div>
         <div class="swatch"><i style="background:#262a35"></i><div><b>Border</b><code>#262A35</code><br>Hairlines</div></div>
-        <div class="swatch"><i style="background:#eef0f6"></i><div><b>Mist</b><code>#EEF0F6</code><br>Primary text, the bracket</div></div>
+        <div class="swatch"><i style="background:#eef0f6"></i><div><b>Mist</b><code>#EEF0F6</code><br>Primary text, the brackets</div></div>
         <div class="swatch"><i style="background:#8b91a1"></i><div><b>Muted</b><code>#8B91A1</code><br>Secondary text</div></div>
         <div class="swatch"><i style="background:#7c8cff"></i><div><b>Violet</b><code>#7C8CFF</code><br>Focus, links, buttons</div></div>
         <div class="swatch"><i style="background:#b57cff"></i><div><b>Orchid</b><code>#B57CFF</code><br>Gradient end, editor cursor</div></div>
@@ -557,7 +557,7 @@ npm install ; npm run package ; product\install.cmd</code></pre>
       </div>
       <div class="brand-foot">
         <div class="spec"><p class="aa">Inter 700, −2%</p><p>UI and website. Headlines 700 with −0.02 em tracking, body 400 / 500.</p><div class="gradient-strip" role="img" aria-label="Accent gradient from violet to orchid"></div><p style="margin-top:8px">Accent gradient: the headline highlight, the primary action and the cursor bar only.</p></div>
-        <div class="spec"><p class="aa mono">const k = 1;</p><p>Code uses your editor font (JetBrains Mono by default on Omarchy). Please don't recolour the bracket, add shadows, or place the mark on the violet gradient.</p></div>
+        <div class="spec"><p class="aa mono">const k = 1;</p><p>Code uses your editor font (JetBrains Mono by default on Omarchy). Please don't recolour the brackets, add shadows, or place the mark on the violet gradient.</p></div>
       </div>
     </div>
   </section>
@@ -567,7 +567,7 @@ npm install ; npm run package ; product\install.cmd</code></pre>
       <h2 id="cta-title">Your editor, your Claude Code<span class="caret" aria-hidden="true"></span></h2>
       <p>Free and open source for Linux, macOS and Windows. Bring the Claude Code CLI you already use.</p>
       <div class="actions">
-        <a class="btn btn-primary" href="#install">Install Kursor</a>
+        <a class="btn btn-primary" href="#install">Install Klammr</a>
         <a class="btn" href="https://github.com/brucegrootgames/kursor">View on GitHub</a>
       </div>
     </section>
@@ -577,7 +577,7 @@ npm install ; npm run package ; product\install.cmd</code></pre>
 <footer class="footer">
   <div class="wrap">
     <div class="footer-row">
-      <a class="brand" href="#top"><img src="img/kursor.svg" alt="" width="24" height="24">Kursor</a>
+      <a class="brand" href="#top"><img src="img/klammr.svg" alt="" width="24" height="24">Klammr</a>
       <nav class="footer-links" aria-label="Project">
         <a href="https://github.com/brucegrootgames/kursor">Source</a>
         <a href="https://github.com/brucegrootgames/kursor/releases">Releases</a>
@@ -586,7 +586,7 @@ npm install ; npm run package ; product\install.cmd</code></pre>
         <a href="https://github.com/brucegrootgames/kursor/blob/main/docs/BRAND.md">Brand guide</a>
       </nav>
     </div>
-    <p class="footer-legal">© Kursor contributors · MIT License · Built on <a href="https://vscodium.com">VSCodium</a> and the <a href="https://code.claude.com/docs/en/agent-sdk/overview">Claude Agent SDK</a>. Not affiliated with Anthropic or Anysphere.</p>
+    <p class="footer-legal">© Klammr contributors · MIT License · Built on <a href="https://vscodium.com">VSCodium</a> and the <a href="https://code.claude.com/docs/en/agent-sdk/overview">Claude Agent SDK</a>. Not affiliated with Anthropic or Anysphere.</p>
   </div>
 </footer>
 

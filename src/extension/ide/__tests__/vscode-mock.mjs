@@ -68,7 +68,7 @@ export const commands = {
   registerCommand: (id, fn) => { state.commands.set(id, fn); return new Disposable(() => state.commands.delete(id)); },
   executeCommand: async (id, ...args) => { if (id === 'setContext') { state.contextKeys[args[0]] = args[1]; return; } const fn = state.commands.get(id); return fn ? fn(...args) : undefined; },
 };
-export const env = { appName: 'Kursor (mock)' };
+export const env = { appName: 'Klammr (mock)' };
 export class EnvCollection {
   constructor() { this.map = new Map(); this.persistent = true; this.description = undefined; }
   replace(k, v) { this.map.set(k, v); }

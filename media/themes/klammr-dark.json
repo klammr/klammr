@@ -1,6 +1,6 @@
 {
   "$schema": "vscode://schemas/color-theme",
-  "name": "Kursor Dark",
+  "name": "Klammr Dark",
   "type": "dark",
   "semanticHighlighting": true,
   "colors": {

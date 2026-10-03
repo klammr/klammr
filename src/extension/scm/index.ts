@@ -1,10 +1,10 @@
 /**
- * [D2] Commit message generation — `kursor.scm.generateCommitMessage`
+ * [D2] Commit message generation — `klammr.scm.generateCommitMessage`
  * (the $(sparkle) button in the Source Control title bar).
  *
  * Uses the built-in `vscode.git` extension API (typings in git.d.ts):
  * staged diff → else working-tree diff (+ untracked files rendered as new-file
- * hunks) → truncated to 60 kB → oneShot (model `kursor.commit.model`) →
+ * hunks) → truncated to 60 kB → oneShot (model `klammr.commit.model`) →
  * `repo.inputBox.value`. Progress is shown in the SCM view.
  */
 import * as vscode from 'vscode';
@@ -16,14 +16,14 @@ const REQUEST_TIMEOUT_MS = 120_000;
 
 export function registerScm(context: vscode.ExtensionContext, deps: BridgeDeps): void {
   context.subscriptions.push(
-    vscode.commands.registerCommand('kursor.scm.generateCommitMessage', async (arg?: unknown) => {
+    vscode.commands.registerCommand('klammr.scm.generateCommitMessage', async (arg?: unknown) => {
       try {
         await generateCommitMessage(deps, arg);
       } catch (e) {
         if (isAbortError(e)) return;
-        deps.log.error('kursor.scm.generateCommitMessage failed', e);
+        deps.log.error('klammr.scm.generateCommitMessage failed', e);
         const pick = await vscode.window.showErrorMessage(
-          `Kursor: could not generate a commit message — ${e instanceof Error ? e.message : String(e)}`,
+          `Klammr: could not generate a commit message — ${e instanceof Error ? e.message : String(e)}`,
           'Show Logs',
         );
         if (pick === 'Show Logs') deps.log.show();
@@ -38,20 +38,20 @@ async function generateCommitMessage(deps: BridgeDeps, arg: unknown): Promise<vo
   const api = await getGitApi();
   const repo = await pickRepository(api, arg);
   if (!repo) {
-    void vscode.window.showInformationMessage('Kursor: no git repository is open.');
+    void vscode.window.showInformationMessage('Klammr: no git repository is open.');
     return;
   }
 
   const ctx = await collectDiff(repo);
   if (!ctx) {
-    void vscode.window.showInformationMessage('Kursor: no changes to describe. Stage or modify files first.');
+    void vscode.window.showInformationMessage('Klammr: no changes to describe. Stage or modify files first.');
     return;
   }
-  const model = (vscode.workspace.getConfiguration('kursor.commit').get<string>('model', 'sonnet') || 'sonnet').trim();
+  const model = (vscode.workspace.getConfiguration('klammr.commit').get<string>('model', 'sonnet') || 'sonnet').trim();
   log.info(`commit message: ${ctx.kind} diff, ${ctx.files.length} file(s), ${ctx.diff.length} chars${ctx.truncated ? ' (truncated)' : ''}, model=${model}`);
 
   const message = await vscode.window.withProgress(
-    { location: vscode.ProgressLocation.SourceControl, title: 'Kursor: generating commit message…' },
+    { location: vscode.ProgressLocation.SourceControl, title: 'Klammr: generating commit message…' },
     async () => {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
@@ -75,7 +75,7 @@ async function generateCommitMessage(deps: BridgeDeps, arg: unknown): Promise<vo
   );
 
   if (!message) {
-    void vscode.window.showWarningMessage('Kursor: the model returned an empty commit message.');
+    void vscode.window.showWarningMessage('Klammr: the model returned an empty commit message.');
     return;
   }
   repo.inputBox.value = message;
@@ -132,7 +132,7 @@ async function pickRepository(api: API, arg: unknown): Promise<Repository | unde
       detail: `${r.state.indexChanges.length} staged · ${r.state.workingTreeChanges.length} changed · ${r.state.untrackedChanges.length} untracked`,
       repo: r,
     })),
-    { title: 'Kursor: which repository?', placeHolder: 'Generate a commit message for…' },
+    { title: 'Klammr: which repository?', placeHolder: 'Generate a commit message for…' },
   );
   return picked?.repo;
 }

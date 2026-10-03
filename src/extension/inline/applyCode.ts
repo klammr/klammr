@@ -1,9 +1,9 @@
 /**
  * "Apply" / "Insert at cursor" from chat code blocks:
- *   kursor.inlineEdit.applyCode { code, path?, language? } → whole-file vertical diff (with a
+ *   klammr.inlineEdit.applyCode { code, path?, language? } → whole-file vertical diff (with a
  *   "fast apply" merge through the model when the snippet is a fragment), or a diff at the
  *   active editor's selection / cursor when no path resolves;
- *   kursor.inlineEdit.insertAtCursor { code } → plain insertion.
+ *   klammr.inlineEdit.insertAtCursor { code } → plain insertion.
  */
 import * as vscode from 'vscode';
 import * as path from 'node:path';
@@ -200,7 +200,7 @@ export class ApplyCodeService {
     const base = path.isAbsolute(clean) ? undefined : vscode.workspace.workspaceFolders?.[0]?.uri;
     if (!path.isAbsolute(clean) && !base) return false;
     const uri = path.isAbsolute(clean) ? vscode.Uri.file(clean) : vscode.Uri.joinPath(base!, clean);
-    const pick = await vscode.window.showInformationMessage(`Kursor: ${vscode.workspace.asRelativePath(uri, false)} does not exist. Create it with this code?`, 'Create file', 'Apply to active editor');
+    const pick = await vscode.window.showInformationMessage(`Klammr: ${vscode.workspace.asRelativePath(uri, false)} does not exist. Create it with this code?`, 'Create file', 'Apply to active editor');
     if (pick !== 'Create file') return false;
     await vscode.workspace.fs.createDirectory(vscode.Uri.file(path.dirname(uri.fsPath)));
     await vscode.workspace.fs.writeFile(uri, Buffer.from(`${code}\n`, 'utf8'));
@@ -211,11 +211,11 @@ export class ApplyCodeService {
   }
 
   private noChanges(): void {
-    void vscode.window.setStatusBarMessage('$(info) Kursor: the file already matches this code', 4000);
+    void vscode.window.setStatusBarMessage('$(info) Klammr: the file already matches this code', 4000);
   }
 }
 
 function inlineModel(): string | undefined {
-  const model = vscode.workspace.getConfiguration('kursor').get<string>('inlineEdit.model', 'sonnet').trim();
+  const model = vscode.workspace.getConfiguration('klammr').get<string>('inlineEdit.model', 'sonnet').trim();
   return model || undefined;
 }

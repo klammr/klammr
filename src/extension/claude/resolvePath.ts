@@ -2,7 +2,7 @@
  * Resolve the user's `claude` executable.
  *
  * Order (ARCHITECTURE §[A], extended per platform):
- *   1. the `kursor.claude.path` setting (expanded `~`)
+ *   1. the `klammr.claude.path` setting (expanded `~`)
  *   2. platform lookup
  *      - Linux / macOS: `$SHELL -l -i -c 'command -v claude'` — the login shell sees
  *        mise/asdf/nvm/Homebrew paths the extension host's PATH usually lacks (5 s
@@ -42,7 +42,7 @@ export interface RunResult {
 export type Runner = (cmd: string, args: string[], timeout: number, env?: NodeJS.ProcessEnv) => Promise<RunResult>;
 
 export interface ResolveOptions {
-  /** Value of `kursor.claude.path` ('' = unset). */
+  /** Value of `klammr.claude.path` ('' = unset). */
   configuredPath?: string;
   log?: Logger;
   /** Overrides for tests. */
@@ -100,7 +100,7 @@ const defaultRun: Runner = (cmd, args, timeout, env) =>
  */
 export function queryLoginShell(shell: string = process.env.SHELL || '/bin/sh', log?: Logger, run: Runner = defaultRun, baseEnv: NodeJS.ProcessEnv = process.env): Promise<LoginShellResult> {
   if (loginShellCache && loginShellCache.key === shell) return loginShellCache.promise;
-  const marker = '__KURSOR_PATH__';
+  const marker = '__KLAMMR_PATH__';
   const script = `command -v claude 2>/dev/null; printf '\\n${marker}%s\\n' "$PATH"`;
   const env = { ...baseEnv };
   delete env.CLAUDECODE;
@@ -119,7 +119,7 @@ export function queryLoginShell(shell: string = process.env.SHELL || '/bin/sh', 
   return promise;
 }
 
-export function parseLoginShellOutput(stdout: string, marker = '__KURSOR_PATH__'): LoginShellResult {
+export function parseLoginShellOutput(stdout: string, marker = '__KLAMMR_PATH__'): LoginShellResult {
   const result: LoginShellResult = {};
   for (const raw of stdout.split(/\r?\n/)) {
     const line = raw.trim();
@@ -258,7 +258,7 @@ export async function unwrapWindowsShim(p: string, deps: WindowsLookupDeps): Pro
   } catch {
     /* keep the shim */
   }
-  deps.log?.warn(`${p} is a .cmd shim that could not be unwrapped; Claude Code sessions may fail to start. Prefer the native installer (claude.exe) or set kursor.claude.path.`);
+  deps.log?.warn(`${p} is a .cmd shim that could not be unwrapped; Claude Code sessions may fail to start. Prefer the native installer (claude.exe) or set klammr.claude.path.`);
   return p;
 }
 
@@ -308,7 +308,7 @@ export async function resolveClaudeExecutable(options: ResolveOptions = {}): Pro
   if (configured) {
     const p = expandHome(configured, home, platform);
     if (await isExecutable(p)) return { path: await unwrap(p), source: 'setting' };
-    log?.warn(`kursor.claude.path is set to "${configured}" but it is not an executable file; falling back to auto-detection`);
+    log?.warn(`klammr.claude.path is set to "${configured}" but it is not an executable file; falling back to auto-detection`);
   }
 
   let loginPath: string | undefined;

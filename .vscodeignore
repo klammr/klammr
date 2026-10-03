@@ -3,7 +3,7 @@
 node_modules/**
 src/**
 product/**
-!product/icons/kursor-256.png
+!product/icons/klammr-256.png
 **/*.map
 **/*.ts
 **/*.tsx

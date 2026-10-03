@@ -13,7 +13,7 @@ import { pathToFileURL } from 'node:url';
 import assert from 'node:assert/strict';
 
 const root = new URL('../../..', import.meta.url).pathname;
-const dir = mkdtempSync(join(process.env.SCRATCHPAD ?? tmpdir(), 'kursor-webview-test-'));
+const dir = mkdtempSync(join(process.env.SCRATCHPAD ?? tmpdir(), 'klammr-webview-test-'));
 const entry = join(dir, 'entry.ts');
 writeFileSync(
   entry,

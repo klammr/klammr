@@ -89,7 +89,7 @@ export function App() {
     return (
       <div className="app connecting">
         <Icon name="loading" spin />
-        <span>Loading Kursor settings…</span>
+        <span>Loading Klammr settings…</span>
       </div>
     );
   }

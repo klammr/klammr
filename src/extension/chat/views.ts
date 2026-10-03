@@ -1,6 +1,6 @@
 /**
- * Webview hosts: the `kursor.chat` side-bar view (WebviewViewProvider, retained
- * when hidden) and the "Open Chat in Editor" WebviewPanel (`kursor.chatPanel`).
+ * Webview hosts: the `klammr.chat` side-bar view (WebviewViewProvider, retained
+ * when hidden) and the "Open Chat in Editor" WebviewPanel (`klammr.chatPanel`).
  * Both load the same HTML and share the ChatManager/ChatStore. Messages posted
  * before a webview reports `ready` are queued (bounded) and flushed on ready.
  */
@@ -11,8 +11,8 @@ import { chatHtml } from './html';
 import type { ChatManager, WebviewHostLike } from './manager';
 import { DEFAULT_TITLE } from './state';
 
-export const VIEW_ID = 'kursor.chat';
-export const PANEL_VIEW_TYPE = 'kursor.chatPanel';
+export const VIEW_ID = 'klammr.chat';
+export const PANEL_VIEW_TYPE = 'klammr.chatPanel';
 const READY_QUEUE_LIMIT = 30;
 
 export type MessageHandler = (msg: WebviewToHost, host: WebviewHost) => Promise<void> | void;
@@ -147,7 +147,7 @@ export class ChatViewProvider implements vscode.WebviewViewProvider, vscode.Disp
     this.view = webviewView;
     webviewView.webview.options = { enableScripts: true, localResourceRoots: [vscode.Uri.joinPath(this.extensionUri, 'dist'), vscode.Uri.joinPath(this.extensionUri, 'media')] };
     webviewView.webview.html = chatHtml(webviewView.webview, this.extensionUri, 'view');
-    // The native title bar carries the chat title and actions ("Kursor: <chat>"); the webview adds a tab strip
+    // The native title bar carries the chat title and actions ("Klammr: <chat>"); the webview adds a tab strip
     // only when several chats are open.
     webviewView.title = this.manager.store.active()?.title || DEFAULT_TITLE;
     this.host?.dispose();
@@ -233,7 +233,7 @@ export class ChatPanelController implements vscode.Disposable {
       this.panel.reveal(undefined, false);
       return;
     }
-    const panel = vscode.window.createWebviewPanel(PANEL_VIEW_TYPE, 'Kursor Chat', { viewColumn: vscode.ViewColumn.Beside, preserveFocus: false }, {
+    const panel = vscode.window.createWebviewPanel(PANEL_VIEW_TYPE, 'Klammr Chat', { viewColumn: vscode.ViewColumn.Beside, preserveFocus: false }, {
       enableScripts: true,
       retainContextWhenHidden: true,
       enableFindWidget: true,
@@ -245,7 +245,7 @@ export class ChatPanelController implements vscode.Disposable {
   private attach(panel: vscode.WebviewPanel): void {
     this.panel?.dispose();
     this.panel = panel;
-    panel.iconPath = vscode.Uri.joinPath(this.context.extensionUri, 'media', 'kursor-activity.svg');
+    panel.iconPath = vscode.Uri.joinPath(this.context.extensionUri, 'media', 'klammr-activity.svg');
     panel.webview.options = { enableScripts: true, localResourceRoots: [vscode.Uri.joinPath(this.context.extensionUri, 'dist'), vscode.Uri.joinPath(this.context.extensionUri, 'media')] };
     panel.webview.html = chatHtml(panel.webview, this.context.extensionUri, 'panel');
     this.host?.dispose();

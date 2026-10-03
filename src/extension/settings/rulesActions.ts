@@ -1,5 +1,5 @@
 /**
- * "New Rule" (command `kursor.rules.new`): asks for a name and a rule type, writes
+ * "New Rule" (command `klammr.rules.new`): asks for a name and a rule type, writes
  * `.cursor/rules/<slug>.mdc` with Cursor's front-matter template and opens it.
  */
 import * as vscode from 'vscode';
@@ -83,7 +83,7 @@ async function pickFolder(preferred?: string): Promise<string | undefined> {
   if (folders.length === 1) return folders[0].path;
   const pick = await vscode.window.showQuickPick(
     folders.map((f) => ({ label: f.name, description: f.path, path: f.path })),
-    { title: 'New Kursor Rule — which folder?', placeHolder: 'Workspace folder' },
+    { title: 'New Klammr Rule — which folder?', placeHolder: 'Workspace folder' },
   );
   return pick?.path;
 }
@@ -108,7 +108,7 @@ export async function createNewRuleInteractive(log: Logger, preferredCwd?: strin
   if (!cwd) return undefined;
 
   const name = await vscode.window.showInputBox({
-    title: 'New Kursor Rule',
+    title: 'New Klammr Rule',
     prompt: 'Rule name (becomes .cursor/rules/<name>.mdc)',
     placeHolder: 'e.g. React components',
     validateInput: (v) => (v.trim().length === 0 ? 'Enter a name' : v.length > 120 ? 'Keep it under 120 characters' : undefined),
@@ -116,14 +116,14 @@ export async function createNewRuleInteractive(log: Logger, preferredCwd?: strin
   });
   if (name === undefined || !name.trim()) return undefined;
 
-  const typePick = await vscode.window.showQuickPick(RULE_TYPES, { title: `New Kursor Rule — "${name.trim()}"`, placeHolder: 'Rule type', ignoreFocusOut: true });
+  const typePick = await vscode.window.showQuickPick(RULE_TYPES, { title: `New Klammr Rule — "${name.trim()}"`, placeHolder: 'Rule type', ignoreFocusOut: true });
   if (!typePick) return undefined;
 
   let description: string | undefined;
   let globs: string[] | undefined;
   if (typePick.type === 'auto') {
     const globsText = await vscode.window.showInputBox({
-      title: 'New Kursor Rule — file patterns',
+      title: 'New Klammr Rule — file patterns',
       prompt: 'Comma-separated globs that attach this rule automatically',
       placeHolder: 'src/components/**/*.tsx, *.css',
       validateInput: (v) => (parseGlobsInput(v).length === 0 ? 'Enter at least one glob' : undefined),
@@ -134,7 +134,7 @@ export async function createNewRuleInteractive(log: Logger, preferredCwd?: strin
   }
   if (typePick.type === 'agent' || typePick.type === 'auto') {
     const desc = await vscode.window.showInputBox({
-      title: 'New Kursor Rule — description',
+      title: 'New Klammr Rule — description',
       prompt: typePick.type === 'agent' ? 'One line the agent uses to decide when this rule is relevant' : 'Optional one-line description',
       placeHolder: typePick.type === 'agent' ? 'Conventions for writing React components' : '',
       validateInput: (v) => (typePick.type === 'agent' && v.trim().length === 0 ? 'Agent-requested rules need a description' : undefined),

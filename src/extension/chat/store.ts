@@ -9,7 +9,7 @@ import type { ChatState, ChatSummary } from '../../shared/protocol';
 import type { Logger } from '../util/log';
 import { DEFAULT_TITLE, trimForPersistence } from './state';
 
-const STORAGE_KEY = 'kursor.chats.v1';
+const STORAGE_KEY = 'klammr.chats.v1';
 export const MAX_OPEN_CHATS = 20;
 
 interface Persisted {

@@ -37,7 +37,7 @@ function truncate(text: string, max: number): string {
 
 export function buildEditSystemPrompt(rulesAppendix?: string): string {
   const parts = [
-    `You are the inline code editor of the Kursor IDE. You rewrite exactly one region of a source file according to the user's instruction.`,
+    `You are the inline code editor of the Klammr IDE. You rewrite exactly one region of a source file according to the user's instruction.`,
     ``,
     `Output rules (strict):`,
     `1. Reply with ONLY the code that replaces the <region>…</region> block. No explanations, no markdown fences, no "Here is", no file path, no tags.`,
@@ -115,7 +115,7 @@ export interface MergePromptInput {
 /** "Fast apply": merge a partial snippet from the chat into the full file. */
 export function buildMergePrompt(input: MergePromptInput): BuiltPrompt {
   const systemPrompt = [
-    `You are a code merge engine inside the Kursor IDE. You receive the current contents of a file and a code snippet produced by an assistant that should be applied to the file.`,
+    `You are a code merge engine inside the Klammr IDE. You receive the current contents of a file and a code snippet produced by an assistant that should be applied to the file.`,
     `The snippet may be partial and may use placeholders such as "// ... existing code ..." to stand for unchanged code.`,
     `Output the COMPLETE updated file with the snippet integrated: replace the parts the snippet rewrites, keep everything else byte-for-byte, expand every placeholder with the original code.`,
     `Reply with ONLY the file contents — no markdown fences, no commentary, no tags.`,

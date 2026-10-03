@@ -1,4 +1,4 @@
-import { KursorMark } from '../../shared/Logo';
+import { KlammrMark } from '../../shared/Logo';
 import type { AppState } from '../../shared/protocol';
 import { post } from '../vscode';
 import { Icon } from './Icon';
@@ -16,11 +16,11 @@ export function SignInPanel({ claude }: { claude: AppState['claude'] }) {
           <span>{claude.error}</span>
         ) : claude.loggedIn === false ? (
           <span>
-            Kursor uses the <code>claude</code> command installed on this machine with your own login. Sign in to start chatting.
+            Klammr uses the <code>claude</code> command installed on this machine with your own login. Sign in to start chatting.
           </span>
         ) : (
           <span>
-            Kursor needs the <code>claude</code> command (Claude Code CLI) installed on this machine.
+            Klammr needs the <code>claude</code> command (Claude Code CLI) installed on this machine.
           </span>
         )}
         {claude.path && (
@@ -32,14 +32,14 @@ export function SignInPanel({ claude }: { claude: AppState['claude'] }) {
       </div>
       <div className="signin-actions">
         {!notFound && (
-          <button type="button" className="btn primary" onClick={() => post({ type: 'runCommand', command: 'kursor.claude.login' })}>
+          <button type="button" className="btn primary" onClick={() => post({ type: 'runCommand', command: 'klammr.claude.login' })}>
             <Icon name="sign-in" /> Sign in
           </button>
         )}
-        <button type="button" className="btn" onClick={() => post({ type: 'runCommand', command: 'workbench.action.openSettings', args: ['kursor.claude.path'] })}>
+        <button type="button" className="btn" onClick={() => post({ type: 'runCommand', command: 'workbench.action.openSettings', args: ['klammr.claude.path'] })}>
           <Icon name="settings" /> Set path
         </button>
-        <button type="button" className="btn ghost" onClick={() => post({ type: 'runCommand', command: 'kursor.claude.status' })}>
+        <button type="button" className="btn ghost" onClick={() => post({ type: 'runCommand', command: 'klammr.claude.status' })}>
           <Icon name="refresh" /> Re-check
         </button>
       </div>
@@ -60,8 +60,8 @@ export function EmptyState({ app }: { app: AppState }) {
   return (
     <div className="empty">
       <div className="empty-inner">
-        <KursorMark className="logo" size={48} />
-        <div className="empty-title">Kursor</div>
+        <KlammrMark className="logo" size={48} />
+        <div className="empty-title">Klammr</div>
         {needsAttention ? (
           <SignInPanel claude={claude} />
         ) : (

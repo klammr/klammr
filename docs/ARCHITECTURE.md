@@ -1,6 +1,6 @@
-# Kursor — architecture & implementation brief
+# Klammr — architecture & implementation brief
 
-Kursor is a Cursor clone: a rebranded VSCodium plus this VS Code extension. Every AI feature is powered by the
+Klammr is a Cursor clone: a rebranded VSCodium plus this VS Code extension. Every AI feature is powered by the
 **Claude Code CLI already installed on the user's machine** (`~/.local/bin/claude`, currently 2.1.263, signed in with
 the user's own Claude Max login). We never touch credentials: we spawn the unmodified `claude` binary and it uses its
 own auth. Target platform: Omarchy (Arch Linux + Hyprland, Wayland).
@@ -16,8 +16,8 @@ excerpts; they are authoritative over memory):
 
 ## Branding / compliance (non-negotiable)
 
-- Product name is **Kursor**. Never name anything "Claude Code" or "Claude" as a product/feature name. UI copy may say, in plain text, "powered by the Claude Code CLI installed on your machine".
-- We spawn the user's own unmodified `claude` binary; the extension never reads, stores or forwards tokens/credentials. If the CLI is not signed in, show a "Sign in" action that runs `claude auth login` in a terminal (`kursor.claude.login`).
+- Product name is **Klammr**. Never name anything "Claude Code" or "Claude" as a product/feature name. UI copy may say, in plain text, "powered by the Claude Code CLI installed on your machine".
+- We spawn the user's own unmodified `claude` binary; the extension never reads, stores or forwards tokens/credentials. If the CLI is not signed in, show a "Sign in" action that runs `claude auth login` in a terminal (`klammr.claude.login`).
 - Tab completions burn the user's subscription window: keep them debounced and cheap (Haiku, tiny prompts).
 
 ## Repo layout & ownership
@@ -34,17 +34,17 @@ src/extension/claude/**          [A] bridge over @anthropic-ai/claude-agent-sdk 
 src/extension/rules/**           [A] Cursor rules (.cursor/rules/*.mdc, .cursorrules, AGENTS.md, user rules)
 src/extension/chat/**            [B] chat view host: sessions, prompt composition, permissions, history, export, commands
 src/extension/context/**         [B] @-mention search (ripgrep), problems/git/terminal/selection context providers, terminal output capture
-src/extension/edits/**           [B] EditTracker: agent edit snapshots, Keep/Undo/Review, inline decorations + CodeLens, kursor.edits.* commands
+src/extension/edits/**           [B] EditTracker: agent edit snapshots, Keep/Undo/Review, inline decorations + CodeLens, klammr.edits.* commands
 src/webview/**                   [C] React chat UI (dist/webview.js)
 src/extension/inline/**          [D1] Ctrl+K inline edit: vertical red/green diff engine, CodeLens accept/reject, prompt UI, apply-from-chat
 src/extension/tab/**             [D2] Tab ghost-text completions + status bar item
 src/extension/terminal/**        [D2] Ctrl+K in terminal (generate command)
 src/extension/scm/**             [D2] commit message generation
 src/extension/actions/**         [D2] lightbulb code actions (Fix in Chat / Add to Chat / Explain)
-src/extension/settings/**        [F] "Kursor Settings" webview panel host
+src/extension/settings/**        [F] "Klammr Settings" webview panel host
 src/webview-settings/**          [F] settings panel UI (dist/settings.js)
 src/extension/ide/**             [E] IDE bridge for a `claude` running in the integrated terminal (~/.claude/ide/<port>.lock, ws MCP server)
-media/**                         icons, media/themes/kursor-dark.json [G]
+media/**                         icons, media/themes/klammr-dark.json [G]
 product/**                       [G] installer: VSCodium download/rebrand, wrapper, desktop entry, Omarchy theme hook, default settings/keybindings
 README.md, docs/**               [G] user docs
 ```
@@ -70,9 +70,9 @@ Rules for every agent:
 
 ## Product decisions (from research)
 
-- Chat lives in the **secondary side bar** (`contributes.viewsContainers.secondarySidebar`, view id `kursor.chat`).
-  `workbench.view.extension.kursor` opens the container; `kursor.chat.focus` focuses the view.
-- Modes (Cursor): **Agent** (edits + commands; Claude Code permission mode from `kursor.agent.permissionMode`, default
+- Chat lives in the **secondary side bar** (`contributes.viewsContainers.secondarySidebar`, view id `klammr.chat`).
+  `workbench.view.extension.klammr` opens the container; `klammr.chat.focus` focuses the view.
+- Modes (Cursor): **Agent** (edits + commands; Claude Code permission mode from `klammr.agent.permissionMode`, default
   `acceptEdits` = edits auto-applied, terminal commands prompt), **Ask** (read-only: disallow `Edit`, `Write`,
   `NotebookEdit`; commands prompt), **Plan** (Claude Code native `plan` permission mode; the `ExitPlanMode` approval
   is rendered as a plan card with **Build** / **Reject**).
@@ -83,11 +83,11 @@ Rules for every agent:
   Code's `rewindFiles(userMessageUuid)` (files only; conversation is kept, like Cursor).
 - Ctrl+K inline edit: Continue-style in-place vertical diff (red placeholder lines + green lines + CodeLens
   Accept/Reject per block, Ctrl+Enter / Ctrl+Backspace for all).
-- Tab: `InlineCompletionItemProvider` ghost text, debounced (`kursor.tab.debounceMs`), Haiku by default, cancellable.
+- Tab: `InlineCompletionItemProvider` ghost text, debounced (`klammr.tab.debounceMs`), Haiku by default, cancellable.
   A fresh CLI round trip is ≈2.5 s, so never fire per keystroke.
 - Keybindings, commands, settings: see `package.json` (authoritative). Context keys we set with `setContext`:
-  `kursor.chatRunning`, `kursor.hasPendingEdits`, `kursor.inlineDiffVisible`, `kursor.inlineDiffResource` (fsPath),
-  `kursor.inlineEditInputFocus`.
+  `klammr.chatRunning`, `klammr.hasPendingEdits`, `klammr.inlineDiffVisible`, `klammr.inlineDiffResource` (fsPath),
+  `klammr.inlineEditInputFocus`.
 
 ## Contracts
 
@@ -100,7 +100,7 @@ Read these files in full before writing code: `src/shared/protocol.ts`, `src/ext
 
 - `import { query } from '@anthropic-ai/claude-agent-sdk'` (types from `sdk.d.ts`; esbuild bundles it into CJS — already
   verified). Always pass `pathToClaudeCodeExecutable` = resolved user binary. Resolution order: setting
-  `kursor.claude.path` → `$SHELL -lic 'command -v claude'` (login shell, 5 s timeout, cache result) →
+  `klammr.claude.path` → `$SHELL -lic 'command -v claude'` (login shell, 5 s timeout, cache result) →
   `~/.local/bin/claude` → `~/.local/share/mise/shims/claude` → `which claude` in process env. Never fall back to the
   SDK's bundled binary silently (it is not packaged in the .vsix); if nothing is found, `status()` returns `ok:false`
   with a helpful error.
@@ -143,23 +143,23 @@ Read these files in full before writing code: `src/shared/protocol.ts`, `src/ext
 - History: use the SDK exports (`listSessions`, `getSessionMessages`, `deleteSession` — check their signatures in
   `sdk.d.ts`); fall back to reading `~/.claude/projects/<cwd with '/' → '-'>/*.jsonl`.
 - `rules/rules.ts`: parse `.cursor/rules/*.mdc` front matter (`description`, `globs` comma-separated, `alwaysApply`),
-  `.cursorrules` (legacy, treated as always), root `AGENTS.md` (always). User rules from `kursor.rules.user`.
+  `.cursorrules` (legacy, treated as always), root `AGENTS.md` (always). User rules from `klammr.rules.user`.
   `buildAppendix(cwd, contextPaths)` → markdown: "# User rules", "# Project rules (always)", auto rules whose globs
   match any context path, and an index of description/manual rules ("Read `<path>` when relevant"). Cap at 60k chars.
   Watch with `FileSystemWatcher` and fire `onDidChange`.
 
 ### [B] `chat/**`, `context/**`, `edits/**` — chat host
 
-- `ChatViewProvider` for `kursor.chat` (`retainContextWhenHidden: true`), CSP with nonce, loads `dist/webview.js`,
-  `dist/codicon.css` (font-src cspSource). Also `kursor.chat.openInEditor` → a `WebviewPanel` (viewType
-  `kursor.chatPanel`) hosting the same UI; both views share one `ChatStore`.
+- `ChatViewProvider` for `klammr.chat` (`retainContextWhenHidden: true`), CSP with nonce, loads `dist/webview.js`,
+  `dist/codicon.css` (font-src cspSource). Also `klammr.chat.openInEditor` → a `WebviewPanel` (viewType
+  `klammr.chatPanel`) hosting the same UI; both views share one `ChatStore`.
 - `ChatStore`: chats (`ChatState`), active chat, per-chat `ClaudeSession` (created lazily on first send with
   `cwd` = workspace folder of the active file or first folder; `appendSystemPrompt` = rules appendix + a short
-  "You are running inside the Kursor editor…" note). Persist chats (messages capped to last 200, tool outputs capped
+  "You are running inside the Klammr editor…" note). Persist chats (messages capped to last 200, tool outputs capped
   to 20 kB) in `context.workspaceState`; on reload, sessions are re-created with `resume`.
 - Prompt composition for `send`: user text, then for each attachment: files/folders → "Attached: `relPath`" (Claude reads
   them with its tools), selection/diagnostic/problems/terminal/git → the text inside fenced blocks with a heading;
-  images → content blocks; when `kursor.agent.attachOpenFile` → append "Active file: `relPath` (cursor at L{n},
+  images → content blocks; when `klammr.agent.attachOpenFile` → append "Active file: `relPath` (cursor at L{n},
   selection L{a}-{b})". Slash commands typed by the user (`/review …`) are passed through verbatim (Claude Code
   expands them).
 - Streaming: on `blockDelta` (text/thinking) post `textDelta`; on `assistantBlock`/`toolResult`/permission/result
@@ -170,10 +170,10 @@ Read these files in full before writing code: `src/shared/protocol.ts`, `src/ext
 - Queue semantics: `send` while running → message appended with `queued: true`, then `session.send()` (Claude Code
   queues it); clear `queued` on `userReplay`. `sendNow` → `interrupt()` then send.
 - Permission/question/plan cards → `session.respondPermission`. When a permission arrives and the view is not
-  visible: set `webviewView.badge` and, if `kursor.agent.notifyOnPermission`, `showInformationMessage` with "Open".
+  visible: set `webviewView.badge` and, if `klammr.agent.notifyOnPermission`, `showInformationMessage` with "Open".
 - Checkpoint restore: confirm (modal) → `session.rewindFiles(uuid)` → `edits.clear(chatId)` → system note.
-- Commands: all `kursor.chat.*` from `package.json`. `kursor.chat.open` toggles: if the view is visible and focused,
-  `workbench.action.closeAuxiliaryBar`; else `kursor.chat.focus`. `addSelectionToNewChat` (Ctrl+L): with a selection
+- Commands: all `klammr.chat.*` from `package.json`. `klammr.chat.open` toggles: if the view is visible and focused,
+  `workbench.action.closeAuxiliaryBar`; else `klammr.chat.focus`. `addSelectionToNewChat` (Ctrl+L): with a selection
   → new chat + selection attachment; without → same as open. `addSelectionToChat` (Ctrl+Shift+L) → attachment on the
   active chat. `fixDiagnostic(uri, diagnostic)` → sendPrompt "Fix this problem: …" with a `diagnostic` attachment.
   `addTerminalSelection` → `workbench.action.terminal.copySelection` then clipboard (restore the previous clipboard).
@@ -188,12 +188,12 @@ Read these files in full before writing code: `src/shared/protocol.ts`, `src/ext
   → `read()`), keep the last 64 kB per terminal (strip ANSI), expose `lastOutput(terminal?)`.
 - `edits/editTracker.ts`: model per file `{base, current, chatId, toolUseIds, isNew}`; stats with jsdiff
   `diffLines`; `keep` → forget; `undo` → restore base (WorkspaceEdit if the doc is open, else `workspace.fs`; delete if
-  `isNew`); `review(path)` → `vscode.diff(Uri kursor-orig:<fsPath>?v=N, file uri, "name (Original ↔ Kursor)")` with a
-  `TextDocumentContentProvider`; `review()` (all) → `vscode.changes("Kursor edits", [[fileUri, origUri, fileUri]…])`.
-  Inline diffs (`kursor.agent.inlineDiffs`): whole-line decorations (`ThemeColor('kursor.addedLineBackground')`) on
+  `isNew`); `review(path)` → `vscode.diff(Uri klammr-orig:<fsPath>?v=N, file uri, "name (Original ↔ Klammr)")` with a
+  `TextDocumentContentProvider`; `review()` (all) → `vscode.changes("Klammr edits", [[fileUri, origUri, fileUri]…])`.
+  Inline diffs (`klammr.agent.inlineDiffs`): whole-line decorations (`ThemeColor('klammr.addedLineBackground')`) on
   added lines from `structuredPatch(base, current, {context:0})`, CodeLens "Keep · Undo" per hunk
-  (`kursor.edits.keepHunk/undoHunk` with `[fsPath, hunkIndex]`), refresh on document change (recompute against base).
-  Register all `kursor.edits.*` commands here; set `kursor.hasPendingEdits`; status bar item
+  (`klammr.edits.keepHunk/undoHunk` with `[fsPath, hunkIndex]`), refresh on document change (recompute against base).
+  Register all `klammr.edits.*` commands here; set `klammr.hasPendingEdits`; status bar item
   `$(diff-multiple) N files · Review` while pending.
 
 ### [C] `src/webview/**` — chat UI (React 18, esbuild iife, CSS in `src/webview/styles.css` imported from main.tsx)
@@ -231,19 +231,19 @@ only appears as a tab strip for several chats; the editor panel (`data-host="pan
   (with effort submenu when supported; **Ctrl+/** cycles), context ring (percent, tooltip breakdown), send button
   that becomes **Stop** while running. Enter sends (Shift+Enter newline); Ctrl+Enter = send now (bypass queue);
   Esc blurs; while running Enter queues.
-- Empty state: Kursor logo + hints ("Ctrl+K to edit code, Tab to complete, @ to add context"), and when
-  `claude.ready` is false an error/sign-in panel with a "Sign in" button (`runCommand kursor.claude.login`) and
-  "Set path" (`runCommand workbench.action.openSettings kursor.claude.path`).
+- Empty state: Klammr logo + hints ("Ctrl+K to edit code, Tab to complete, @ to add context"), and when
+  `claude.ready` is false an error/sign-in panel with a "Sign in" button (`runCommand klammr.claude.login`) and
+  "Set path" (`runCommand workbench.action.openSettings klammr.claude.path`).
 - History view (toggled by `showHistory`/header button): list of `HistoryEntry` with resume/delete; search box.
 - Persist UI-only state with `vscode.setState` (`WebviewUiState`). Keep `main.tsx` small; split components under
   `src/webview/components/`.
 
 ### [D1] `inline/**` — Ctrl+K inline edit
 
-- `kursor.inlineEdit.open`: capture editor + selection (or the current line when empty). Prompt UI: `createQuickPick`
+- `klammr.inlineEdit.open`: capture editor + selection (or the current line when empty). Prompt UI: `createQuickPick`
   titled `Edit <file>:<a>-<b>` (or "Insert at line n"), `placeholder` "Instructions… (Enter to edit, or pick an
   action)", items: "✎ Edit selection", "? Quick question", "📄 Edit whole file", "→ Send to chat", plus a
-  "History" section of previous prompts (workspaceState). Set `kursor.inlineEditInputFocus` while open. Highlight the
+  "History" section of previous prompts (workspaceState). Set `klammr.inlineEditInputFocus` while open. Highlight the
   target range with a `editor.selectionHighlightBackground` whole-line decoration while generating.
 - Generation via `bridge.oneShot` with a strict system prompt: return ONLY the replacement code for the range (no
   fences, no prose), preserve indentation/style; include language id, file path, ±60 lines of context around the range
@@ -251,45 +251,45 @@ only appears as a tab strip for several chats; the editor panel (`data-host="pan
   keep leading indentation of the original first line if the model lost it.
 - Diff engine: port Continue's vertical diff (reference-impls.md §1): compute `diffLines(old, new)` from jsdiff and
   apply blocks: old lines stay as **red placeholder lines** (empty lines inserted, decorated with the old text via
-  `after.contentText`, `textDecoration: 'none; display: none'`, `ThemeColor('kursor.removedLineBackground')`),
+  `after.contentText`, `textDecoration: 'none; display: none'`, `ThemeColor('klammr.removedLineBackground')`),
   new lines inserted as real text with a green whole-line decoration; one CodeLens pair "Accept · Reject" per block
-  (`kursor.inlineEdit.acceptBlock/rejectBlock [fsPath, blockIndex]`); `acceptAll`/`rejectAll` (Ctrl+Enter /
+  (`klammr.inlineEdit.acceptBlock/rejectBlock [fsPath, blockIndex]`); `acceptAll`/`rejectAll` (Ctrl+Enter /
   Ctrl+Backspace / Ctrl+Z). Use `editor.edit(cb, {undoStopBefore:false, undoStopAfter:false})`; keep block
-  bookkeeping updated on document changes (shift line numbers); set `kursor.inlineDiffVisible` and
-  `kursor.inlineDiffResource`; when the last block is resolved, clear everything. Streaming feel: while waiting show a
-  status-bar spinner "$(loading~spin) Kursor: editing…" and allow Esc to cancel (abort signal).
+  bookkeeping updated on document changes (shift line numbers); set `klammr.inlineDiffVisible` and
+  `klammr.inlineDiffResource`; when the last block is resolved, clear everything. Streaming feel: while waiting show a
+  status-bar spinner "$(loading~spin) Klammr: editing…" and allow Esc to cancel (abort signal).
 - Follow-up: after the diff is shown, Ctrl+K again on the same range re-opens the prompt; a new instruction rejects
   the current diff first.
 - Quick question → `chat.sendPrompt(question, [selection attachment], {mode:'ask'})`. Send to chat →
   `chat.addAttachment(selection)` + insert text.
-- Register hidden command `kursor.inlineEdit.applyCode` with args `{ code: string; path?: string; language?: string }`
+- Register hidden command `klammr.inlineEdit.applyCode` with args `{ code: string; path?: string; language?: string }`
   (used by the chat "Apply" button): if `path` resolves to a file, open it and show a whole-file vertical diff of
   current → code (if `code` looks like a fragment, ask Claude via `oneShot` to merge it into the file first — "fast
-  apply"); else apply to the active editor selection/cursor. Also `kursor.inlineEdit.insertAtCursor {code}`.
+  apply"); else apply to the active editor selection/cursor. Also `klammr.inlineEdit.insertAtCursor {code}`.
 
 ### [D2] `tab/**`, `terminal/**`, `scm/**`, `actions/**`
 
 - Tab: `registerInlineCompletionItemProvider({scheme:'file'}|{scheme:'untitled'})`. Skip when disabled, language in
-  `kursor.tab.disabledLanguages`, or `context.selectedCompletionInfo` is set. Debounce with a timer + the
+  `klammr.tab.disabledLanguages`, or `context.selectedCompletionInfo` is set. Debounce with a timer + the
   `CancellationToken` (abort the CLI request when cancelled). Prompt: FIM-style system prompt ("You are a code
   completion engine… output only the text to insert at <CURSOR>, no fences, at most 8 lines, stop when the code after
-  the cursor already continues") with `kursor.tab.contextLines` of prefix/suffix and the language id; model
-  `kursor.tab.model`. Sanitize: strip fences, remove overlap with the existing suffix on the same line, trim trailing
+  the cursor already continues") with `klammr.tab.contextLines` of prefix/suffix and the language id; model
+  `klammr.tab.model`. Sanitize: strip fences, remove overlap with the existing suffix on the same line, trim trailing
   newline, reject empty/whitespace. Cache last result by (uri, version, position). Status bar item (right,
-  `$(sparkle) Kursor Tab` / `$(sparkle) Tab: off` / snoozed) → `kursor.tab.statusMenu` QuickPick: Enable/Disable,
-  Snooze 30 min, Disable for <language>. `kursor.tab.trigger` → `editor.action.inlineSuggest.trigger`.
-- Terminal Ctrl+K (`kursor.terminal.generate`): `showInputBox` "Describe the command…"; context = shell
+  `$(sparkle) Klammr Tab` / `$(sparkle) Tab: off` / snoozed) → `klammr.tab.statusMenu` QuickPick: Enable/Disable,
+  Snooze 30 min, Disable for <language>. `klammr.tab.trigger` → `editor.action.inlineSuggest.trigger`.
+- Terminal Ctrl+K (`klammr.terminal.generate`): `showInputBox` "Describe the command…"; context = shell
   (`terminal.state.shell` or `$SHELL`), cwd (`terminal.shellIntegration?.cwd`), OS; `oneShot` → single command line;
   then QuickPick: "▶ Run" (sendText(cmd, true)), "⎘ Insert" (sendText(cmd, false)), "✎ Edit prompt"; Esc inserts.
-- SCM (`kursor.scm.generateCommitMessage`): git API `vscode.git` → active/first repo; `repo.diff(true)` (staged) else
+- SCM (`klammr.scm.generateCommitMessage`): git API `vscode.git` → active/first repo; `repo.diff(true)` (staged) else
   `repo.diff()`; if empty, tell the user; truncate 60 kB; `oneShot` → conventional-commit style message (summary ≤72
   chars + optional body); `repo.inputBox.value = msg`; `withProgress` in the SCM view.
 - Actions: `CodeActionProvider` for `{scheme:'file'}`: for each diagnostic in `context.diagnostics` a QuickFix
-  "Fix in Chat" → `kursor.chat.fixDiagnostic(uri, diagnostic)`; when there is a selection: "Add to Chat"
-  (`kursor.chat.addSelectionToChat`), "Explain with Kursor" (`kursor.chat.explainSelection`), "Edit with Kursor (Ctrl+K)"
-  (`kursor.inlineEdit.open`). Provide `providedCodeActionKinds: [QuickFix, Refactor]`.
+  "Fix in Chat" → `klammr.chat.fixDiagnostic(uri, diagnostic)`; when there is a selection: "Add to Chat"
+  (`klammr.chat.addSelectionToChat`), "Explain with Klammr" (`klammr.chat.explainSelection`), "Edit with Klammr (Ctrl+K)"
+  (`klammr.inlineEdit.open`). Provide `providedCodeActionKinds: [QuickFix, Refactor]`.
 
-### [E] `ide/**` — IDE bridge (so `claude` in the integrated terminal integrates with Kursor)
+### [E] `ide/**` — IDE bridge (so `claude` in the integrated terminal integrates with Klammr)
 
 Implement what the official extension does (reference-impls.md §4.4, all-results.md E.3): WebSocket server
 (`ws`) on 127.0.0.1 random port 10000–65535, lock file `~/.claude/ide/<port>.lock` = `{pid: process.ppid,
@@ -300,56 +300,56 @@ dir 0700, rewritten on workspace change, deleted on dispose), header check `x-cl
 `openFile`, `getDiagnostics`, `getOpenEditors`, `getWorkspaceFolders`, `getCurrentSelection`, `getLatestSelection`,
 `checkDocumentDirty`, `saveDocument`, `close_tab`, `closeAllDiffTabs`, `openDiff(old_file_path, new_file_path,
 new_file_contents, tab_name)` (open `vscode.diff` with an in-memory right side; resolve `FILE_SAVED` + contents on
-accept (editor/title buttons or save) or `DIFF_REJECTED` when the tab closes — reuse `kursor-ide-left`/`kursor-ide-right`
+accept (editor/title buttons or save) or `DIFF_REJECTED` when the tab closes — reuse `klammr-ide-left`/`klammr-ide-right`
 `FileSystemProvider` schemes), and notifications `selection_changed` (debounced 100 ms, `{text, filePath, fileUrl,
-selection:{start,end,isEmpty}}`) and `at_mentioned` (command `kursor.ide.insertAtMention`, add a keybinding? no —
-command only). Gate on `kursor.ide.enableServer`. Log connections.
+selection:{start,end,isEmpty}}`) and `at_mentioned` (command `klammr.ide.insertAtMention`, add a keybinding? no —
+command only). Gate on `klammr.ide.enableServer`. Log connections.
 
-### [F] `settings/**` + `src/webview-settings/**` — "Kursor Settings" (Ctrl+Shift+J)
+### [F] `settings/**` + `src/webview-settings/**` — "Klammr Settings" (Ctrl+Shift+J)
 
-`WebviewPanel` (viewType `kursor.settings`, singleton, `retainContextWhenHidden`), React UI with a left tab list:
+`WebviewPanel` (viewType `klammr.settings`, singleton, `retainContextWhenHidden`), React UI with a left tab list:
 **General** (Claude status card: path, version, signed-in email/plan, buttons Sign in / Re-check / Change path;
 "Open VS Code settings"), **Agents** (default mode, permission mode radio with the Cursor-style descriptions,
 inline diffs, auto-save, attach open file, notify on permission), **Tab** (enabled, debounce, model, disabled
 languages), **Models** (default model + effort; presets: default/opus/sonnet/haiku/fable + free text; inline-edit,
-terminal and commit models), **Rules** (User Rules textarea → `kursor.rules.user`; project rules list from
+terminal and commit models), **Rules** (User Rules textarea → `klammr.rules.user`; project rules list from
 `rules.listProjectRules` with Open buttons; "New Rule" → creates `.cursor/rules/<slug>.mdc` with front matter
-template and opens it — also registered as `kursor.rules.new`), **Indexing** (explain `.cursorignore`/`.gitignore`
+template and opens it — also registered as `klammr.rules.new`), **Indexing** (explain `.cursorignore`/`.gitignore`
 handling, button to open/create `.cursorignore`), **About** (version, links). Read/write settings with
-`workspace.getConfiguration('kursor')` (`ConfigurationTarget.Global`), refresh on `onDidChangeConfiguration`.
+`workspace.getConfiguration('klammr')` (`ConfigurationTarget.Global`), refresh on `onDidChangeConfiguration`.
 Protocol: define `src/shared/settingsProtocol.ts` (yours).
 
-### [G] `product/**`, `media/themes/kursor-dark.json`, `README.md`
+### [G] `product/**`, `media/themes/klammr-dark.json`, `README.md`
 
 See vscodium.md §8 and omarchy.md §8 (recipes are verified against this machine). Deliver:
 
 - `product/install.sh` (idempotent, `set -euo pipefail`, no sudo): download+sha256-verify VSCodium 1.135.06055 into
-  `~/.cache/kursor` (skip if present), extract to `~/.local/opt/kursor` (replace), rename `codium`→`kursor`,
-  `bin/codium`→`bin/kursor` (+ fix the launcher script), patch `resources/app/product.json` (nameShort/nameLong
-  Kursor, applicationName kursor, dataFolderName .kursor, urlProtocol kursor, licence/report URLs; keep version,
-  commit, checksums, gallery), patch `resources/app/package.json` (`name: Kursor`, `desktopName: kursor.desktop`),
-  replace `resources/app/resources/linux/code.png` with `product/icons/kursor-1024.png`, install hicolor icons
-  (256/512/scalable svg), `~/.local/bin/kursor` wrapper (flags file `~/.config/kursor-flags.conf`; Wayland flags only
-  when `WAYLAND_DISPLAY` is set), `~/.local/share/applications/kursor.desktop` + `kursor-url-handler.desktop`
-  (absolute Exec, `StartupWMClass=kursor`, `MimeType=text/plain;inode/directory;application/x-kursor-workspace;`),
-  `update-desktop-database`, `gtk-update-icon-cache`, seed `~/.kursor/argv.json` (`password-store: gnome-libsecret`),
-  seed `~/.config/Kursor/User/settings.json` **only if missing** (Cursor-like defaults: `window.titleBarStyle custom`,
+  `~/.cache/klammr` (skip if present), extract to `~/.local/opt/klammr` (replace), rename `codium`→`klammr`,
+  `bin/codium`→`bin/klammr` (+ fix the launcher script), patch `resources/app/product.json` (nameShort/nameLong
+  Klammr, applicationName klammr, dataFolderName .klammr, urlProtocol klammr, licence/report URLs; keep version,
+  commit, checksums, gallery), patch `resources/app/package.json` (`name: Klammr`, `desktopName: klammr.desktop`),
+  replace `resources/app/resources/linux/code.png` with `product/icons/klammr-1024.png`, install hicolor icons
+  (256/512/scalable svg), `~/.local/bin/klammr` wrapper (flags file `~/.config/klammr-flags.conf`; Wayland flags only
+  when `WAYLAND_DISPLAY` is set), `~/.local/share/applications/klammr.desktop` + `klammr-url-handler.desktop`
+  (absolute Exec, `StartupWMClass=klammr`, `MimeType=text/plain;inode/directory;application/x-klammr-workspace;`),
+  `update-desktop-database`, `gtk-update-icon-cache`, seed `~/.klammr/argv.json` (`password-store: gnome-libsecret`),
+  seed `~/.config/Klammr/User/settings.json` **only if missing** (Cursor-like defaults: `window.titleBarStyle custom`,
   `window.commandCenter true`, `workbench.activityBar.location top`, `workbench.secondarySideBar.defaultVisibility
   visible`, `workbench.startupEditor none`, `security.workspace.trust.enabled false`, `chat.disableAIFeatures true`,
-  `editor.inlineSuggest.enabled true`, `workbench.colorTheme "Kursor Dark"`, `update.mode none`,
+  `editor.inlineSuggest.enabled true`, `workbench.colorTheme "Klammr Dark"`, `update.mode none`,
   `extensions.autoCheckUpdates true`, `window.dialogStyle custom`, `window.menuBarVisibility compact`, `editor.fontFamily`
   with a Nerd/mono fallback list; the extension's `configurationDefaults` add Modern UI, the UI font and the editor look),
-  install the extension from `dist/kursor.vsix` (`~/.local/opt/kursor/bin/kursor --install-extension … --force`),
-  optionally `--with-icons PKief.material-icon-theme`; Omarchy: install `product/omarchy/kursor-theme.hook` via
+  install the extension from `dist/klammr.vsix` (`~/.local/opt/klammr/bin/klammr --install-extension … --force`),
+  optionally `--with-icons PKief.material-icon-theme`; Omarchy: install `product/omarchy/klammr-theme.hook` via
   `omarchy hook install theme-set` (only if `omarchy` exists) and run it once; print next steps. Flags:
   `--no-extension`, `--no-omarchy`, `--hypr-bind` (append the `o.bind("SUPER + SHIFT + K", …)` line to
   `~/.config/hypr/bindings.lua` then `hyprctl reload && hyprctl configerrors`), `--default-editor` (write
-  `~/.local/state/omarchy/defaults/editor` = kursor). Never edit anything under `/usr/share/omarchy`.
-- `product/uninstall.sh` reversing everything (asks before deleting `~/.config/Kursor`).
-- `product/omarchy/kursor-theme.hook` (from omarchy.md §8.3, parametrised with `~/.config/Kursor/User/settings.json`
-  and `~/.kursor/extensions`).
-- `media/themes/kursor-dark.json`: generated from the brand palette by `scripts/build-theme.mjs` (`npm run theme`) —
+  `~/.local/state/omarchy/defaults/editor` = klammr). Never edit anything under `/usr/share/omarchy`.
+- `product/uninstall.sh` reversing everything (asks before deleting `~/.config/Klammr`).
+- `product/omarchy/klammr-theme.hook` (from omarchy.md §8.3, parametrised with `~/.config/Klammr/User/settings.json`
+  and `~/.klammr/extensions`).
+- `media/themes/klammr-dark.json`: generated from the brand palette by `scripts/build-theme.mjs` (`npm run theme`) —
   ink window, surface cards for VS Code's Modern UI, violet accent, orchid cursor, its own syntax palette.
-- `README.md`: what Kursor is, install (`npm install && npm run package && bash product/install.sh`), features with
+- `README.md`: what Klammr is, install (`npm install && npm run package && bash product/install.sh`), features with
   keybindings table, how Claude Code is used (own binary/login, no credentials stored), Omarchy integration, settings,
   troubleshooting (sign-in, path, Wayland), uninstall, compliance note.

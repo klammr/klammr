@@ -11,7 +11,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const src = path.resolve(here, '..');
-const tmpRoot = fs.mkdtempSync(path.join(process.env.KURSOR_TEST_TMP || os.tmpdir(), 'kursor-ide-test-'));
+const tmpRoot = fs.mkdtempSync(path.join(process.env.KLAMMR_TEST_TMP || os.tmpdir(), 'klammr-ide-test-'));
 
 let lockFile;
 let port;
@@ -43,8 +43,8 @@ test('claudeConfigDir honours CLAUDE_CONFIG_DIR and ~ expansion', () => {
 });
 
 test('buildLockPayload has exactly the fields the CLI parses', () => {
-  const payload = lockFile.buildLockPayload({ workspaceFolders: ['/w/a', '/w/b'], ideName: 'Kursor', authToken: 'tok', pid: 4242, platform: 'linux' });
-  assert.deepEqual(payload, { pid: 4242, workspaceFolders: ['/w/a', '/w/b'], ideName: 'Kursor', transport: 'ws', runningInWindows: false, authToken: 'tok' });
+  const payload = lockFile.buildLockPayload({ workspaceFolders: ['/w/a', '/w/b'], ideName: 'Klammr', authToken: 'tok', pid: 4242, platform: 'linux' });
+  assert.deepEqual(payload, { pid: 4242, workspaceFolders: ['/w/a', '/w/b'], ideName: 'Klammr', transport: 'ws', runningInWindows: false, authToken: 'tok' });
   assert.deepEqual(Object.keys(payload), ['pid', 'workspaceFolders', 'ideName', 'transport', 'runningInWindows', 'authToken']);
   assert.equal(lockFile.buildLockPayload({ workspaceFolders: [], ideName: 'K', authToken: 't', platform: 'win32' }).runningInWindows, true);
   assert.equal(lockFile.buildLockPayload({ workspaceFolders: [], ideName: 'K', authToken: 't' }).pid, process.ppid);
@@ -63,7 +63,7 @@ test('lock file naming round-trips the port', () => {
 
 test('writeLockFile creates a 0700 dir and a 0600 JSON file; delete is idempotent', () => {
   const dir = path.join(tmpRoot, 'cfg', 'ide');
-  const payload = lockFile.buildLockPayload({ workspaceFolders: ['/w'], ideName: 'Kursor', authToken: 'secret', pid: 1, platform: 'linux' });
+  const payload = lockFile.buildLockPayload({ workspaceFolders: ['/w'], ideName: 'Klammr', authToken: 'secret', pid: 1, platform: 'linux' });
   const file = lockFile.writeLockFile(dir, 23456, payload);
   assert.equal(file, path.join(dir, '23456.lock'));
   if (process.platform !== 'win32') {

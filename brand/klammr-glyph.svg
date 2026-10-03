@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <!-- Mark without the tile, for dark or themed surfaces: the brackets use currentColor -->
+  <defs>
+    <linearGradient id="bar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f9bff"/><stop offset="1" stop-color="#b57cff"/></linearGradient>
+  </defs>
+  <rect x="117" y="81" width="22" height="94" rx="10" fill="url(#bar)"/>
+  <g fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"><polyline points="103,68 70,68 70,188 103,188"/><polyline points="153,68 186,68 186,188 153,188"/></g>
+</svg>

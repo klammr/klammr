@@ -1,7 +1,7 @@
 /**
- * RulesService — Cursor-style rules for Kursor.
+ * RulesService — Cursor-style rules for Klammr.
  *
- * Sources: `kursor.rules.user` (user rules), `.cursor/rules/**​/*.mdc`
+ * Sources: `klammr.rules.user` (user rules), `.cursor/rules/**​/*.mdc`
  * (front matter: description / globs / alwaysApply), nested `.cursor/rules`
  * directories, `.cursorrules` (legacy, always) and root `AGENTS.md` (always).
  * `CLAUDE.md` is left to Claude Code itself.
@@ -26,7 +26,7 @@ export function createRulesService(context: vscode.ExtensionContext, log: Logger
   let debounce: NodeJS.Timeout | undefined;
   let disposed = false;
 
-  const config = (): vscode.WorkspaceConfiguration => vscode.workspace.getConfiguration('kursor');
+  const config = (): vscode.WorkspaceConfiguration => vscode.workspace.getConfiguration('klammr');
   const useProjectRules = (): boolean => config().get<boolean>('rules.useProjectRules', true) ?? true;
 
   const invalidate = (reason: string): void => {
@@ -59,7 +59,7 @@ export function createRulesService(context: vscode.ExtensionContext, log: Logger
   }
   disposables.push(
     vscode.workspace.onDidChangeConfiguration((e) => {
-      if (e.affectsConfiguration('kursor.rules')) invalidate('configuration');
+      if (e.affectsConfiguration('klammr.rules')) invalidate('configuration');
     }),
     vscode.workspace.onDidChangeWorkspaceFolders(() => invalidate('workspace folders')),
   );

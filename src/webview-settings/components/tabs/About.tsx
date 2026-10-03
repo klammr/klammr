@@ -1,4 +1,4 @@
-import { KursorMark } from '../../../shared/Logo';
+import { KlammrMark } from '../../../shared/Logo';
 import { pushToast, useStore } from '../../store';
 import { copyText, tildify } from '../../util';
 import { post } from '../../vscode';
@@ -18,7 +18,7 @@ export function AboutTab() {
   const claude = useStore((s) => s.state!.claude);
 
   const diagnostics = [
-    `Kursor ${about.extensionVersion}`,
+    `Klammr ${about.extensionVersion}`,
     `${about.appName} ${about.appVersion} (${about.platform}, ${about.uiKind})`,
     `Claude Code CLI ${claude.version ?? 'unavailable'}${claude.path ? ` at ${claude.path}` : ''}`,
     `Signed in: ${claude.loggedIn === undefined ? 'unknown' : claude.loggedIn ? `yes${claude.subscriptionType ? ` (${claude.subscriptionType})` : ''}` : 'no'}`,
@@ -27,12 +27,12 @@ export function AboutTab() {
 
   return (
     <>
-      <Section title="About Kursor">
+      <Section title="About Klammr">
         <div className="card about-card">
-          <KursorMark className="about-logo" size={64} />
+          <KlammrMark className="about-logo" size={64} />
           <div className="about-text">
             <div className="about-title">
-              <span>Kursor</span>
+              <span>Klammr</span>
               <span className="about-version muted">v{about.extensionVersion}</span>
             </div>
             <div className="about-sub">Cursor-style AI coding for {about.appName}: agent chat, Ctrl+K inline edits, Tab completions, terminal and commit helpers.</div>
@@ -67,7 +67,7 @@ export function AboutTab() {
           <Button icon="copy" onClick={() => void copyText(diagnostics).then((ok) => pushToast(ok ? 'info' : 'error', ok ? 'Diagnostics copied' : 'Could not copy'))}>
             Copy diagnostics
           </Button>
-          <Button ghost icon="output" onClick={() => post({ type: 'runCommand', command: 'kursor.showLogs' })}>
+          <Button ghost icon="output" onClick={() => post({ type: 'runCommand', command: 'klammr.showLogs' })}>
             Show logs
           </Button>
         </div>
@@ -97,7 +97,7 @@ export function AboutTab() {
               ['Accept inline edit · Keep all agent edits', ['Ctrl', 'Enter']],
               ['Reject inline edit', ['Ctrl', 'Backspace']],
               ['Trigger a Tab completion', ['Alt', '\\']],
-              ['Kursor Settings', ['Ctrl', 'Shift', 'J']],
+              ['Klammr Settings', ['Ctrl', 'Shift', 'J']],
             ].map(([label, keys]) => (
               <tr key={label as string}>
                 <td>{label as string}</td>
@@ -116,7 +116,7 @@ export function AboutTab() {
         <SettingRow
           label="Change shortcuts"
           control={
-            <Button ghost icon="keyboard" onClick={() => post({ type: 'runCommand', command: 'workbench.action.openGlobalKeybindings', args: ['kursor'] })}>
+            <Button ghost icon="keyboard" onClick={() => post({ type: 'runCommand', command: 'workbench.action.openGlobalKeybindings', args: ['klammr'] })}>
               Keyboard shortcuts
             </Button>
           }
@@ -125,7 +125,7 @@ export function AboutTab() {
 
       <Section title="Notice">
         <p className="muted">
-          Kursor is an independent project and is not affiliated with Anysphere (Cursor) or Anthropic. It spawns the unmodified <code>claude</code> executable from your PATH; the extension never reads, stores or transmits your credentials. Usage counts against your own Claude subscription.
+          Klammr is an independent project and is not affiliated with Anysphere (Cursor) or Anthropic. It spawns the unmodified <code>claude</code> executable from your PATH; the extension never reads, stores or transmits your credentials. Usage counts against your own Claude subscription.
         </p>
       </Section>
     </>

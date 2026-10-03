@@ -1,14 +1,14 @@
 #!/usr/bin/env node
-// Kursor installer — a rebranded VSCodium plus the Kursor extension, for Linux, macOS and Windows.
+// Klammr installer — a rebranded VSCodium plus the Klammr extension, for Linux, macOS and Windows.
 // Node >= 18, no dependencies. Normally started through install.sh / install.cmd, which locate Node.
 //
 //   node product/install.mjs [options]
 //
-//   --vsix <path>        extension package to install (default: dist/kursor.vsix, or kursor.vsix in a bundle)
+//   --vsix <path>        extension package to install (default: dist/klammr.vsix, or klammr.vsix in a bundle)
 //   --no-extension       skip installing the extension (editor only)
 //   --with-icons         also install PKief.material-icon-theme from Open VSX and select it
 //   --force-download     ignore the cached archive and download VSCodium again
-//   --from <dir>         install a tree staged earlier (a release bundle's app/ or Kursor.app) instead of downloading
+//   --from <dir>         install a tree staged earlier (a release bundle's app/ or Klammr.app) instead of downloading
 //   --yes, -y            no questions (overwrite an existing --stage-only directory, …)
 //   --dry-run            print the plan and exit without touching anything
 //   --stage-only <dir>   download + verify + extract + rebrand into <dir>, install nothing
@@ -17,17 +17,17 @@
 //   -h, --help           this text
 //
 //   Linux (Omarchy):     --no-omarchy  skip the theme hook      --hypr-bind  SUPER + SHIFT + K binding
-//                        --default-editor  make Kursor Omarchy's default editor
+//                        --default-editor  make Klammr Omarchy's default editor
 //   macOS / Windows:     --system  install for all users (/Applications, %ProgramFiles% — needs write access)
-//   Windows:             --desktop-shortcut  also put Kursor.lnk on the desktop     --no-protocol  skip kursor://
+//   Windows:             --desktop-shortcut  also put Klammr.lnk on the desktop     --no-protocol  skip klammr://
 //
 // Where things go (user install):
-//   Linux    ~/.local/opt/kursor, ~/.local/bin/kursor, ~/.config/Kursor/User, ~/.kursor, ~/.config/kursor-flags.conf
-//   macOS    ~/Applications/Kursor.app, ~/.local/bin/kursor → Kursor.app/…/bin/kursor, ~/Library/Application Support/Kursor/User, ~/.kursor
-//   Windows  %LOCALAPPDATA%\Programs\Kursor (+ bin on the user Path), Start Menu\Kursor.lnk, %APPDATA%\Kursor\User, %USERPROFILE%\.kursor
+//   Linux    ~/.local/opt/klammr, ~/.local/bin/klammr, ~/.config/Klammr/User, ~/.klammr, ~/.config/klammr-flags.conf
+//   macOS    ~/Applications/Klammr.app, ~/.local/bin/klammr → Klammr.app/…/bin/klammr, ~/Library/Application Support/Klammr/User, ~/.klammr
+//   Windows  %LOCALAPPDATA%\Programs\Klammr (+ bin on the user Path), Start Menu\Klammr.lnk, %APPDATA%\Klammr\User, %USERPROFILE%\.klammr
 //
-// Environment: KURSOR_CACHE_DIR (download cache), KURSOR_VSCODIUM_VERSION (verified against VSCodium's
-// published .sha256), KURSOR_REPO_URL (Help-menu links). Idempotent: re-running upgrades the application
+// Environment: KLAMMR_CACHE_DIR (download cache), KLAMMR_VSCODIUM_VERSION (verified against VSCodium's
+// published .sha256), KLAMMR_REPO_URL (Help-menu links). Idempotent: re-running upgrades the application
 // directory and refreshes launchers/shortcuts, but never overwrites settings.json, keybindings.json,
 // argv.json or the flags file once they exist. No sudo anywhere.
 
@@ -36,7 +36,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   ARCHES, PLATFORMS, PLATFORM_LABEL, PRODUCT_DIR, REPO_DIR, VSCODIUM_VERSION, assetFor, cleanStaleSiblings,
-  copyTree, die, ensureAsset, ensureDir, exists, extractArchive, have, isFile, jsoncSetIfAbsent, kursorPaths, log,
+  copyTree, die, ensureAsset, ensureDir, exists, extractArchive, have, isFile, jsoncSetIfAbsent, klammrPaths, log,
   main, makeStageDir, markerOf, nowIso, parseArgs, readJson, rmrf, run, swapIn, writeIfMissing, writeJson,
 } from './lib/common.mjs';
 import { describeTree, rebrand } from './lib/rebrand.mjs';
@@ -50,20 +50,20 @@ const usage = () => {
 };
 
 // Headless CLI of a (staged or installed) tree. Windows runs the exe as Node directly — exactly what
-// bin\kursor.cmd does — so no cmd.exe quoting is involved.
+// bin\klammr.cmd does — so no cmd.exe quoting is involved.
 function cliFor(platform, root) {
   if (platform === 'win32') {
-    return (args) => run(path.join(root, 'Kursor.exe'), [path.join(root, 'resources', 'app', 'out', 'cli.js'), ...args],
+    return (args) => run(path.join(root, 'Klammr.exe'), [path.join(root, 'resources', 'app', 'out', 'cli.js'), ...args],
       { env: { ...process.env, ELECTRON_RUN_AS_NODE: '1', VSCODE_DEV: '' } });
   }
-  const cli = platform === 'darwin' ? path.join(root, 'Contents', 'Resources', 'app', 'bin', 'kursor') : path.join(root, 'bin', 'kursor');
+  const cli = platform === 'darwin' ? path.join(root, 'Contents', 'Resources', 'app', 'bin', 'klammr') : path.join(root, 'bin', 'klammr');
   return (args) => run(cli, args);
 }
 
-// A release bundle has app/ (or app/Kursor.app) and kursor.vsix next to this script.
+// A release bundle has app/ (or app/Klammr.app) and klammr.vsix next to this script.
 function prebuiltRoot(platform, dir) {
   if (!dir) return null;
-  const root = platform === 'darwin' && path.basename(dir) !== 'Kursor.app' ? path.join(dir, 'Kursor.app') : dir;
+  const root = platform === 'darwin' && path.basename(dir) !== 'Klammr.app' ? path.join(dir, 'Klammr.app') : dir;
   return isFile(markerOf(platform, root)) ? root : null;
 }
 
@@ -91,21 +91,21 @@ await main(async () => {
   if (!PLATFORMS.includes(platform)) die(`unsupported platform ${platform} (linux, darwin, win32)`);
   if (!ARCHES.includes(arch)) die(`unsupported arch ${arch} (x64, arm64)`);
   if (!stageOnly && (platform !== host || arch !== hostArch)) die('--platform/--arch select a foreign target and need --stage-only; an install always targets this machine');
-  if (opts.system && platform === 'linux') die('--system is for macOS/Windows; on Linux Kursor always installs under $HOME');
+  if (opts.system && platform === 'linux') die('--system is for macOS/Windows; on Linux Klammr always installs under $HOME');
   const yes = !!opts.yes;
-  const paths = kursorPaths(platform, { system: !!opts.system });
-  const cacheDir = kursorPaths(host).cacheDir;
+  const paths = klammrPaths(platform, { system: !!opts.system });
+  const cacheDir = klammrPaths(host).cacheDir;
   const asset = assetFor(platform, arch);
 
   const bundleApp = prebuiltRoot(platform, path.join(PRODUCT_DIR, 'app'));
   const from = opts.from ? prebuiltRoot(platform, path.resolve(opts.from)) : bundleApp;
-  if (opts.from && !from) die(`--from ${opts.from}: no Kursor tree for ${platform} found there (missing kursor-install.json marker)`);
+  if (opts.from && !from) die(`--from ${opts.from}: no Klammr tree for ${platform} found there (missing klammr-install.json marker)`);
   if (from) {
     const m = readJson(markerOf(platform, from));
     if (m.platform !== platform || m.arch !== arch) die(`${from} was staged for ${m.platform}-${m.arch}, this machine is ${platform}-${arch}`);
   }
   const withExtension = !opts['no-extension'] && !stageOnly;
-  const vsix = path.resolve(opts.vsix || (isFile(path.join(PRODUCT_DIR, 'kursor.vsix')) ? path.join(PRODUCT_DIR, 'kursor.vsix') : path.join(REPO_DIR, 'dist', 'kursor.vsix')));
+  const vsix = path.resolve(opts.vsix || (isFile(path.join(PRODUCT_DIR, 'klammr.vsix')) ? path.join(PRODUCT_DIR, 'klammr.vsix') : path.join(REPO_DIR, 'dist', 'klammr.vsix')));
   const omarchy = platform === 'linux' && host === 'linux' && linux.omarchyAvailable();
   const withOmarchy = omarchy && !opts['no-omarchy'];
 
@@ -126,11 +126,11 @@ await main(async () => {
   }
 
   // ---- plan ----------------------------------------------------------------------------------
-  log.step('Kursor installer');
+  log.step('Klammr installer');
   log.info(`target: ${PLATFORM_LABEL[platform]} ${arch}${platform !== host || arch !== hostArch ? `   (host: ${PLATFORM_LABEL[host] || host} ${hostArch})` : ''}`);
   log.info(`VSCodium ${VSCODIUM_VERSION}: ${from ? `prebuilt ${from}` : asset.url}`);
   if (stageOnly) {
-    log.info(`mode: --stage-only → ${stageOnly}${platform === 'darwin' ? '/Kursor.app' : ''} (nothing is installed)`);
+    log.info(`mode: --stage-only → ${stageOnly}${platform === 'darwin' ? '/Klammr.app' : ''} (nothing is installed)`);
   } else {
     log.info(`install: ${paths.appRoot}`);
     log.info(`command: ${platform === 'win32' ? paths.cli : platform === 'darwin' ? paths.cliLink : paths.wrapper}    settings: ${paths.userDir}    extensions: ${path.join(paths.dataDir, 'extensions')}`);
@@ -140,12 +140,12 @@ await main(async () => {
       if (opts['hypr-bind']) plan.push('SUPER + SHIFT + K binding');
       log.info(`omarchy: ${plan.filter(Boolean).join(', ')}`);
     }
-    if (platform === 'win32') log.info(`windows: Start Menu shortcut${opts['desktop-shortcut'] ? ' + desktop shortcut' : ''}, user Path, ${opts['no-protocol'] ? 'no kursor:// protocol' : 'kursor:// protocol'}`);
+    if (platform === 'win32') log.info(`windows: Start Menu shortcut${opts['desktop-shortcut'] ? ' + desktop shortcut' : ''}, user Path, ${opts['no-protocol'] ? 'no klammr:// protocol' : 'klammr:// protocol'}`);
     if (platform === 'darwin') log.info(`macos: ad-hoc codesign, quarantine cleared, CLI symlink${paths.system ? 's (~/.local/bin, /usr/local/bin)' : ' (~/.local/bin)'}`);
   }
   if (opts['dry-run']) { log.info('dry run — stopping here'); return; }
-  if (!stageOnly && host === 'linux' && linux.kursorRunning(paths)) log.warn('Kursor is running. The upgrade proceeds; restart Kursor afterwards to pick it up.');
-  if (!stageOnly && host === 'win32' && win32.kursorRunning()) die('Kursor.exe is running — close it first (its files are locked while it runs)');
+  if (!stageOnly && host === 'linux' && linux.klammrRunning(paths)) log.warn('Klammr is running. The upgrade proceeds; restart Klammr afterwards to pick it up.');
+  if (!stageOnly && host === 'win32' && win32.klammrRunning()) die('Klammr.exe is running — close it first (its files are locked while it runs)');
 
   // ---- 1. archive ----------------------------------------------------------------------------
   const total = stageOnly ? 2 : 6;
@@ -161,7 +161,7 @@ await main(async () => {
 
   // ---- 2. extract + rebrand (+ swap in) ------------------------------------------------------
   const target = stageOnly || paths.appRoot;
-  log.step(`2/${total}  ${stageOnly ? 'Staging' : 'Installing'} ${platform === 'darwin' && stageOnly ? path.join(target, 'Kursor.app') : target}`);
+  log.step(`2/${total}  ${stageOnly ? 'Staging' : 'Installing'} ${platform === 'darwin' && stageOnly ? path.join(target, 'Klammr.app') : target}`);
   if (stageOnly && exists(target) && fs.readdirSync(target).length) {
     if (!yes) die(`${target} exists and is not empty (pass --yes to replace it)`);
     rmrf(target);
@@ -176,7 +176,7 @@ await main(async () => {
   let stagedRoot;
   try {
     if (from) {
-      stagedRoot = path.join(extractDir, platform === 'darwin' ? 'Kursor.app' : 'app');
+      stagedRoot = path.join(extractDir, platform === 'darwin' ? 'Klammr.app' : 'app');
       log.info(`copying ${from}`);
       copyTree(from, stagedRoot);
     } else {
@@ -184,7 +184,7 @@ await main(async () => {
       stagedRoot = rebrand(platform, extractDir, { platform, arch, sha256 });
     }
     if (stageOnly) {
-      if (platform === 'darwin') { ensureDir(target); fs.renameSync(stagedRoot, path.join(target, 'Kursor.app')); } else fs.renameSync(stagedRoot, target);
+      if (platform === 'darwin') { ensureDir(target); fs.renameSync(stagedRoot, path.join(target, 'Klammr.app')); } else fs.renameSync(stagedRoot, target);
     } else {
       swapIn(stagedRoot, target);
       const marker = readJson(paths.marker);
@@ -195,14 +195,14 @@ await main(async () => {
   } finally {
     if (exists(extractDir)) rmrf(extractDir);
   }
-  const root = stageOnly ? (platform === 'darwin' ? path.join(target, 'Kursor.app') : target) : paths.appRoot;
+  const root = stageOnly ? (platform === 'darwin' ? path.join(target, 'Klammr.app') : target) : paths.appRoot;
   log.ok(`${stageOnly ? 'staged' : 'installed'} ${root}`);
   for (const line of describeTree(platform, root)) log.info(line);
   const cli = cliFor(platform, root);
 
   if (stageOnly) {
     const deferred = platform === 'darwin' ? 'codesign --force --deep --sign -, xattr -dr com.apple.quarantine, CLI symlink'
-      : platform === 'win32' ? 'rcedit (exe icon), Start Menu shortcut, user Path, kursor:// registry key' : 'wrapper, desktop entries, icons, MIME, Omarchy';
+      : platform === 'win32' ? 'rcedit (exe icon), Start Menu shortcut, user Path, klammr:// registry key' : 'wrapper, desktop entries, icons, MIME, Omarchy';
     if (platform === host) {
       const r = cli(['--version']);
       if (r.ok) log.ok(`staged CLI --version → ${r.stdout.trim().split('\n')[0]}`); else log.warn(`staged CLI --version failed: ${r.stderr.trim()}`);
@@ -238,7 +238,7 @@ await main(async () => {
   writeIfMissing(path.join(paths.userDir, 'keybindings.json'), fs.readFileSync(path.join(PRODUCT_DIR, 'defaults', 'keybindings.json')));
 
   // ---- 5. extension --------------------------------------------------------------------------
-  log.step(`5/${total}  Kursor extension`);
+  log.step(`5/${total}  Klammr extension`);
   const retryHint = `"${paths.cli}" --install-extension "${vsix}" --force`;
   if (withExtension) {
     log.info(`installing ${path.basename(vsix)} into ${path.join(paths.dataDir, 'extensions')}`);
@@ -261,7 +261,7 @@ await main(async () => {
   if (platform === 'linux') {
     log.step(`6/${total}  Omarchy / Hyprland`);
     if (omarchy) {
-      if (withOmarchy) { linux.omarchyInstallThemeHook(paths); linux.omarchyRunThemeHookOnce(paths); } else log.info('theme hook skipped (--no-omarchy); Kursor keeps the Kursor Dark theme');
+      if (withOmarchy) { linux.omarchyInstallThemeHook(paths); linux.omarchyRunThemeHookOnce(paths); } else log.info('theme hook skipped (--no-omarchy); Klammr keeps the Klammr Dark theme');
       if (opts['default-editor']) linux.setDefaultEditor(paths);
     } else {
       log.info('Omarchy not detected — theme hook and default-editor steps skipped');
@@ -276,40 +276,40 @@ await main(async () => {
   if (platform === 'linux') log.step('Verifying');
   const ver = cli(['--version']);
   const first = ver.stdout.trim().split('\n')[0];
-  if (ver.ok && first === VSCODIUM_VERSION) log.ok(`kursor --version → ${first} (commit ${readJson(path.join(paths.appDir, 'product.json')).commit.slice(0, 10)})`);
+  if (ver.ok && first === VSCODIUM_VERSION) log.ok(`klammr --version → ${first} (commit ${readJson(path.join(paths.appDir, 'product.json')).commit.slice(0, 10)})`);
   else log.warn(`'${paths.cli} --version' ${ver.ok ? `printed ${first}` : 'failed'} — the install may be incomplete${ver.stderr ? `\n${ver.stderr.trim()}` : ''}`);
-  if (readJson(path.join(paths.appDir, 'product.json')).nameShort === 'Kursor') log.ok('product.json rebranded (nameShort = Kursor, dataFolderName = .kursor)');
+  if (readJson(path.join(paths.appDir, 'product.json')).nameShort === 'Klammr') log.ok('product.json rebranded (nameShort = Klammr, dataFolderName = .klammr)');
 
   const claude = have('claude') || (host !== 'win32' && isFile(path.join(paths.home, '.local', 'bin', 'claude')) ? path.join(paths.home, '.local', 'bin', 'claude') : null);
   const settings = path.join(paths.userDir, 'settings.json');
-  const theme = (isFile(settings) && /"workbench\.colorTheme"\s*:\s*"([^"]*)"/.exec(fs.readFileSync(settings, 'utf8')) || [])[1] || 'Kursor Dark';
+  const theme = (isFile(settings) && /"workbench\.colorTheme"\s*:\s*"([^"]*)"/.exec(fs.readFileSync(settings, 'utf8')) || [])[1] || 'Klammr Dark';
 
   log.step('Done — next steps');
   const L = [];
   if (platform === 'linux') {
-    L.push('    Launch      kursor [path]            or the "Kursor" entry in your launcher');
+    L.push('    Launch      klammr [path]            or the "Klammr" entry in your launcher');
     if (opts['hypr-bind']) L.push('                SUPER + SHIFT + K');
     if (opts['default-editor'] && omarchy) L.push('                SUPER + SHIFT + N  (Omarchy default editor)');
   } else if (platform === 'darwin') {
-    L.push('    Launch      open -a Kursor            or Kursor in Launchpad / Spotlight;   kursor [path]  in a terminal');
-    L.push('                The app is signed ad hoc: if macOS refuses the first launch, right-click Kursor.app → Open once.');
+    L.push('    Launch      open -a Klammr            or Klammr in Launchpad / Spotlight;   klammr [path]  in a terminal');
+    L.push('                The app is signed ad hoc: if macOS refuses the first launch, right-click Klammr.app → Open once.');
   } else {
-    L.push('    Launch      Start Menu → Kursor       or  kursor [path]  in a NEW terminal (the Path change needs one)');
+    L.push('    Launch      Start Menu → Klammr       or  klammr [path]  in a NEW terminal (the Path change needs one)');
   }
   L.push('');
-  L.push('    Claude      Kursor drives the Claude Code CLI already on this machine — your own binary and login.');
-  L.push('                Kursor stores no credentials; usage counts against your Claude plan.');
-  L.push(claude ? `                found: ${claude}` : '                NOT FOUND on PATH — install Claude Code (https://code.claude.com/docs/en/setup) or set kursor.claude.path in Kursor');
-  L.push('                Not signed in yet?  run:  claude auth login     (or use the Sign in button in Kursor\'s chat)');
+  L.push('    Claude      Klammr drives the Claude Code CLI already on this machine — your own binary and login.');
+  L.push('                Klammr stores no credentials; usage counts against your Claude plan.');
+  L.push(claude ? `                found: ${claude}` : '                NOT FOUND on PATH — install Claude Code (https://code.claude.com/docs/en/setup) or set klammr.claude.path in Klammr');
+  L.push('                Not signed in yet?  run:  claude auth login     (or use the Sign in button in Klammr\'s chat)');
   L.push('');
-  L.push(`    Theme       "${theme}" is selected in settings.json (Kursor Dark ships with the extension).`);
+  L.push(`    Theme       "${theme}" is selected in settings.json (Klammr Dark ships with the extension).`);
   if (withOmarchy) {
-    L.push('                With the Omarchy hook Kursor follows `omarchy theme set …`; to keep Kursor Dark instead:');
+    L.push('                With the Omarchy hook Klammr follows `omarchy theme set …`; to keep Klammr Dark instead:');
     L.push(`                touch ${paths.omarchy.skipToggle}`);
   }
   L.push('');
   L.push(`    Settings    ${settings}   (yours — the installer never overwrites it)`);
-  L.push('                Ctrl+Shift+J inside Kursor opens the Kursor Settings panel; Ctrl+, the VS Code settings.');
+  L.push('                Ctrl+Shift+J inside Klammr opens the Klammr Settings panel; Ctrl+, the VS Code settings.');
   if (platform === 'linux') L.push(`    Flags       ${paths.flagsFile}`);
   const rerun = platform === 'win32' ? 'product\\install.cmd' : 'bash product/install.sh';
   const unrun = platform === 'win32' ? 'product\\uninstall.cmd' : 'bash product/uninstall.sh';

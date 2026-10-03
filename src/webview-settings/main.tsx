@@ -1,5 +1,5 @@
 /**
- * Kursor Settings webview entry (bundled by esbuild to dist/settings.js + dist/settings.css).
+ * Klammr Settings webview entry (bundled by esbuild to dist/settings.js + dist/settings.css).
  * Keep this file small: UI lives under ./components, state in ./store.ts.
  */
 import { createRoot } from 'react-dom/client';

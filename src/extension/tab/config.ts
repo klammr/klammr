@@ -1,10 +1,10 @@
 /**
- * Live view of the `kursor.tab.*` settings. Re-read on every
+ * Live view of the `klammr.tab.*` settings. Re-read on every
  * `onDidChangeConfiguration` that affects the section (see index.ts).
  */
 import * as vscode from 'vscode';
 
-export const TAB_SECTION = 'kursor.tab';
+export const TAB_SECTION = 'klammr.tab';
 
 export interface TabConfig {
   enabled: boolean;

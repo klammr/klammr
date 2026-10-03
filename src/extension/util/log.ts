@@ -24,7 +24,7 @@ function fmt(args: unknown[]): string {
 }
 
 export function createLogger(context: vscode.ExtensionContext): Logger {
-  const channel = vscode.window.createOutputChannel('Kursor', { log: true });
+  const channel = vscode.window.createOutputChannel('Klammr', { log: true });
   context.subscriptions.push(channel);
   const make = (prefix: string): Logger => ({
     info: (m, ...a) => channel.info(`${prefix}${m}${a.length ? ' ' + fmt(a) : ''}`),

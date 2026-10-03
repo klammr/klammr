@@ -1,7 +1,7 @@
 /** Prompt history for the Ctrl+K prompt (workspaceState, most recent first). */
 import type * as vscode from 'vscode';
 
-const KEY = 'kursor.inlineEdit.history';
+const KEY = 'klammr.inlineEdit.history';
 const MAX = 30;
 
 export class PromptHistory {

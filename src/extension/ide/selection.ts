@@ -1,6 +1,6 @@
 /**
  * Tracks the latest text selection for `getLatestSelection` and emits debounced
- * `selection_changed` payloads; builds `at_mentioned` payloads for `kursor.ide.insertAtMention`.
+ * `selection_changed` payloads; builds `at_mentioned` payloads for `klammr.ide.insertAtMention`.
  */
 import * as vscode from 'vscode';
 import type { Logger } from '../util/log';
@@ -27,7 +27,7 @@ export interface AtMentionInfo {
 const IGNORED_SCHEMES = new Set(['comment', 'output', 'debug', 'vscode', 'vscode-terminal', 'search-editor', 'walkThrough', 'vscode-settings', 'vscode-scm']);
 
 export function isTrackableScheme(scheme: string): boolean {
-  return !IGNORED_SCHEMES.has(scheme) && !scheme.startsWith('kursor-');
+  return !IGNORED_SCHEMES.has(scheme) && !scheme.startsWith('klammr-');
 }
 
 export function selectionInfoOf(editor: vscode.TextEditor): SelectionInfo {

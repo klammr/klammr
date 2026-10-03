@@ -1,5 +1,5 @@
 /**
- * Kursor chat webview entry (bundled by esbuild to dist/webview.js).
+ * Klammr chat webview entry (bundled by esbuild to dist/webview.js).
  * Keep this file small: all UI lives under ./components, state in ./store.ts.
  */
 import { createRoot } from 'react-dom/client';

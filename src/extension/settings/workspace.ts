@@ -8,8 +8,8 @@ import * as path from 'node:path';
 import type { WorkspaceInfo } from '../../shared/settingsProtocol';
 import { isInside, samePath } from '../util/platform';
 
-export const CURSORIGNORE_TEMPLATE = `# .cursorignore — files and folders Kursor should leave out of @-mention search and context.
-# Same syntax as .gitignore. Kursor also honours .gitignore automatically.
+export const CURSORIGNORE_TEMPLATE = `# .cursorignore — files and folders Klammr should leave out of @-mention search and context.
+# Same syntax as .gitignore. Klammr also honours .gitignore automatically.
 #
 # Examples:
 # dist/
@@ -78,7 +78,7 @@ export async function openGitignore(cwd: string): Promise<void> {
   if (!(await fileExists(target.fsPath))) {
     const pick = await vscode.window.showInformationMessage('This folder has no .gitignore yet. Create one?', { modal: false }, 'Create');
     if (pick !== 'Create') return;
-    await vscode.workspace.fs.writeFile(target, Buffer.from('# Files git (and Kursor) should ignore\n', 'utf8'));
+    await vscode.workspace.fs.writeFile(target, Buffer.from('# Files git (and Klammr) should ignore\n', 'utf8'));
   }
   const doc = await vscode.workspace.openTextDocument(target);
   await vscode.window.showTextDocument(doc, { preview: false });

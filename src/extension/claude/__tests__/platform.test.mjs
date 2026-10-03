@@ -11,7 +11,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const src = path.resolve(here, '..');
-const tmp = fs.mkdtempSync(path.join(process.env.KURSOR_TEST_TMP || os.tmpdir(), 'kursor-claude-platform-test-'));
+const tmp = fs.mkdtempSync(path.join(process.env.KLAMMR_TEST_TMP || os.tmpdir(), 'klammr-claude-platform-test-'));
 let resolvePath, env, status, history, launch;
 
 before(async () => {
@@ -87,8 +87,8 @@ test('loginShellCandidates: $SHELL first, then zsh/bash on macOS', () => {
 });
 
 test('parseLoginShellOutput / parseWhereOutput / pickWindowsHit', () => {
-  assert.deepEqual(resolvePath.parseLoginShellOutput('warning: profile\n/Users/u/.local/bin/claude\n\n__KURSOR_PATH__/opt/homebrew/bin:/usr/bin\n'), { claude: '/Users/u/.local/bin/claude', path: '/opt/homebrew/bin:/usr/bin' });
-  assert.deepEqual(resolvePath.parseLoginShellOutput('\n__KURSOR_PATH__\n'), {});
+  assert.deepEqual(resolvePath.parseLoginShellOutput('warning: profile\n/Users/u/.local/bin/claude\n\n__KLAMMR_PATH__/opt/homebrew/bin:/usr/bin\n'), { claude: '/Users/u/.local/bin/claude', path: '/opt/homebrew/bin:/usr/bin' });
+  assert.deepEqual(resolvePath.parseLoginShellOutput('\n__KLAMMR_PATH__\n'), {});
   const where = 'C:\\Users\\u\\AppData\\Roaming\\npm\\claude\r\nC:\\Users\\u\\AppData\\Roaming\\npm\\claude.cmd\r\nC:\\Users\\u\\.local\\bin\\claude.exe\r\n';
   const hits = resolvePath.parseWhereOutput(where);
   assert.equal(hits.length, 3);
@@ -161,7 +161,7 @@ test('resolve on macOS: $SHELL zsh answers with -l -i -c, loginPath captured', a
   resolvePath.clearLoginShellCache();
   const f = fakeFs({
     files: ['/bin/zsh', '/opt/homebrew/bin/claude'],
-    runs: { zsh: { stdout: '/opt/homebrew/bin/claude\n__KURSOR_PATH__/opt/homebrew/bin:/usr/bin:/bin\n', stderr: '', code: 0 } },
+    runs: { zsh: { stdout: '/opt/homebrew/bin/claude\n__KLAMMR_PATH__/opt/homebrew/bin:/usr/bin:/bin\n', stderr: '', code: 0 } },
   });
   const r = await resolvePath.resolveClaudeExecutable({ platform: 'darwin', homeDir: '/Users/u', env: { SHELL: '/bin/zsh', PATH: '/usr/bin' }, log: noLog, ...f });
   assert.deepEqual(r, { path: '/opt/homebrew/bin/claude', source: 'login-shell', loginPath: '/opt/homebrew/bin:/usr/bin:/bin' });
@@ -170,7 +170,7 @@ test('resolve on macOS: $SHELL zsh answers with -l -i -c, loginPath captured', a
 
 test('resolve on macOS: missing $SHELL falls back to /bin/zsh then /bin/bash, then Homebrew path', async () => {
   resolvePath.clearLoginShellCache();
-  const f = fakeFs({ files: ['/bin/bash', '/opt/homebrew/bin/claude'], runs: { bash: { stdout: '\n__KURSOR_PATH__/usr/bin\n', stderr: '', code: 0 } } });
+  const f = fakeFs({ files: ['/bin/bash', '/opt/homebrew/bin/claude'], runs: { bash: { stdout: '\n__KLAMMR_PATH__/usr/bin\n', stderr: '', code: 0 } } });
   const r = await resolvePath.resolveClaudeExecutable({ platform: 'darwin', homeDir: '/Users/u', env: { SHELL: '/opt/homebrew/bin/fish', PATH: '/usr/bin' }, log: noLog, ...f });
   assert.deepEqual(r, { path: '/opt/homebrew/bin/claude', source: 'well-known', loginPath: '/usr/bin' });
   // fish and zsh do not exist in this fake fs: only bash was asked
@@ -236,7 +236,7 @@ test('probeClaudeStatus routes through spawnSpec and parses CRLF output', async 
 // history
 
 test('projectKey matches the CLI: non-alphanumerics → "-", 200-char cap + base36 hash', () => {
-  assert.equal(history.projectKey('/home/u/Work/kursor'), '-home-u-Work-kursor');
+  assert.equal(history.projectKey('/home/u/Work/klammr'), '-home-u-Work-klammr');
   assert.equal(history.projectKey('C:\\Users\\u\\proj'), 'C--Users-u-proj');
   assert.equal(history.projectKey('/Users/u/My Project (v2)'), '-Users-u-My-Project--v2-');
   const long = '/' + 'a'.repeat(250);
