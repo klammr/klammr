@@ -7,9 +7,11 @@ $dir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $script = if ($env:KLAMMR_BOOTSTRAP_SCRIPT) { $env:KLAMMR_BOOTSTRAP_SCRIPT } else { 'install.mjs' }
 
 function Test-Node([string] $exe) {
+  $ErrorActionPreference = 'Continue'
   if (-not $exe -or -not (Test-Path -LiteralPath $exe)) { return $false }
-  try { $major = & $exe -p 'process.versions.node.split(".")[0]' 2>$null } catch { return $false }
-  return ([int]$major -ge 18)
+  # A bare expression on purpose: Windows PowerShell 5.1 drops double quotes from arguments to native programs.
+  try { $version = & $exe -p process.versions.node 2>$null } catch { return $false }
+  return ("$version" -match '^(\d+)\.' -and [int]$Matches[1] -ge 18)
 }
 
 function Find-Node {

@@ -7,6 +7,9 @@ builds the extension and one bundle per platform from that tag.
 
 ## [Unreleased]
 
+### Fixed
+- On Windows PowerShell 5.1, which `install.cmd`, `uninstall.cmd` and `irm … | iex` run in, the installer rejected every Node.js and stopped: PowerShell 5.1 drops the double quotes from the version check it passes to `node`. CI now runs the installer bootstraps on Linux, macOS and Windows.
+
 ## [0.2.0] - 2026-10-03
 
 ### Added

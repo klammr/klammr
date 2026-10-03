@@ -1,4 +1,5 @@
-# Continuous integration: typecheck, theme freshness, build, unit tests, smoke-load and packaging on every push and PR.
+# Continuous integration: typecheck, theme freshness, build, unit tests, smoke-load and packaging on every push and PR,
+# plus the installer bootstraps on Linux, macOS and Windows.
 name: ci
 
 on:
@@ -26,3 +27,29 @@ jobs:
         with:
           name: klammr-vsix
           path: dist/klammr.vsix
+
+  bootstraps:
+    name: installer bootstraps (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # The bootstraps only find Node.js and start install.mjs / uninstall.mjs; --help proves both work in this OS's
+      # shell (Windows PowerShell 5.1 behind install.cmd on Windows).
+      - name: install.sh / uninstall.sh --help
+        if: runner.os != 'Windows'
+        run: |
+          sh product/install.sh --help
+          sh product/uninstall.sh --help
+      - name: install.cmd / uninstall.cmd --help
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          call product\install.cmd --help || exit /b 1
+          call product\uninstall.cmd --help || exit /b 1
