@@ -80,7 +80,8 @@
   $version = "$env:KLAMMR_VERSION"
   if (-not $version) {
     # GitHub redirects releases/latest to releases/tag/<tag>, or to releases/ while there is none.
-    $r = Invoke-WebRequest -UseBasicParsing -Method Head -Uri "$repo/releases/latest"
+    try { $r = Invoke-WebRequest -UseBasicParsing -Method Head -Uri "$repo/releases/latest" }
+    catch { throw "cannot reach $repo ($($_.Exception.Message))" }
     $final = if ($r.BaseResponse.ResponseUri) { $r.BaseResponse.ResponseUri.AbsoluteUri } else { $r.BaseResponse.RequestMessage.RequestUri.AbsoluteUri }
     if ($final -notmatch '/releases/tag/([^/?#]+)') { throw "no Klammr release is published at $repo/releases yet" }
     $version = $Matches[1]
