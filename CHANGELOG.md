@@ -7,6 +7,8 @@ builds the extension and one bundle per platform from that tag.
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-03
+
 ### Fixed
 - On Windows PowerShell 5.1, which `install.cmd`, `uninstall.cmd` and `irm … | iex` run in, the installer rejected every Node.js and stopped: PowerShell 5.1 drops the double quotes from the version check it passes to `node`. CI now runs the installer bootstraps on Linux, macOS and Windows.
 
@@ -54,7 +56,8 @@ First public release.
 ### Fixed
 - Installer and bundle builder use Windows' built-in `tar.exe` (bsdtar) instead of a GNU tar found on PATH, which misread `C:\` paths and cannot handle zip archives.
 
-[Unreleased]: https://github.com/klammr/klammr/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/klammr/klammr/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/klammr/klammr/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/klammr/klammr/releases/tag/v0.2.0
 [0.1.1]: https://github.com/brucegrootgames/kursor/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/brucegrootgames/kursor/releases/tag/v0.1.0
